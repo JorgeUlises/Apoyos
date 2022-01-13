@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Acciones.Models.Calle>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de Calles</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Registro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCalle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Manzana)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Distrito)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seccion)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Lote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Colonia)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCalle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manzana)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Distrito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seccion)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Lote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
+            </td>
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.CalleId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CalleId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CalleId">Delete</a>*@
+
+                <a asp-action="Edit" asp-route-id="@item.CalleId"><span style='cursor: pointer' class='fas fa-edit fa-lg' title='Editar'></span></a>
+                <a asp-action="Delete" asp-route-id="@item.CalleId"><span style='cursor: pointer' class='fas fa-trash fa-lg' title='Eliminar'></span></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

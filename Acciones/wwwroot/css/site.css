@@ -1,0 +1,514 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+/*a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}*/
+
+/* Provide sufficient contrast against white background */
+/*a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}*/
+
+/* Sticky footer styles
+-------------------------------------------------- */
+/*html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}*/
+
+/* Sticky footer styles
+-------------------------------------------------- */
+/*html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {*/
+  /* Margin bottom by footer height */
+  /*margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;*/ /* Vertically center the text there */
+/*}*/
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+
+.fondoGrisLetraNegra {
+    color: #000;
+    background-color: #d7dbdb;
+}
+
+
+.fondoAzulClaroLetraNegra_2 {
+    color: #000;
+    border-color: white;
+    background-color: rgba(18, 95, 159, 0.3);
+    /*border-radius: 10px 10px 0px 0px;*/
+}
+
+.letraAzulEncabezado {
+    color: rgba(13, 77, 168, 1);
+}
+
+.fondoMenu {
+    color: #fff;
+    border-color: white;
+    background-color: rgba(13, 77, 168, 1);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoMenuFactor {
+    color: #fff;
+    border-color: white;
+    background-color: rgba(13, 77, 168, .5);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoMenuFactorH {
+    color: #fff;
+    border-color: white;
+    background-color: rgba(13, 77, 168, .5);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoNaranjaClaro {
+    color: #000;
+    border-color: white;
+    background-color: rgba(250, 196, 94, 0.78);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.BotonNaranjaClaro {
+    color: #000;
+    border-color: white;
+    background-color: rgba(250, 196, 94, 0.78);
+    /*border-radius: 10px 10px 10px 10px;*/
+}
+
+.fondoAzul_p_LetraNegra_2 { /* fondo azul claro letra blanca  */
+    color: #000;
+    border-color: white;
+    /*background-color: rgba(236, 143, 29, 1);*/
+    background-color: rgba(85, 167, 250, .98);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoAzul_p_LetraNegra_3v { /* fondo azul claro letra blanca  */
+    color: #000;
+    border-color: white;
+    background-color: rgba(19, 104, 173, 0.2);
+    border-radius: 10px 10px 0px 0px;
+}
+
+/*.fondoAzul_p_LetraNegra_3v {*/ /* fondo azul claro letra blanca  */
+    /*color: #000;
+    border-color: white;*/
+    /*background-color: rgba(19, 104, 173, 0.82);*/
+    /*background-color: rgba(18, 95, 159, 0.3);
+    border-radius: 10px 10px 0px 0px;
+}*/
+
+.fondoAzul_p_LetraNegra_3 { /* fondo azul claro letra blanca  */
+    color: #000;
+    border-color: white;
+    background-color: rgba(18, 95, 159, 0.3);
+    border-radius: 10px 0px 0px 10px;
+}
+
+
+.fondoGrisLetraNegra_2 {
+    color: #000;
+    border-color: white;
+    background-color: #babfbf;
+    border-radius: 10px 10px 0px 0px;
+}
+
+
+
+.fondoGrisLetraNegra_2h {
+    color: #000;
+    border-color: white;
+    background-color: #babfbf;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.fondoAzulLetraNegra_2 {
+    color: white;
+    border-color: white;
+    background-color: #0C28BB;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoAzulClaroLetraBlanca_2 {
+    color: white;
+    border-color: white;
+    background-color: #1e81b0;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoObscuroLetraBlanca_2 {
+    color: white;
+    border-color: white;
+    background-color: #7B7C7D;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.fondoObscuroLetraBlanca_2h {
+    color: white;
+    border-color: white;
+    background-color: #7B7C7D;
+    border-radius: 10px 0px 0px 10px;
+}
+/******************************************* 
+ *   
+ *   Tabla Encabezado Fijo   
+ *
+ *******************************************/
+body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    line-height: 1.4;
+    color: #333;
+    background-color: #fff;
+    padding: 0 5vw;
+}
+
+/* Standard Tables */
+
+table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    border: 0.1em solid #d6d6d6;
+}
+
+caption {
+    text-align: left;
+    font-style: italic;
+    padding: 0.25em 0.5em 0.5em 0.5em;
+}
+
+th,
+td {
+    /*padding: 0.25em 0.5em 0.25em 1em;*/
+    vertical-align: text-top;
+    /*text-align: left;*/
+    /*text-indent: -0.5em;*/    
+}
+
+th {
+    vertical-align: bottom;
+    background-color: rgba(13, 77, 168, .8);
+    color: #fff;
+}
+
+tr:nth-child(even) th[scope=row] {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) th[scope=row] {
+    background-color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/*td:nth-of-type(2) {
+    font-style: italic;
+}*/
+
+/*th:nth-of-type(3),
+td:nth-of-type(3) {
+    text-align: right;
+}*/
+
+/* Fixed Headers */
+
+th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+    th[scope=row] {
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        z-index: 1;
+    }
+
+    th[scope=row] {
+        vertical-align: top;
+        color: inherit;
+        background-color: inherit;
+        background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%);
+    }
+
+table:nth-of-type(2) th:not([scope=row]):first-child {
+    left: 0;
+    z-index: 3;
+    background: linear-gradient(90deg, #666 0%, #666 calc(100% - .05em), #ccc calc(100% - .05em), #ccc 100%);
+}
+
+/* Strictly for making the scrolling happen. */
+
+th[scope=row] + td {
+    min-width: 24em;
+}
+
+th[scope=row] {
+    min-width: 20em;
+}
+
+body {
+    padding-bottom: 90vh;
+}
+
+/*************************************
+    Input width
+**************************************/
+
+#inputNombreColonia {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.centrarVH {
+    text-align: center; /* Centrar horizontalmente */
+    vertical-align: middle; /* Centrar verticalmente */
+}
+
+.centrarV {
+    vertical-align: middle; /* Centrar verticalmente */
+}
+
+/*************************** 
+    
+    T  A  B  's
+
+****************************/
+
+.nav {
+    &::after
+
+{
+    content: ' ';
+    display: block;
+    background-color: #eb2c2c;
+    /*background-color: #fff;*/
+    /*background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 26%);*/
+    background: #eb2c2c;
+    width: 50px;
+    position: sticky;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    left: 20px;
+    min-width: 61px; /* important */
+}
+
+--scrollbarBG: #c4c2c2;
+--thumbBG: #000;
+
+&:hover {
+    /*--thumbBG: #e0e0e0;*/
+    --thumbBG: #eb2c2c;
+}
+
+position: relative;
+overflow-x: scroll;
+padding-bottom:3px;
+scrollbar-width: thin;
+scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+
+&::-webkit-scrollbar {
+    width: 1px;
+    height: 1px;
+}
+
+&::-webkit-scrollbar-track {
+    background: var(--scrollbarBG);
+}
+
+&::-webkit-scrollbar-thumb {
+    background-color: var(--thumbBG);
+    border-radius: 2px;
+}
+
+
+
+body {
+    margin: 20px;
+}
+
+#app {
+    max-width: 100%;
+    margin: auto;
+}
+
+
+
+
+
+
+
+
+@media( max-width : 585px ) {
+
+    .board {
+        width: 90%;
+        height: auto !important;
+    }
+
+    span.round-tabs {
+        font-size: 16px;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .tab-content .head {
+        font-size: 20px;
+    }
+
+    .nav-tabs > li a {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    li.active:after {
+        content: " ";
+        position: absolute;
+        left: 35%;
+    }
+}
+
+
+/*
+
+*/
+hr {
+    height: 1px;
+    background-color: rgba(236, 143, 29, 1);
+    border: none;
+}

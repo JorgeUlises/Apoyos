@@ -1,0 +1,64 @@
+﻿@model Acciones.Models.Colonia
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Colonia</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ColoniaId" />
+            <div class="form-group">
+                <label asp-for="NombreColonia" class="control-label"></label>
+                <input asp-for="NombreColonia" class="form-control" />
+                <span asp-validation-for="NombreColonia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Distrito" class="control-label"></label>
+                <input asp-for="Distrito" class="form-control" />
+                <span asp-validation-for="Distrito" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seccion" class="control-label"></label>
+                <input asp-for="Seccion" class="form-control" />
+                <span asp-validation-for="Seccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstatusColonia" class="control-label"></label>
+                <input asp-for="EstatusColonia" class="form-control" />
+                <span asp-validation-for="EstatusColonia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaRegistro" class="control-label"></label>
+                <input asp-for="FechaRegistro" class="form-control" />
+                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaUltimoCambio" class="control-label"></label>
+                <input asp-for="FechaUltimoCambio" class="form-control" />
+                <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioRegistroId" class="control-label"></label>
+                <input asp-for="UsuarioRegistroId" class="form-control" />
+                <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

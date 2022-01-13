@@ -1,0 +1,193 @@
+﻿@model IEnumerable<Acciones.Models.Ciudadano>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <table width="100%" style="border:none;">
+        <tr>
+            <td align="left">
+                <img src="~/Images/ciudadanos_2.png" height='60' />
+            </td>
+            <td align="center">
+                <h1 class="letraAzulEncabezado">CIUDADANOS</h1>
+            </td>
+            <td align="right">
+                <a asp-action="Create"><button class="btn btn-dark redondeada">NUEVO REGISTRO</button> </a>
+                <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fas fa-filter" title="Aplicar Filtro"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table class="table table-bordered" style='width:100%;'>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Paterno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Materno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Colonia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calle)
+            </th>
+            <th>
+                # Ext.
+            </th>
+            <th>
+                # Int.
+            </th>
+            <th>
+                CP
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Partido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoMiembro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Distrito)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Seccion)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.Estatus)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Genero)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Notas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Campo1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Campo2)
+        </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
+            </th>
+            *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paterno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Materno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Calle.NombreCalle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumExterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumInterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Partido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoMiembro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Distrito)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Seccion)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.FechaNacimiento)
+        </td>*@
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Estatus)
+        </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Genero)
+            </td>
+
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CiudadanoId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CiudadanoId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CiudadanoId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div style="display: inline-block; text-align: right; width: 100%">
+    <ul id="pagina-solicitudes" class="pagination-sm"></ul>
+</div>
+
+<div align="right">
+    <label id="labelNumeroRegistros_footer"></label>
+    &nbsp;
+    <label>Por Página</label>
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraIniciativa();">
+        <OPTION VALUE="5">5</OPTION>
+        <OPTION VALUE="10" selected="selected">10</OPTION>
+        <OPTION VALUE="20">20</OPTION>
+        <OPTION VALUE="100">100</OPTION>
+        <OPTION VALUE="200000">Todos</OPTION>
+    </SELECT>
+</div>
+
+
+<input id="hideNumPaginas" type="hidden" value="">
+<input id="hideNumRegistros" type="hidden" value="">

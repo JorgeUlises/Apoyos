@@ -1,0 +1,316 @@
+﻿@model IEnumerable<Acciones.Models.Evento>
+
+@{
+    ViewData["Title"] = "Eventos";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+@{
+    List<SelectListItem> estatusEvento = new List<SelectListItem>();
+    estatusEvento.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
+    estatusEvento.Add(new SelectListItem() { Text = "SIN ESTATUS", Value = "0" });
+    estatusEvento.Add(new SelectListItem() { Text = "PLANEADO", Value = "1" });
+    estatusEvento.Add(new SelectListItem() { Text = "REALIZADO", Value = "2" });
+    estatusEvento.Add(new SelectListItem() { Text = "POSPUESTO", Value = "3" });
+    estatusEvento.Add(new SelectListItem() { Text = "CANCELADO", Value = "4" });
+}
+
+@{
+    List<SelectListItem> tipoEvento = new List<SelectListItem>();
+    tipoEvento.Add(new SelectListItem() { Text = "TODO", Value = "" });
+    tipoEvento.Add(new SelectListItem() { Text = "SIN TIPO", Value = "SIN TIPO" });
+    tipoEvento.Add(new SelectListItem() { Text = "A", Value = "A" });
+    tipoEvento.Add(new SelectListItem() { Text = "B", Value = "B" });
+    tipoEvento.Add(new SelectListItem() { Text = "C", Value = "C" });
+    tipoEvento.Add(new SelectListItem() { Text = "D", Value = "D" });
+}
+<div class="row">
+    <table width="100%" style="border:none;">
+        <tr>
+            <td align="left">
+                <img src="~/Images/eventos.png" height='60' />
+            </td>
+            <td align="center">
+                <h1 class="letraAzulEncabezado">EVENTOS</h1>
+            </td>
+            <td align="right">
+                <a asp-action="Create"><button class="btn BotonNaranjaClaro redondeada">NUEVO REGISTRO</button> </a>
+                <button class="btn BotonNaranjaClaro" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fas fa-filter" title="Aplicar Filtro"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<p align="right">
+    <label id="labelNumeroRegistros">&nbsp;</label>
+</p>
+
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <table class='table responsive-table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="LegBusqLabel">Legislatura</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="NumFolioBusqLabel">Folio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="EstatusBusqLabel">Estatus</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="TipoBusqLabel" id="TipoBusqLabel">Tipo</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="LegEventosBusqueda" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <input type="text" class="form-control" name="NumFolioBusqueda" id="NumFolioBusqueda" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="EstatusEventoBusqueda" class="form-control" asp-items="estatusEvento"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="TipoBusqueda" class="form-control" asp-items="tipoEvento"></select>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="SolicitanteBusqLabel">Colonia</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="EstatusBusqLabel">Descripción</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="FechaLabel">Fecha</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <input type="text" class="form-control" name="coloniaFiltro" id="coloniaFiltro" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <input type="text" class="form-control" name="descripcionFiltro" id="descripcionFiltro" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <div class='Column centrarVH' id='datetimepicker_FiltroFechaEvento' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoFechaEvento" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </td>
+                <td style='text-align: center; padding: 5px;' width="20%">
+                    <button type='button' onclick='FiltraEventos();' class='btn BotonNaranjaClaro redondeada'>FILTRAR</button>&nbsp;
+                    <a asp-action="Index"><button class="btn BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<input id="hideFechaInicioEvento" type="hidden" value="">
+<input id="hideFechaFinEvento" type="hidden" value="">
+
+<div id="divEventos"></div>
+
+<div style="display: inline-block; text-align: right; width: 100%">
+    <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
+</div>
+
+<div align="right">
+    <label id="labelNumeroRegistros_footer"></label>
+    &nbsp;
+    <label>Por Página</label>
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraEventos();">
+        <OPTION VALUE="5">5</OPTION>
+        <OPTION VALUE="10" selected="selected">10</OPTION>
+        <OPTION VALUE="20">20</OPTION>
+        <OPTION VALUE="100">100</OPTION>
+        <OPTION VALUE="200000">Todos</OPTION>
+    </SELECT>
+</div>
+
+
+<input id="hideNumPaginas" type="hidden" value="">
+<input id="hideNumRegistros" type="hidden" value="">
+
+@*---------Modal Muestra Detalle de Evento ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosEvento" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table>
+                    <tr width="100%;">
+                        <td>
+                            <h4 class="modal-title" id="ModalLabelConsultaEvento">EVENTO</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosEvento'></div>
+                <hr />
+
+                <div id='AsistenciaEventoId'></div>
+                <div id='ListaArchivosEventoId'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumExterior)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumInterior)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cp)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Distrito)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Seccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumAsistentes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Campo1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Campo2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Latitud)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Longitud)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UsuarioRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Calle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Colonia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Diputado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Legislatura)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumExterior)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumInterior)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Distrito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Seccion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumAsistentes)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Campo1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Campo2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Latitud)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Longitud)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Calle.NombreCalle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Diputado.DiputadoId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Legislatura.Nombre)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EventoId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.EventoId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.EventoId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

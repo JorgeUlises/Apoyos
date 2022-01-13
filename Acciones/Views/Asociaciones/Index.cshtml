@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Acciones.Models.Asociacione>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumExterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumInterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Distrito)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Campo1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Campo2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Colonia)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumExterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumInterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Distrito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Campo1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Campo2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitud)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitud)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaRegistro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Calle.NombreCalle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AsociacionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AsociacionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AsociacionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

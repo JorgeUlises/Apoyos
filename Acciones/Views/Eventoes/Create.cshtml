@@ -1,0 +1,335 @@
+﻿@model Acciones.Models.Evento
+
+@{
+    ViewData["Title"] = "Nuevo Registro de evento";
+}
+
+
+@{
+    List<SelectListItem> estatusEvento = new List<SelectListItem>();
+    estatusEvento.Add(new SelectListItem() { Text = "", Value = "0" });
+    estatusEvento.Add(new SelectListItem() { Text = "PLANEADO", Value = "1" });
+    estatusEvento.Add(new SelectListItem() { Text = "REALIZADO", Value = "2" });
+    estatusEvento.Add(new SelectListItem() { Text = "POSPUESTO", Value = "3" });
+    estatusEvento.Add(new SelectListItem() { Text = "CANCELADO", Value = "4" });
+}
+
+@{
+    List<SelectListItem> tipoEvento = new List<SelectListItem>();
+    tipoEvento.Add(new SelectListItem() { Text = "", Value = "" });
+    tipoEvento.Add(new SelectListItem() { Text = "A", Value = "A" });
+    tipoEvento.Add(new SelectListItem() { Text = "B", Value = "B" });
+    tipoEvento.Add(new SelectListItem() { Text = "C", Value = "C" });
+    tipoEvento.Add(new SelectListItem() { Text = "D", Value = "D" });
+}
+
+<h1>REGISTRO DE NUEVO EVENTO</h1>
+<br />
+<div class="card">
+    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>EVENTO</h4>
+    <div class="card-body">
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                    <label for="LegislaturaLabel">Legislatura</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                    <label for="FolioLabel">Folio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="20%">
+                    <label for="EstatusLabel">Estatus</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                    <label for="NumAsistentesLabel">Número Asistentes</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="20%">
+                    <label for="FechaEventoLabel" id="FechaRecibidoLabel">Fecha Evento</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                    <label for="TipoLabel">Tipo</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select id="LegEventosNuevo" class="form-control" asp-items="ViewBag.LegEventoNvoReg"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <input type="text" class="form-control" name="FolioEvento" id="FolioEvento" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select asp-for="Estatus" id="opcionEstatusId" class="form-control" asp-items="estatusEvento"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <input type="text" class="form-control" name="NumAsistentes" id="NumAsistentes" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <div class='input-group date' id='datetimepickerFEvento'>
+                        <input asp-for="Fecha" id="FechaEvento" class="form-control" />
+                    </div>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select asp-for="Tipo" id="opcionTipoEventos" class="form-control" asp-items="tipoEvento"></select>
+                </td>
+            </tr>
+        </table>
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' class='fondoAzul_p_LetraNegra_3v' width="30%">
+                    <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
+                </td>
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoAzul_p_LetraNegra_3v' width="40%">
+                    <label for="CalleLabel">Calle</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="NumeroExteriorLabel"># Exterior</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="NumeroInteriorLabel"># Interior</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="CPLabel">CP</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                    <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="40%">
+                    <input type="text" class="form-control" name="callesBuscar" id="callesBuscar" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaNumExt" id="IngresaNumExt" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaNumInt" id="IngresaNumInt" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaCP" id="IngresaCP" />
+                </td>
+            </tr>
+        </table>
+
+        <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
+        <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+        <input type="text" id="hEventoId" name="hEventoId" style="display:none" />
+
+
+        <div>
+            <div class="alert alert-success" id="mensajeColonia_OK" style="display:none;" align="center">
+                <strong>Los Datos Fueron Guardados</strong>
+            </div>
+            <div class="alert alert-danger" id="mensajeColonia_Error" style="display:none;" align="center">
+                <strong>Los Datos NO Fueron Guardados</strong>
+            </div>
+            <div class="alert alert-danger" id="mensajeColonia_Existente" style="display:none;" align="center">
+                <strong>Ya existe una Colonia con el mismo nombre</strong>
+            </div>
+
+            <div class="alert alert-danger" id="msgSelColonia_AntesDeNvaCalle" style="display:none;" align="center">
+                <strong>Para registrar una nueva calle, debe seleccionar una colonia</strong>
+            </div>
+        </div>
+
+        <div>
+            <div class="alert alert-danger" id="msgAlertFolioExistente" style="display: none;" align="center">
+                <strong>Este FOLIO ya existe!</strong>.
+            </div>
+        </div>
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr style="padding:2px;">
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="LatitudCiudadano" class="control-label" onclick="ObtieneLalitudLongitudActual();">Latitud</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
+                    <input type="text" class="form-control" name="Latitud" id="Latitud" />
+                </td>
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="LongitudCiudadano" class="control-label">Longitud</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
+                    <input type="text" class="form-control" name="Longitud" id="Longitud" />
+                </td>
+            </tr>
+        </table>
+
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr style="padding:2px;">
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="15%">
+                    <label for="DescripcionLabel" class="control-label">Nombre del Evento</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="85%">
+                    <textarea id="DescripcionEvento" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcionEvento(event)></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div>
+    <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
+        <strong> Debe registrar por lo menos Folio, Calle, Colonia, Fecha y Nombre del Evento.</strong>
+    </div>
+    <div class="alert alert-success" id="mensajeAlerta_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAlerta_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+</div>
+
+<div align="center">
+    <button type='button' onclick='GuardarNuevoEvento();' class='btn BotonNaranjaClaro redondeada'>GUARDAR</button>&nbsp;
+    <a asp-action="Index"><button class="btn BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+</div>
+
+
+@*<div id="dvMap" style="width: 500px; height: 500px"></div>*@
+
+
+@*<div id="divEventoComplemento" style="display:none;">
+
+        <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ARCHIVOS ANEXOS</h4>
+        <div id="divArchivosAnexosNevento"></div>
+
+        <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ASISTENTES</h4>
+        <div id="divAsistentesNevento"></div>
+
+    </div>*@
+
+
+<div class="col-md-12 col-sm-12" id="app">
+    @*<p class="alert alert-primary">Use mousewheel to scroll the tabs while preventing vertical page scroll</p>*@
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-pills flex-nowrap" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ARCHIVOS ANEXOS</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ASISTENTES</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content col-md-12 col-sm-12">
+        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
+            <div id="divArchivosAnexosNvoEvento"></div>
+        </div>
+        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ASISTENTES</h4>
+            <div id="divAsistentesNvoEvento"></div>
+        </div>
+    </div>
+</div>
+
+@*---------Modal Alta Colonia ---------*@
+<div class="modal" id="divModalAltaColonia" tabindex="-2" role="dialog" aria-labelledby="divModalAltaColonia">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Colonia</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreColonia" lang="es" placeholder="Proporcione el nombre de la colonia" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenColoniaId" type="hidden" name="HiddenColoniaId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaColoniaButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*---------Modal Alta Calle ---------*@
+<div class="modal" id="divModalAltaCalle" tabindex="-2" role="dialog" aria-labelledby="divModalAltaCalle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Calle</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreCalle" lang="es" placeholder="Proporcione el nombre de la calle" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenCalleId" type="hidden" name="HiddenCalleId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaCalleButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*---------Modal Seleccionar y Subir Archivo Evento ---------*@
+<div class="modal" id="ModalSeleccionarArchivosEvento" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosEventos">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosEventos" class="modal-title" style="padding-left:10px;"><srong>Documento Anexos de Evento</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFileEvento" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenPeticionId" type="hidden" name="HiddenPeticionId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosEventoButton('FileUploadFormFileEvento')" class="btn BotonNaranjaClaro">Subir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
