@@ -1,59 +1,67 @@
-﻿@model IEnumerable<Acciones.Models.Categoria>
+﻿@*@model IEnumerable<Acciones.Models.Categoria>*@
+@model Acciones.Models.Categoria
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="col-md-12 col-sm-12 row" align="center">
+    <div class="col-md-6 col-sm-6" align="center">
+        <h1>LISTADO DE CATEGORÍAS</h1>
+        <p type="button" data-toggle="collapse" data-target="#collapseNvaCat" aria-expanded="false" aria-controls="collapseNvaCat">
+            Nueva Categoría <i class="fas fa-plus-circle"></i>
+        </p>
+        <div class="collapse" id="collapseNvaCat">
+            <form asp-action="Create">
+                <div>
+                    <table style="border:none;" width="100%">
+                        <tr>
+                            <td width="80%">
+                                <input type="text" class="form-control" asp-for="Descripcion" id="nombreNvaCat" />
+                            </td>
+                            <td width="20%">
+                                <input type="submit" value="Registrar" class="btn btn-primary" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div id="divCategoriaNR"></div>
+    </div>
+    <div class="col-md-6 col-sm-6" align="center">
+        <h1>LISTADO DE SUB-CATEGORÍAS</h1>
+        <p type="button" data-toggle="collapse" data-target="#collapseNvaSubCat" aria-expanded="false" aria-controls="collapseNvaSubCat">
+            Nueva Subcategoría <i class="fas fa-plus-circle"></i>
+        </p>
+        <div class="collapse" id="collapseNvaSubCat">
+            <form asp-action="Create_Subcategoria">
+                <input type="hidden" asp-for="CategoriaId" id="idCS" />
+                <div>
+                    <table style="border:none;" width="100%">
+                        <tr>
+                            <td width="80%">
+                                <input type="text" class="form-control" asp-for="Descripcion" id="nombreNvaSubCat" />
+                            </td>
+                            <td width="20%">
+                                <input type="submit" value="Registrar" class="btn btn-primary" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div id="divCatSubCategoriaNR"></div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoriaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoriaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoriaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="alert alert-danger" id="msjNoSeElimino" style="display:none;" align="center">
+    <strong>La Categoría NO fue eliminada, debido a que está asignada a: Gestión y/o Apoyo</strong>
+</div>

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Acciones.Models.EstatusIniciativas>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de Estatus de Iniciativas</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Registro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UsuarioRegistro)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var indice = 0; }
+        @foreach (var item in Model)
+        {
+            indice++;
+            <tr>
+                <td>@indice</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioRegistro)
+                    </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EstatusIniciativasId"><span style='cursor: pointer' class='fas fa-edit' title='Editar'></span></a>
+                    <a asp-action="Delete" asp-route-id="@item.EstatusIniciativasId"><span style='cursor: pointer' class='fas fa-trash' title='Eliminar'></span></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

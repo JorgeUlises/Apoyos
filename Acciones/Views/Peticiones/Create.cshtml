@@ -13,7 +13,6 @@
 }
 
 
-
 <h1 class="letraAzulEncabezado">NUEVO REGISTRO DE APOYO</h1>
 
 <br />
@@ -23,10 +22,13 @@
 
         <table class='table table-bordered' style='width:100%; padding:3px;'>
             <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="LegislaturaLabel">Legislatura</label>
+                </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
                     <label for="OrigenSolicitudLabel">Origen de Solicitud</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="20%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
                     <label for="FolioLabel">Folio</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
@@ -43,15 +45,18 @@
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="LegPeticionNuevo" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="15%">
                     <select for="OrigenPeticion" onchange="optSelecEnOrigen();" id="OrigenPeticion" class="form-control" asp-items="ViewBag.OrigenPeticionId"></select>
                 </td>
 
-                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="20%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <input asp-for="Folio" id="FolioPeticion" class="form-control" />
                 </td>
 
-                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="15%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="15%">
                     <div class='input-group date' id='datepickerFSolicitud'>
                         <input asp-for="FechaSolicitud" id="FechaSolicitud" class="form-control" />
                     </div>
@@ -84,12 +89,19 @@
 
         <table class='table table-bordered' style='width:100%;' id="tablaCiudadano">
             <tr style="padding:2px;">
-                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="30%">
-                    <img src="~/Images/persona_t.png" width="25px" height="25px"/>
-                    <label for="SolicitanteLabel" class="control-label">Solicitante</label>
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    @*<img src="~/Images/persona_t.png" width="25px" height="25px" />*@
+                    <label for="SolicitanteLabel" class="control-label"><a asp-controller="Ciudadanoes" asp-action="Create" style="color:blue; text-decoration:underline;">Solicitante</a></label>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
-                    <input type='text' id='NombreCiudadanoSolicitante' style='width:100%; max-width:100%;' />
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; vertical-align: middle;' width="25%">
+                    <input class="form-control" type='text' id='NombreCiudadanoSolicitante' style='width:100%; max-width:100%;' />
+                </td>
+                <td style='text-align: center; vertical-align: middle; padding: 2px;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="ResponsableLabel" class="control-label">Responsable</label>
+                </td>
+                <td style='text-align: center;' width="25%">
+                    @*<input class="form-control" type='text' id='ResponsableSolicitante' style='width:100%; max-width:100%;' />*@
+                    <select asp-for="ResponsableID" class="form-control" asp-items="ViewBag.ResponsableAtenderId" id="responsablePeticion"></select>
                 </td>
             </tr>
         </table>
@@ -118,7 +130,12 @@
 
         @*Inicio Sección de Mensajes*@
 
-
+        <div class="alert alert-danger" id="msgAlerta_FolioPeticion" style="display: none;" align="center">
+            <strong>Debe proporcionar una FOLIO</strong>
+        </div>
+        <div class="alert alert-danger" id="msgAlerta_DescripcionPeticion" style="display: none;" align="center">
+            <strong>Debe proporcionar la Descripción</strong>
+        </div>
 
         <div class="alert alert-danger" id="msgCategoriaSubcategoria" style="display: none;" align="center">
             <strong>Cada Categoría debe contener una Subcategoría!</strong>
@@ -128,16 +145,29 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="90%">
-                    <label for="ColoniaLabel" id="DescripcionLabel">Descripción</label>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="60%">
+                    <label id="DescripcionLabel">Descripción</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="30%">
+                    <label id="CostoLabel">Costo</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
-                    <label for="ColoniaLabel" id="HitoLabel">Hito</label>
+                    <label id="HitoLabel">Hito</label>
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="90%">
+                <td style='text-align: center; vertical-align:middle; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="60%">
                     <textarea id="DescripcionApoyo" name="DescripcionApoyo" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="30%">
+                    <table width='100%' style=' border-color: #c1c4c9;'>
+                        <tr>
+                            <td width='20%' style='background-color: #c1c4c9; border-radius: 10px 0px 0px 10px; text-align:center;'>$</td>
+                            <td width='80%' style='text-align:left;'>
+                                <input asp-for="Costo" id="CostoPeticionId" class="form-control" onkeypress="return isNumber(event)" />
+                            </td>
+                        </tr>
+                    </table>
                 </td>
                 <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
                     <input type='checkbox' id='cboxHito'>
@@ -174,72 +204,48 @@
 </div>
 
 <div align="center">
-    <button type='button' onclick='GuardarNuevaPeticion();' class='btn BotonNaranjaClaro redondeada'>GUARDAR</button>&nbsp;
-    <a asp-action="Index"><button class="btn BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+    <button type='button' onclick='GuardarNuevaPeticion();' class='btn btn-warning redondeada'>GUARDAR</button>&nbsp;
+    <a asp-action="Index"><button class="btn btn-warning redondeada">CANCELAR</button> </a>
 </div>
 
-<hr />
+<hr style="background-color: rgba(250, 196, 94, 0.8); " />
 
 <input type="text" id="hCategoriaBuscar" name="hCategoriaBuscar" style="display:none" />
 <input type="text" id="hSubCategoriaBuscar" name="hSubCategoriaBuscar" style="display:none" />
 
-@*<div id="divArchivoAnexosApoyo" style="display:none;">
 
-    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>CLASIFICACIÓN</h4>
-    <div id="divCatSubCatNPeticion"></div>
-
-    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ARCHIVOS ANEXOS</h4>
-    <div id="divArchivosAnexosNPeticion"></div>
-
-    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>BENEFICIARIOS</h4>
-    <div id="divBeneficiariosNPeticion"></div>
-
-    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>BITÁCORA</h4>
-    <div id="divBitacoraNPeticion"></div>
-
-</div>*@
-
-
-<div class="col-md-12 col-sm-12" id="app">
-    @*<p class="alert alert-primary">Use mousewheel to scroll the tabs while preventing vertical page scroll</p>*@
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-pills flex-nowrap" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">CLASIFICACIÓN</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ARCHIVOS ANEXOS</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">BENEFICIARIOS</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">BITÁCORA</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content col-md-12 col-sm-12">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>CLASIFICACIÓN</h4>
-            <div id="divCatSubCatNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
-            <div id="divArchivosAnexosNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BENEFICIARIOS</h4>
-            <div id="divBeneficiariosNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BITÁCORA</h4>
-            <div id="divBitacoraNPeticion"></div>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <ul id="tabsJustified" class="nav nav-pills flex-column" style="background-color: rgba(220,223,226,.8);">
+                    <li class="nav-item"><a href="" data-target="#home1" data-toggle="tab" class="nav-link small text-uppercase active" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">CATEGORÍA</a></li>
+                    <li class="nav-item"><a href="" data-target="#profile1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">ARCHIVOS</a></li>
+                    <li class="nav-item"><a href="" data-target="#messages1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">BENEFICIARIOS</a></li>
+                    <li class="nav-item"><a href="" data-target="#messages2" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">SEGUIMIENTO</a></li>
+                </ul>
+                <div class="tab-content border rounded p-3 w-100" style="background-color: rgba(181, 185, 195, 0.3); ">
+                    <div id="home1" class="tab-pane fade active show">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>CATEGORÍA Y SUBCATEGORÍA</h4>
+                        <div id="divCatSubCatNPeticion"></div>
+                    </div>
+                    <div id="profile1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
+                        <div id="divArchivosAnexosNPeticion"></div>
+                    </div>
+                    <div id="messages1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BENEFICIARIOS</h4>
+                        <div id="divBeneficiariosNPeticion"></div>
+                    </div>
+                    <div id="messages2" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>SEGUIMIENTO</h4>
+                        <div id="divBitacoraNPeticion"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 
 @*---------Modal Seleccionar y Subir Archivo Peticiones ---------*@
 <div class="modal" id="ModalSeleccionarArchivosPeticiones" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosPeticiones">
@@ -275,6 +281,40 @@
     </div>
 </div>
 
+@*---------Modal Seleccionar y Subir Archivo Petición-Bitacora ---------*@
+<div class="modal" id="ModalSeleccionarArchivosPeticionesBitacora" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosPeticionesBitacora">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaArchBitacora" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosPeticionesBitacora" class="modal-title" style="padding-left:10px;"><srong>Documento Anexos de Actividad de Seguimiento de Apoyos</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFilePeticionBitacora" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenPeticionActId" type="hidden" name="HiddenPeticionActId" value="">
+                <input id="HiddenPeticionBitacoraId" type="hidden" name="HiddenPeticionBitacoraId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosPeticionBitacoraButton('FileUploadFormFilePeticionBitacora')" class="btn btn-dark">Anexar Archivo</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

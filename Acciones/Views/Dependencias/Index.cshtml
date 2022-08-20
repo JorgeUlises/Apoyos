@@ -4,22 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Listado de Dependencias</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><button class="btn btn-dark redondeada">NUEVO REGISTRO</button> </a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>No</th>
             <th>
-                @Html.DisplayNameFor(model => model.NombreDependecia)
+                @*@Html.DisplayNameFor(model => model.NombreDependecia)*@
+                Dependencia
             </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreContacto)
+                @*@Html.DisplayNameFor(model => model.NombreContacto)*@
+                Contacto
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.NumExterior)
@@ -36,48 +39,52 @@
             <th>
                 @Html.DisplayNameFor(model => model.Telefono)
             </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Estatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Campo1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Campo2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitud)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaRegistro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UsuarioRegistroId)
+        </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Estatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Campo1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Campo2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Latitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Longitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
+                @Html.DisplayNameFor(model => model.Colonia)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Calle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Colonia)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @{var indice = 0; }
+        @foreach (var item in Model)
+        {
+            indice++;
         <tr>
+            <td>@indice</td>
             <td>
                 @Html.DisplayFor(modelItem => item.NombreDependecia)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.NombreContacto)
             </td>
@@ -96,42 +103,42 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Telefono)
             </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Estatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Campo1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Campo2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Longitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaRegistro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
+        </td>*@
             <td>
-                @Html.DisplayFor(modelItem => item.Estatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Campo1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Campo2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitud)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitud)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
+                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Calle.NombreCalle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DependenciaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DependenciaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DependenciaId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.DependenciaId">Editar</a> |
+                @*<a asp-action="Details" asp-route-id="@item.DependenciaId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.DependenciaId">Eliminar</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

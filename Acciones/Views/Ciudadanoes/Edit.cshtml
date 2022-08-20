@@ -4,151 +4,552 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
 
-<h4>Ciudadano</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CiudadanoId" />
-            <div class="form-group">
-                <label asp-for="Paterno" class="control-label"></label>
-                <input asp-for="Paterno" class="form-control" />
-                <span asp-validation-for="Paterno" class="text-danger"></span>
+
+@{
+    List<SelectListItem> opcionesGenero = new List<SelectListItem>();
+    opcionesGenero.Add(new SelectListItem() { Text = "", Value = "0" });
+    opcionesGenero.Add(new SelectListItem() { Text = "FEMENINO", Value = "FEMENINO" });
+    opcionesGenero.Add(new SelectListItem() { Text = "MASCULINO", Value = "MASCULINO" });
+    opcionesGenero.Add(new SelectListItem() { Text = "OTRO", Value = "OTRO" });
+}
+
+@{
+    List<SelectListItem> miembroPartido = new List<SelectListItem>();
+    miembroPartido.Add(new SelectListItem() { Text = "", Value = "" });
+    miembroPartido.Add(new SelectListItem() { Text = "SI", Value = "SI" });
+    miembroPartido.Add(new SelectListItem() { Text = "NO", Value = "NO" });
+}
+
+<h1>ACTUALIZA DATOS DE CIUDADANO</h1>
+<br />
+
+
+<div class="card">
+    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>CIUDADANO</h4>
+    <div class="card-body">
+        <div class="row">
+            <div style="align-content:left;">
+                <img id="imaForoCiudadano" src='@Model.URL' height='60' class='rounded-circle img-no-padding img-responsive' />
             </div>
-            <div class="form-group">
-                <label asp-for="Materno" class="control-label"></label>
-                <input asp-for="Materno" class="form-control" />
-                <span asp-validation-for="Materno" class="text-danger"></span>
+
+            <div style="margin-left: auto; margin-right: 0; ">
+                <a data-toggle="collapse" href="#collapseDatosCiudadano" role="button" aria-expanded="true" aria-controls="collapseDatosCiudadano">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
             </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="PaternoLabel">Paterno</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="MaternoLabel">Materno</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="NombreLabel">Nombres</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="NombreLabel">Cumpleaños</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="FechaNacimientoLabel" id="FechaRecibidoLabel">Fecha Nacimiento</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="GeneroLabel">Genero</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
+                    <input asp-for="Paterno" type="text" class="form-control" name="IngresaPaterno" id="IngresaPaterno" />
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
+                    <input asp-for="Materno" type="text" class="form-control" name="IngresaMaterno" id="IngresaMaterno" />
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
+                    <input asp-for="Nombre" type="text" class="form-control" name="IngresaNombre" id="IngresaNombre" />
+                </td>
+                <td style='text-align: center; padding: 2px; vertical-align: middle;' width="10%">
+                    @if (@Model.recordarcumple == 1)
+                    {
+                        <input type='checkbox' id='cboxRecordarCumple' checked>
+                    }
+                    else
+                    {
+                        <input type='checkbox' id='cboxRecordarCumple'>
+                    }
+
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <div class='input-group date' id='datetimepickerFN'>
+                        <input asp-for="FechaNacimiento" id="FechaNacimiento" class="form-control" />
+                    </div>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select asp-for="Genero" id="opcionGeneroId" class="form-control" asp-items="opcionesGenero"></select>
+                </td>
+            </tr>
+        </table>
+
+        <div class="collapse show" id="collapseDatosCiudadano">
+            <table class='table table-bordered' style='width:100%;'>
+                <tr>
+                    <td class='fondoMenuFactor' width="20%" style='text-align: center; vertical-align: middle;'>
+                        <div style="margin: auto;" class="row">
+                            <div title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' style="cursor:pointer;">
+                                <img src="~/Images/colonia_t.png" width="30px" height="20px" />
+                            </div>
+                            <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
+                        </div>
+                    </td>
+                    <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoMenuFactor' width="30%">
+                        <label for="CalleLabel">Calle</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                        <label>Municipio</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="NumeroExteriorLabel"># Exterior</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="NumeroInteriorLabel"># Interior</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="CPLabel">CP</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="20%">
+                        <input value="@ViewBag.NombreColonia" type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" />
+                    </td>
+                    <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="30%">
+                        <input value="@ViewBag.NombreCalle" type="text" class="form-control" name="callesBuscar" id="callesBuscar" />
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                        <select asp-for="MunicipioId" class="form-control" asp-items="ViewBag.Municipio" id="EditMunicipioId"></select>
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <input asp-for="NumExterior" type="text" class="form-control" name="IngresaNumExt" id="IngresaNumExt" />
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <input asp-for="NumInterior" type="text" class="form-control" name="IngresaNumInt" id="IngresaNumInt" />
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <input asp-for="Cp" type="text" class="form-control" name="IngresaCP" id="IngresaCP" />
+                    </td>
+                </tr>
+            </table>
+
+            <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" value="@Model.ColoniaId" />
+            <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" value="@Model.CalleId" />
+            <input type="text" id="hColoniaBuscarPublicidad" name="hColoniaBuscarPublicidad" style="display:none" />
+            <input type="text" id="hCalleBuscarPublicidad" name="hCalleBuscarPublicidad" style="display:none" />
+            <input type="text" id="hCiudadanoId" name="hCiudadanoId" style="display:none" value="@Model.CiudadanoId" />
+            <input type="text" id="hURL" name="hURL" style="display:none" value="@Model.URL" />
+            <input type="text" id="hNombreArchivoBD" name="hNombreArchivoBD" style="display:none" value="@Model.NombreArchivoBD" />
+            <input type="text" id="hMunicipioId" name="hMunicipioId" style="display:none" value="@Model.MunicipioId" />
+            <input type="text" id="hPartidoId" name="hPartidoId" style="display:none" value="@Model.PartidoId" />
+
+            <div>
+                <div class="alert alert-success" id="mensajeColonia_OK" style="display:none;" align="center">
+                    <strong>Los Datos Fueron Guardados</strong>
+                </div>
+                <div class="alert alert-danger" id="mensajeColonia_Error" style="display:none;" align="center">
+                    <strong>Los Datos NO Fueron Guardados</strong>
+                </div>
+                <div class="alert alert-danger" id="mensajeColonia_Existente" style="display:none;" align="center">
+                    <strong>Ya existe una Colonia con el mismo nombre</strong>
+                </div>
+
+                <div class="alert alert-danger" id="msgSelColonia_AntesDeNvaCalle" style="display:none;" align="center">
+                    <strong>Para registrar una nueva calle, debe seleccionar una colonia</strong>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ColoniaId" class="control-label"></label>
-                <select asp-for="ColoniaId" class="form-control" asp-items="ViewBag.ColoniaId"></select>
-                <span asp-validation-for="ColoniaId" class="text-danger"></span>
+
+            <table class='table table-bordered' style='width:100%;'>
+                <tr>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="40%">
+                        <label for="emailLabel" id="emailLabel">e-mail</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                        <label for="TelefonoLabel">Teléfono</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="PartidoLabel">Partido</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="MiembroLabel">Miembro</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="SeccionLabel">Sección</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="40%">
+                        <input asp-for="Email" type="text" class="form-control" name="IngresaEmail" id="IngresaEmail" />
+                    </td>
+                    <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="30%">
+                        <input asp-for="Telefono" type="text" class="form-control" name="IngresaTelefono" id="IngresaTelefono" />
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <select asp-for="PartidoId" id="PartidoId" class="form-control" asp-items="ViewBag.Partidos"></select>
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <select asp-for="TipoMiembro" id="TipoMiembroId" class="form-control" asp-items="miembroPartido"></select>
+                    </td>
+                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                        <input asp-for="Seccion" type="text" class="form-control" name="IngresaSeccion" id="IngresaSeccion" />
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <div>
+                <div class="alert alert-danger" id="msgAlertPersonaExistente" style="display: none;" align="center">
+                    <strong>Esta persona ya existe!</strong>.
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CalleId" class="control-label"></label>
-                <select asp-for="CalleId" class="form-control" asp-items="ViewBag.CalleId"></select>
-                <span asp-validation-for="CalleId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumExterior" class="control-label"></label>
-                <input asp-for="NumExterior" class="form-control" />
-                <span asp-validation-for="NumExterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumInterior" class="control-label"></label>
-                <input asp-for="NumInterior" class="form-control" />
-                <span asp-validation-for="NumInterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cp" class="control-label"></label>
-                <input asp-for="Cp" class="form-control" />
-                <span asp-validation-for="Cp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Partido" class="control-label"></label>
-                <input asp-for="Partido" class="form-control" />
-                <span asp-validation-for="Partido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoMiembro" class="control-label"></label>
-                <input asp-for="TipoMiembro" class="form-control" />
-                <span asp-validation-for="TipoMiembro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Distrito" class="control-label"></label>
-                <input asp-for="Distrito" class="form-control" />
-                <span asp-validation-for="Distrito" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Seccion" class="control-label"></label>
-                <input asp-for="Seccion" class="form-control" />
-                <span asp-validation-for="Seccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaNacimiento" class="control-label"></label>
-                <input asp-for="FechaNacimiento" class="form-control" />
-                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estatus" class="control-label"></label>
-                <input asp-for="Estatus" class="form-control" />
-                <span asp-validation-for="Estatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genero" class="control-label"></label>
-                <input asp-for="Genero" class="form-control" />
-                <span asp-validation-for="Genero" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Notas" class="control-label"></label>
-                <input asp-for="Notas" class="form-control" />
-                <span asp-validation-for="Notas" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Campo1" class="control-label"></label>
-                <input asp-for="Campo1" class="form-control" />
-                <span asp-validation-for="Campo1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Campo2" class="control-label"></label>
-                <input asp-for="Campo2" class="form-control" />
-                <span asp-validation-for="Campo2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitud" class="control-label"></label>
-                <input asp-for="Latitud" class="form-control" />
-                <span asp-validation-for="Latitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitud" class="control-label"></label>
-                <input asp-for="Longitud" class="form-control" />
-                <span asp-validation-for="Longitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                <input asp-for="FechaUltimoCambio" class="form-control" />
-                <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioRegistroId" class="control-label"></label>
-                <input asp-for="UsuarioRegistroId" class="form-control" />
-                <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+
+            <table class='table table-bordered' style='width:100%;'>
+                <tr>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                        <label for="RFCLabel" id="emailLabel">RFC</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                        <label for="CURPLabel">CURP</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="AfinLabel">Afin</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="RCAsillaLabel">Representante de Casilla</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="LNegraLabel">Lista Negra</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                        <label for="LDDigital">DistritoDigital</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="30%">
+                        <input asp-for="RFC" type='text' class="form-control" id='RFCciudadanoSolicitante' style='width:100%; max-width:100%;' />
+                    </td>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="40%">
+                        <input asp-for="CURP" type="text" class="form-control" name="CURPciudadanoSolicitante" id="CURPciudadanoSolicitante" />
+                    </td>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                        @if (@Model.Afin == 1)
+                        {
+                            <input type='checkbox' id='cboxAfin' checked>
+                        }
+                        else
+                        {
+                            <input type='checkbox' id='cboxAfin'>
+                        }
+                    </td>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                        @if (@Model.RCasilla == 1)
+                        {
+                            <input type='checkbox' id='cboxRCasilla' checked>
+                        }
+                        else
+                        {
+                            <input type='checkbox' id='cboxRCasilla'>
+                        }
+                    </td>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                        @if (@Model.NoAfin == 1)
+                        {
+                            <input type='checkbox' id='cboxLNegra' checked>
+                        }
+                        else
+                        {
+                            <input type='checkbox' id='cboxLNegra'>
+                        }
+                    </td>
+                    <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                        @if (@Model.DDigital == 1)
+                        {
+                            <input type='checkbox' id='cboxDDigital' checked>
+                        }
+                        else
+                        {
+                            <input type='checkbox' id='cboxDDigital'>
+                        }
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+            <table class='table table-bordered' style='width:100%;'>
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="15%">
+                        <label for="LatitudCiudadano" class="control-label" onclick="ObtieneLalitudLongitudActual();">Latitud</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="15%">
+                        <input asp-for="Latitud" type="text" class="form-control" name="Latitud" id="Latitud" onkeypress='validaNumerosPuntoMenos(event)' />
+                    </td>
+                    <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="15%">
+                        <label for="LongitudCiudadano" class="control-label">Longitud</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="15%">
+                        <input asp-for="Longitud" type="text" class="form-control" name="Longitud" id="Longitud" onkeypress='validaNumerosPuntoMenos(event)' />
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+
+
+            <table class='table' style='width:100%; border:0px;'>
+                <tr>
+                    <td style='width:50%;'>
+                        <table class='table table-bordered' style='width:100%;'>
+                            <tr style="padding:2px;">
+                                <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="7%">
+                                    <label for="NotasLabel" class="control-label">Notas</label>
+                                </td>
+                                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="93%">
+                                    <textarea asp-for="Notas" id="Notas" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputNotas(event)></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style='width:50%;'>
+                        <table class='table table-bordered' style='width:100%;'>
+                            <tr>
+                                <td width="20%" class='fondoMenuFactorH' style="vertical-align:middle; text-align:center;">
+                                    @*<img id="imageCiudadano" src="~/Images/avatar.png" height='40' />*@
+                                    <div>
+                                        Fotografía
+                                    </div>
+                                </td>
+                                <td width="60%">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="FileUploadFormFileFoto" lang="es" placeholder="">
+                                        <label class="custom-file-label" data-browse="Seleccione archivo">Fotografía</label>
+                                    </div>
+                                </td>
+                                <td width="20%">
+                                    <div>
+                                        <button style="width:100%; height:100%;padding:0;" type="button" onclick="subirArchivosFotoButton('FileUploadFormFileFoto', @Model.CiudadanoId)" class="btn btn-primary">Subir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                @if (@Model.INE_URL.Length > 0)
+                                {
+                                    <td align="center" width="20%" style="vertical-align:middle; text-align:center; background-color:lightgrey;">
+                                        <div>
+                                            INE
+                                        </div>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align="center" width="20%" class='fondoMenuFactorH' style="vertical-align:middle; text-align:center;">
+                                        <div>
+                                            INE
+                                        </div>
+                                    </td>
+                                }
+
+
+                                <td width="60%">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="FileUploadFormFileINE" lang="es" placeholder="">
+                                        <label class="custom-file-label" data-browse="Seleccione archivo">INE</label>
+                                    </div>
+                                </td>
+                                <td width="20%">
+                                    <div>
+                                        <button style="width:100%; height:100%;padding:0;" type="button" onclick="subirArchivosINEButton('FileUploadFormFileINE', @Model.CiudadanoId)" class="btn btn-primary">Subir</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <a href="@Model.INE_URL" target="_blank" title="Imagen de INE ">
+            <img id="imaINE_Ciudadano" src="@Model.INE_URL" height="60" />
+        </a>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
+        <strong> Debe registrar por lo menos nombre y teléfono o correo electrónico.</strong>
+    </div>
+    <div class="alert alert-success" id="mensajeAlerta_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAlerta_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAlerta_PersonaExistente" style="display:none;" align="center">
+        <strong>Ya existe una persona con el mismo nombre y apellidos</strong>
+    </div>
+
+
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<div align="right">
+    <button type='button' onclick='ActualizaCiudadano();' class='BotonNaranjaClaro redondeada'>ACTUALIZA</button>&nbsp;
+    <a href="javascript:history.back(-2)"><button class="BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+    <input name="action" onclick="history.back()" type="submit" value="REGRESAR" />
+</div>
+
+
+
+
+@*<div class="collapse" id="collapseDatosPublicidad">
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Registro de Publicidad</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mb-3 col-md-2">
+                        <label class="form-label" for="inputTipo">Folio</label>
+                        <input type="text" class="form-control" id="inputFolioPublicidad">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label class="form-label" for="inputTipo">Tipo</label>
+                        <select class="form-control" asp-items="ViewBag.TipoPublicidad" id="TipoPublicidadId"></select>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label class="form-label" for="inputOrigen">Origen</label>
+                        <select class="form-control" asp-items="ViewBag.OrigenPublicidad" id="OrigenPublicidadId"></select>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="inputTamaño">Tamaño</label>
+                        <input type="text" class="form-control" id="inputTamañoPublicidad">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="inputTipo">Colonia</label>
+                        <input value="@ViewBag.NombreColoniaPub" type="text" class="form-control" id="ColoniaBuscarPublicidad" />
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label class="form-label" for="inputOrigen">Calle</label>
+                        <select class="form-control" id="CallePublicidadId" disabled></select>
+                    </div>
+                    <div class="mb-3 col-md-2">
+                        <label class="form-label" for="inputTamaño"># Exterior</label>
+                        <input type="text" class="form-control" id="inputNumExtPublicidad">
+                    </div>
+                    <div class="mb-3 col-md-2">
+                        <label class="form-label" for="inputTamaño">CP</label>
+                        <input type="text" class="form-control" id="inputCpPublicidad">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label class="form-label" for="inputTamaño">Latitud</label>
+                        <input type="text" class="form-control" id="inputLatitudPublicidad">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label class="form-label" for="inputTamaño">Longitud</label>
+                        <input type="text" class="form-control" id="inputLongitudPublicidad">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label class="form-label" for="inputTamaño">Notas</label>
+                        <input type="text" class="form-control" id="inputNotasPublicidad">
+                    </div>
+                </div>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="divListaLonasBardas"></div>*@
+
+
+
+@*---------Modal Alta Colonia ---------*@
+<div class="modal" id="divModalAltaColonia" tabindex="-20" role="dialog" aria-labelledby="divModalAltaColonia">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Colonia</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreColonia" lang="es" placeholder="Proporcione el nombre de la colonia" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenColoniaId" type="hidden" name="HiddenColoniaId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaColoniaButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*---------Modal Alta Calle ---------*@
+<div class="modal" id="divModalAltaCalle" tabindex="-2" role="dialog" aria-labelledby="divModalAltaCalle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Calle</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreCalle" lang="es" placeholder="Proporcione el nombre de la calle" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenCalleId" type="hidden" name="HiddenCalleId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaCalleButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

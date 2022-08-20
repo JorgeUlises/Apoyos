@@ -10,6 +10,14 @@ $('#FileUploadFormFileApoyos').on('change', function (e) {
 })
 
 
+$('#FileUploadFormFilePeticionBitacora').on('change', function (e) {
+    var files = [];
+    for (var i = 0; i < $(this)[0].files.length; i++) {
+        files.push($(this)[0].files[i].name);
+    }
+    $(this).next('.custom-file-label').html(files.join(', '));
+})
+
 
 
 const onInputDescripcion = event => {
@@ -19,8 +27,9 @@ const onInputDescripcion = event => {
 /*********************************************************************************************************
  * Guarda Nueva Petición
  *********************************************************************************************************/
-function GuardarNuevaPeticion() {
+function GuardarNuevaPeticion() { 
     var DatosGuardados = false;
+    var legislaturaId = $("#LegPeticionNuevo").val();
     var origenSolicitud = $("#OrigenPeticion").val();
     var folio = $("#FolioPeticion").val();
     var fechaSolicitud = $("#FechaSolicitud").val();
@@ -31,12 +40,24 @@ function GuardarNuevaPeticion() {
     var asociacionId = $("#AsociacionId").val();
     var descripcionSolicitud = $("#DescripcionApoyo").val().trim().replace(/\n/g, '&#13');
     var hito = 0;
+    var costo = $("#CostoPeticionId").val();
+    var responsableId = $("#responsablePeticion").val();
+
     if ($("#cboxHito").is(":checked")) {
         hito = 1;
     }
 
+    if (costo == null || costo=="") {
+        costo = "0";
+    }
 
+    if (asociacionId == null || asociacionId == "") {
+        asociacionId = 0;
+    }
+
+    console.log("legislaturaId: " + legislaturaId);
     console.log("origenSolicitud: " + origenSolicitud);
+    console.log("folio: " + folio);
     console.log("fechaSolicitud: " + fechaSolicitud);
     console.log("fechaCompromiso: " + fechaCompromiso);
     console.log("fechaConclusion: " + fechaConclusion);
@@ -45,6 +66,8 @@ function GuardarNuevaPeticion() {
     console.log("asociacionId: " + asociacionId);
     console.log("descripcionSolicitud: " + descripcionSolicitud);
     console.log("hito: " + hito);
+    console.log("costo: " + costo);
+    console.log("responsableId: " + responsableId);
 
     var datosCompletos = false;
 
@@ -52,6 +75,22 @@ function GuardarNuevaPeticion() {
         $("#msgAlerta_Origensolicitud").show();
         setTimeout(function () {
             $('#msgAlerta_Origensolicitud').fadeOut('fast');
+        }, 3000);
+        return;
+    }
+
+    //if (folio.length <= 0) {
+    //    $("#msgAlerta_FolioPeticion").show();
+    //    setTimeout(function () {
+    //        $('#msgAlerta_FolioPeticion').fadeOut('fast');
+    //    }, 3000);
+    //    return;
+    //}
+
+    if (descripcionSolicitud.length <= 0) {
+        $("#msgAlerta_DescripcionPeticion").show();
+        setTimeout(function () {
+            $('#msgAlerta_DescripcionPeticion').fadeOut('fast');
         }, 3000);
         return;
     }
@@ -94,10 +133,10 @@ function GuardarNuevaPeticion() {
         cache: false,
         async: false,
         data: {
-            origenSolicitud, folio, fechaSolicitud, fechaCompromiso, fechaConclusion, estatus, solicitanteId, asociacionId, descripcionSolicitud, hito
+            origenSolicitud, folio, fechaSolicitud, fechaCompromiso, fechaConclusion, estatus, solicitanteId, asociacionId, descripcionSolicitud, hito, costo, responsableId, legislaturaId
         },
         success: (response) => {
-            console.log(">>>> DESPUES D GUARDAR REGRESA : -" + response + "-");
+            console.log(">>>> DESPUES D GUARDAR REGRESA : >" + response + "<");
 
             switch (response) {
                 //case 0:
@@ -108,6 +147,13 @@ function GuardarNuevaPeticion() {
                 //    DatosGuardados = false;
                 //    break;
                 case -1:
+                    $("#mensajeAlerta_Error").show();
+                    setTimeout(function () {
+                        $('#mensajeAlerta_Error').fadeOut('fast');
+                    }, 2000);
+                    DatosGuardados = false;
+                    break;
+                case -2:
                     $("#mensajeAlerta_Error").show();
                     setTimeout(function () {
                         $('#mensajeAlerta_Error').fadeOut('fast');
@@ -202,12 +248,17 @@ function GeneraTablaCatSubCatNSolicitud(idPeticion) {
                 tablaHTML += "<td style='text-align:center;'>" + indice + "</td>";
                 tablaHTML += "<td>" + val.descripcionCat + "</td>";
                 tablaHTML += "<td>" + val.descripcionSubcat + "</td>";
-                tablaHTML += "<td><span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Categoría y Subcategoria' onclick='EliminaRowPeticionCatSubcat(" + idPeticion + "," + val.peticionCategoriaId + "," + val.peticionSubCategoriaId + "," + val.categoriaId + "," + val.subcategoriaId + ");'></span></td>";
+                tablaHTML += "<td><span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Categoría y Subcategoria' onclick='EliminaRowPeticionCatSubcat(" + idPeticion + "," + val.peticionCategoriaID + "," + val.peticionSubcategoriaID + "," + val.categoriaID + "," + val.subcategoriasID + ");'></span></td>";
                 tablaHTML += "</tr>";
             });
             //$('#divCatSubCatNPeticion tbody').append(tablaHTML);
         }
     });
+
+    if (indice > 0) {
+        $("#opc_1").css({ 'border-left-color': '#20B016' });
+    }
+
 
     indice++;
 
@@ -267,13 +318,16 @@ function GeneraTablaArchivosAnexosNSolicitud(idPeticion) {
                 tablaHTML += "<tr id='ArchivoRenglon_" + indice + "'>";
                 tablaHTML += "<td style='text-align:center;'>" + indice + "</td>";
                 tablaHTML += "<td><a href='" + val.url + "' target='_blank' title='Archivo'>" + val.nombreArchivo + "</a></td>";
-                tablaHTML += "<td><span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowArchivo(" + val.archivoId + ");'></span></td>";
+                tablaHTML += "<td><span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowArchivoPeticion(" + val.archivosPeticionesID + "," + idPeticion + ");'></span></td>";
                 tablaHTML += "</tr>";
             });
-            //$('#divCatSubCatNPeticion tbody').append(tablaHTML);
+            //$('#divCatSubCatNPeticion tbody').append(tablaHTML);  
         }
     });
 
+    if (indice > 0) {
+        $("#opc_2").css({ 'border-left-color': '#20B016' });
+    }
     //indice++;
 
 
@@ -332,7 +386,7 @@ function GeneraTablaBeneficiariosNSolicitud(idPeticion) {
         cache: false,
         async: false,
         success: (response) => {
-            $.each(response, (index, val) => {
+            $.each(response, (index, val) => { 
                 indice++;
                 tablaHTML += "<tr id='ArchivoRenglon_" + indice + "'>";
                 tablaHTML += "<td style='text-align:center;'>" + indice + "</td>";
@@ -341,14 +395,18 @@ function GeneraTablaBeneficiariosNSolicitud(idPeticion) {
                 tablaHTML += "<td>" + val.calle + "</td>";
                 tablaHTML += "<td><input type='text' id='DescripcionApoyo_" + val.beneficiariosID + "' style='width:100%; max-width:100%;' value='" + val.notas + "'/></td>";
                 tablaHTML += "<td>";
-                tablaHTML += "<span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowBeneficiario(" + val.peticionID + "," + val.ciudadanoID + ");'></span>";
+                tablaHTML += "<span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowBeneficiarioPeticion(" + val.peticionID + "," + val.ciudadanoID + "," + val.beneficiariosID + ");'></span>";
                 tablaHTML += "<span class='fas fa-save' style='font-size:18px; cursor:pointer' title='Actualiza el apoyo recibido' onclick='GuardaCambiosApoyoBeneficiario(" + val.peticionID + "," + val.ciudadanoID + "," + val.beneficiariosID + ");'></span>";
                 tablaHTML += "</td>";
-                tablaHTML += "</tr>";
+                tablaHTML += "</tr>"; 
             });
             //$('#divCatSubCatNPeticion tbody').append(tablaHTML);
         }
     });
+
+    if (indice > 0) {
+        $("#opc_3").css({ 'border-left-color': '#20B016' });
+    }
 
     indice++;
 
@@ -385,27 +443,23 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
     tablaHTML += "<td style='text-align:center; padding:1px;' width='3%'>";
     tablaHTML += "#";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='35%'>";
+    tablaHTML += "<td style='text-align:left; background-color:white; color:black; padding:1px;' width='35%'>";
     tablaHTML += "Actividad";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
+    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='15%'>";
     tablaHTML += "Fecha Registro";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
-    tablaHTML += "Fecha Compromiso";
-    tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
+    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='15%'>";
     tablaHTML += "Fecha Conclusion";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
-    tablaHTML += "Estatus";
+    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='15%'>";
+    tablaHTML += "Archivos";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='20%'>";
-    tablaHTML += "Responsable";
+    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='15%'>";
+    tablaHTML += "Estatus";
     tablaHTML += "</td>";
 
     tablaHTML += "<td style='text-align:center;padding:1px;' width='2%'>";
-    tablaHTML += "<span style='font-size:18px; cursor:pointer' title='Agrega Espacio para nuevo registro de Categoría-Subcategoría' onclick='AgregaRowCatSubC(" + indice + ");'>+</span>";
     tablaHTML += "</td>";
     tablaHTML += "</tr>";
     var selAux = "";
@@ -421,14 +475,44 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
                 selAux = "";
                 tablaHTML += "<tr id='BitacoraRenglon_" + indice + "'>";
                 tablaHTML += "<td style='text-align:center;'>" + indice + "</td>";
-                tablaHTML += "<td style='text-align:center;'>" + val.bitacoraBase.descripcion + "</td>";
+
+                tablaHTML += "<td><input type='text' id='BitacoraActividad_" + val.bitacoraBase.bitacoraId + "' style='width:100%; max-width:100%;' value='" + val.bitacoraBase.descripcion + "'/></td>";
+
                 tablaHTML += "<td><input type='text' name = 'FR_Bitacora' id='FR_" + val.bitacoraBase.bitacoraId + "' style='width:100%; max-width:100%;' value='" + moment(val.bitacoraBase.fechaRegistro).format('DD/MM/yyyy') + "'/></td>";
-                tablaHTML += "<td><input type='text' name = 'FC_Bitacora' id='FC_" + val.bitacoraBase.bitacoraId + "' style='width:100%; max-width:100%;' value='" + moment(val.bitacoraBase.fechaCompromiso).format('DD/MM/yyyy') + "'/></td>";
                 tablaHTML += "<td><input type='text' name = 'FF_Bitacora' id='FF_" + val.bitacoraBase.bitacoraId + "' style='width:100%; max-width:100%;' value='" + moment(val.bitacoraBase.fechaConclusion).format('DD/MM/yyyy') + "'/></td>";
 
                 tablaHTML += "<td>";
-                tablaHTML += "<select id='SelEstatus_'" + val.bitacoraBase.bitacoraId + ">";
-                tablaHTML += "<option value=''></option>";
+                if (val.archivosRelacionadosBitacora.length != 0) {
+                    tablaHTML += "<table style='width: 100%; border:none; margin:0; padding:0; border-collapse: collapse;' cellpadding='0' cellspacing='0'>";
+                    var indiceArch = 0;
+                    for (const elemento in val.archivosRelacionadosBitacora) {
+                        indiceArch++;
+                        console.log("URL--> " + val.archivosRelacionadosBitacora[elemento].url);
+                        tablaHTML += "<tr>";
+                        tablaHTML += "<td width='5%'>" + indiceArch + "</td>";
+                        tablaHTML += "<td width='65%'><a href='" + val.archivosRelacionadosBitacora[elemento].url + "' target='_blank' title='" + val.archivosRelacionadosBitacora[elemento].nombreArchivo + "'>" + val.archivosRelacionadosBitacora[elemento].nombreArchivo.substring(0, 20) + "</a></td>";
+                        tablaHTML += "<td width='30%'>";
+                        tablaHTML += "<span class='fas fa-trash-alt' style='font-size:16px; cursor:pointer;' title='Elimina Archivo' onclick='EliminaArchivoBitacoraPeticion(" + val.archivosRelacionadosBitacora[elemento].archivosBitacoraId + "," + val.archivosRelacionadosBitacora[elemento].bitacoraId + "," + idPeticion + ");'>&nbsp;</span>";
+                        tablaHTML += "<span class='fas fa-file-upload' style='font-size:16px; cursor:pointer;' title='Anexar Archivo' onclick='MostrarModalSubirArchivoPeticionBitacora(" + val.archivosRelacionadosBitacora[elemento].bitacoraId + "," + idPeticion + ");'></span>";
+                        tablaHTML += "</td>";
+                        tablaHTML += "</tr>";
+                    }
+                    tablaHTML += "</table>";
+                } else {
+                    tablaHTML += "<table style='width: 100%; border:none; margin:0; padding:0; border-collapse: collapse;' cellpadding='0' cellspacing='0'>";
+                    tablaHTML += "<tr>";
+                    tablaHTML += "<td width='70%'></td>";
+                    tablaHTML += "<td width='30%'>";
+                    tablaHTML += "<span class='fas fa-file-upload' style='font-size:16px; cursor:pointer;' title='Anexar Archivo' onclick='MostrarModalSubirArchivoPeticionBitacora(" + val.bitacoraBase.bitacoraId  + "," + idPeticion + ");'></span>";
+                    tablaHTML += "</td>";
+                    tablaHTML += "</tr>";
+                    tablaHTML += "</table>";
+                }
+                tablaHTML += "</td>";
+
+                tablaHTML += "<td>";
+                tablaHTML += "<select width='100%' id='SelEstatus_" + val.bitacoraBase.bitacoraId + "'>";
+                tablaHTML += "<option value='0'></option>";
                 switch (val.bitacoraBase.estatus) {
                     case 0:
                         tablaHTML += "<option value='1'>FINALIZADA</option>";
@@ -454,16 +538,18 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
                 tablaHTML += "</select>";
                 tablaHTML += "</td>";
 
-                tablaHTML += "<td><input type='text' id='Responsable_" + val.bitacoraBase.bitacoraId + "' style='width:100%; max-width:100%;' value='" + val.bitacoraBase.responsable + "'/></td>";
                 tablaHTML += "<td>";
-                tablaHTML += "<span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowBitacora(" + val.bitacoraBase.bitacoraId + "," + idPeticion + ");'></span>";
-                tablaHTML += "<span class='fas fa-save' style='font-size:18px; cursor:pointer' title='Actualiza el apoyo recibido' onclick='GuardaCambiosBitacora(" + val.bitacoraBase.bitacoraId + "," + idPeticion + ");'></span>";
+                tablaHTML += "<span class='fas fa-trash-alt' style='font-size:18px; cursor:pointer' title='Elimina Archivo' onclick='EliminaRowBitacoraPeticion(" + val.bitacoraBase.bitacoraId + "," + idPeticion + ");'></span>";
+                tablaHTML += "<span class='fas fa-save' style='font-size:18px; cursor:pointer' title='Actualiza el apoyo recibido' onclick='ActualizaBitacora(" + val.bitacoraBase.bitacoraId + "," + idPeticion + ");'></span>";
                 tablaHTML += "</td>";
                 tablaHTML += "</tr>";
             });
-            //$('#divCatSubCatNPeticion tbody').append(tablaHTML);
         }
     });
+
+    if (indice > 0) {
+        $("#opc_4").css({ 'border-left-color': '#20B016' });
+    }
 
     indice++;
 
@@ -478,15 +564,13 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
     tablaHTML += "</td>";
 
     tablaHTML += "<td>";
-    tablaHTML += "<div class='input-group date' id='dpBitacoraFC'>";
-    tablaHTML += "<input asp-for='FC_Bitacora' name='FC_Bitacora' id='FC_BitacoraNva' class='form-control'/>";
-    tablaHTML += "</div>";
-    tablaHTML += "</td>";
-
-    tablaHTML += "<td>";
     tablaHTML += "<div class='input-group date' id='dpBitacoraFF'>";
     tablaHTML += "<input asp-for='FF_Bitacora' name='FF_Bitacora' id='FF_BitacoraNva' class='form-control'/>";
     tablaHTML += "</div>";
+    tablaHTML += "</td>";
+
+
+    tablaHTML += "<td>";
     tablaHTML += "</td>";
 
     tablaHTML += "<td>";
@@ -498,7 +582,6 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
     tablaHTML += "</select>";
     tablaHTML += "</td>";
 
-    tablaHTML += "<td><input type='text' id='BitacoraResponsable' style='width:100%; max-width:100%;' value=''/></td>";
     tablaHTML += "<td><span class='fas fa-save' style='font-size:18px; cursor:pointer' title='Guardar Actividad' onclick='GuardaNvaActividadBitacora(" + idPeticion + ");'></span></td>";
     tablaHTML += "</tr>";
 
@@ -508,18 +591,15 @@ function GeneraTablaBitacoraNSolicitud(idPeticion) {
 
     $("#divBitacoraNPeticion").html(tablaHTML);
 
-    //$('#FR_Bitacora').datepicker({
     $('input[name="FR_Bitacora"]').datepicker({
         dateFormat: 'dd/mm/yy',
         locale: 'es'
     });
 
-    //$('#FC_Bitacora').datepicker({
     $('input[name="FC_Bitacora"]').datepicker({
         dateFormat: 'dd/mm/yy'
     });
 
-    //$('#FF_Bitacora').datepicker({
     $('input[name="FF_Bitacora"]').datepicker({
         dateFormat: 'dd/mm/yy'
     });
@@ -699,13 +779,62 @@ function GuardaNvaActividadBitacora(idPeticion) {
 
 
 /************************************************************************************************************************
+ *  Guarda ACTUALIZACIÓN de Actividad en Bitácora
+ ************************************************************************************************************************/
+function ActualizaBitacora(bitacoraId, idPeticion) {
+
+    var actividad = $("#BitacoraActividad_" + bitacoraId).val();
+    var fechaRegistro = $("#FR_" + bitacoraId).val();
+    var fechaCompromiso = $("#FC_" + bitacoraId).val();
+    var fechaConclusion = $("#FF_" + bitacoraId).val();
+    var estatusBitacora = $("#SelEstatus_" + bitacoraId).val();
+    var responsableBitacora = $("#BitacoraResponsable").val();
+    var DatosGuardadosBitacora = false;
+
+    console.log("actividad: " + actividad);
+    console.log("fechaRegistro: " + fechaRegistro);
+    console.log("fechaCompromiso: " + fechaCompromiso);
+    console.log("fechaConclusion: " + fechaConclusion);
+    console.log("estatusBitacora: " + estatusBitacora);
+    console.log("idPeticion: " + idPeticion);
+    console.log("bitacoraId: " + bitacoraId);
+
+    //return;
+
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/ActualizaActividadBitacora",
+        data: { bitacoraId, idPeticion, actividad, fechaRegistro, fechaCompromiso, fechaConclusion, estatusBitacora, responsableBitacora },
+        cache: false,
+        async: false,
+        success: (response) => {
+            $.each(response, (index, val) => {
+                if (val > 0) {
+                    console.log("LOS DATOS DE Actividad Bitácora FUERON ACTUALIZADOS");
+                }
+            })
+        },
+        error: function (response) {
+            DatosGuardadosBeneficiario = false;
+        }
+    });
+
+    //if (DatosGuardadosBitacora) {
+    GeneraTablaBitacoraNSolicitud(idPeticion);
+    //}
+}
+
+
+
+/************************************************************************************************************************
  *  Guarda Actualización en Solicitud de Petición
  ************************************************************************************************************************/
 function GuardarActualizacionPeticion(idPeticion) {
     var DatosGuardados = false;
+    var legislaturaId = $("#LegislaturaId").val();
     var origenSolicitud = $("#OrigenPeticion").val();
     var folio = $("#FolioPeticionEdicion").val();
-    var SolicitanteOriginalId = $("#SolicitanteOriginalId").val();
+    //var SolicitanteOriginalId = $("#SolicitanteOriginalId").val();
     
     var fechaSolicitud = $("#FechaSolicitud").val();
     var fechaCompromiso = $("#FechaCompromiso").val();
@@ -723,6 +852,9 @@ function GuardarActualizacionPeticion(idPeticion) {
         hito = 1;
     }
 
+    var costo = $("#CostoApoyoEdit").val();
+    var responsableId = $("#responsableId").val();
+
     if (asociacionId == null || asociacionId==0) {
         asociacionId = 1;
     }
@@ -730,7 +862,7 @@ function GuardarActualizacionPeticion(idPeticion) {
     console.log("idPeticion: " + idPeticion);
     console.log("origenSolicitud: " + origenSolicitud);
     console.log("folio: " + folio);
-    console.log("SolicitanteOriginalId: " + SolicitanteOriginalId);
+    //console.log("SolicitanteOriginalId: " + SolicitanteOriginalId);
     
     console.log("fechaSolicitud: " + fechaSolicitud);
     console.log("fechaCompromiso: " + fechaCompromiso);
@@ -791,7 +923,7 @@ function GuardarActualizacionPeticion(idPeticion) {
         cache: false,
         async: false,
         data: {
-            idPeticion, origenSolicitud, folio, fechaSolicitud, fechaCompromiso, fechaConclusion, estatus, solicitanteId, asociacionId, descripcionSolicitud, hito
+            idPeticion, origenSolicitud, folio, fechaSolicitud, fechaCompromiso, fechaConclusion, estatus, solicitanteId, asociacionId, descripcionSolicitud, hito, costo, responsableId, legislaturaId
         },
         success: (response) => {
             console.log(">>>> DESPUES D GUARDAR REGRESA : -" + response + "-");
@@ -845,7 +977,7 @@ function GuardarActualizacionPeticion(idPeticion) {
 }
 
 /**********************************************************************************************
- * Muestra MODAL para Subir Archivo Anexo de Petiviones
+ * Muestra MODAL para Subir Archivo Anexo de Peticiones
  **********************************************************************************************/
 function MostrarModalSubirArchivoAnexo(idPeticion) {
     $("#ModalSeleccionarArchivosPeticiones").appendTo("body");
@@ -896,10 +1028,71 @@ function subirArchivosApoyoButton(nombreArchivoAsubir) {
     });
 }
 
+
+
+/**********************************************************************************************
+ * Muestra MODAL para Subir Archivo Anexo de ACTIVIDADES DE PETICIONES
+ **********************************************************************************************/
+function MostrarModalSubirArchivoPeticionBitacora(BitacoraId, PeticionId) {
+    $("#ModalSeleccionarArchivosPeticionesBitacora").appendTo("body");
+    $("#ModalSeleccionarArchivosPeticionesBitacora").modal("show");
+
+    console.log("PeticionId: " + PeticionId);
+    console.log("BitacoraId: " + BitacoraId);
+    $('#HiddenPeticionActId').val(PeticionId);
+    $('#HiddenPeticionBitacoraId').val(BitacoraId);
+}
+
+
+/***********************************************************************************
+ * Subir Archivo de PETICIÓN - BITACORA
+ ***********************************************************************************/
+function subirArchivosPeticionBitacoraButton(nombreArchivoAsubir) {
+    var formData = new FormData();
+    var input = document.getElementById(nombreArchivoAsubir);
+    var files = input.files;
+
+    var PeticionId = $('#HiddenPeticionActId').val();
+    var BitacoraId = $('#HiddenPeticionBitacoraId').val();
+
+    for (var i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+    }
+
+    formData.append("PeticionId", PeticionId);
+    formData.append("BitacoraId", BitacoraId);
+
+    console.log("LISTO PARA SUBIR ARCHIVOS: " + PeticionId + "---" + BitacoraId);
+    $.ajax({
+        type: 'POST',
+        url: "/Apoyo/Peticiones/SubirArchivoPeticionBitacora",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: formData,
+        dataType: 'json',
+        cache: false,
+        async: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log('El archivo ha sido subido-->' + response);
+            $('#ModalSeleccionarArchivosPeticionesBitacora').modal('hide');
+            GeneraTablaBitacoraNSolicitud(PeticionId);
+        },
+        error: function (error) {
+            console.log('Error al subir el archivo');
+        }
+    });
+}
+
+
 /*********************************************************************************************************************
  * FILTRAR PETICIONES - Identifica opción seleccionada
  *********************************************************************************************************************/
 $('#LegBusqueda').click(function () {
+    $('#LegPeticionReferencia').val($('#LegBusqueda').val()).select = true;
     FiltraPeticiones();
 });
 
@@ -938,8 +1131,13 @@ $('#DependenciaBusqueda').click(function () {
     FiltraPeticiones();
 });
 
+$('#ResponsableBusqueda').click(function () {
+    console.log("VALOR SELECCIONADO: " + $("#ResponsableBusqueda").val());
+    FiltraPeticiones();
+});
+
 /*********************************************************************************************************************
- * FILTRAR Iniciativas
+ * FILTRAR Peticiones
  *********************************************************************************************************************/
 function FiltraPeticiones() {
     //    var LegislaturaId = $("#LegBusqueda").val();
@@ -953,6 +1151,21 @@ function FiltraPeticiones() {
 
     GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetSolicitudes);
 }
+
+/***************************************
+ * Busqueda Rápida Peticiones
+ ***************************************/
+function BusqudaRapPeticiones() {
+    var valorBR = $('#BRPeticionId').val().trim();
+    $("#descripcionFiltro").val(valorBR);
+    FiltraPeticiones()
+}
+
+$('#filtro_P').click(function () {
+    console.log("BOTÓN DE FILTRO..................");
+    $('#BRPeticionId').val("");
+    $("#descripcionFiltro").val("");
+});
 
 
 /*********************************************************************************************************************
@@ -972,6 +1185,7 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
     var estatusId = $("#EstatusBusqueda").val();
     var asociacionId = $("#AsociacionBusqueda").val();
     var dependenciaId = $("#DependenciaBusqueda").val();
+    var responsableId = $("#ResponsableBusqueda").val();
 
 
     var hito = $("#HitoBusqueda").val();
@@ -988,13 +1202,15 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
 
     console.log("Folio: " + folio);
 
-    //console.log("INICIO: " + fechaInicioRecibido);
-    //console.log("FIN: " + fechaFinRecibido);
+    console.log("INICIO: " + fechaInicioSolicitud);
+    console.log("FIN: " + fechaFinSolicitud);
 
 
     //console.log("Opción BUSQUEDA Origen: " + origenInciativa);
 
     //console.log("PARAMETROS: LegislaturaId: " + LegislaturaId + " numTurnoParam: " + numTurnoParam + " tipoIniciativaParam: " + tipoIniciativaParam + " estatusParam: " + estatusParam);
+
+    tablaHTML += "<div class='table-responsive'>";
 
     tablaHTML += "<table class='table table-bordered' style = 'width:100%;padding: 1px;'>";
     tablaHTML += "<thead>";
@@ -1002,9 +1218,10 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
     tablaHTML += "<th width='2%' style='border-radius: 10px 0px 0px 10px; text-align:center;'>#</th>";
     tablaHTML += "<th width='8%' style='text-align:center;'>Folio</th>";
     tablaHTML += "<th width='13%' style='text-align:center;'>Fecha Registro</th>";
-    tablaHTML += "<th width='25%' style='text-align:center;'>Nombre Solicitante</th>";
+    tablaHTML += "<th width='20%' style='text-align:center;'>Nombre Solicitante</th>";
     tablaHTML += "<th width='30%' style='text-align:center;'>Descripcion</th>";
-    tablaHTML += "<th width='15%' style='text-align:center;'>Clasificación-Subclasificación</th>";
+    tablaHTML += "<th width='15%' style='text-align:center;'>Categoría-Subcategoría</th>";
+    tablaHTML += "<th width='5%' style='text-align:center;'>Costo</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Estatus</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Días Transcurridos</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Días Solución</th>";
@@ -1017,20 +1234,44 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
     $.ajax({
         type: "GET",
         url: "/Apoyo/Peticiones/ObtienePeticiones",
-        data: { RegXpag, offsetPeticiones, LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId },
+        data: { RegXpag, offsetPeticiones, LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId, responsableId },
         cache: false,
         async: false,
         success: (response) => {
             $.each(response, (index, val) => {
                 indice = index + 1;
                 tablaHTML += "<tr>";
-                tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle;padding:1px;'>" + indice + "</td>";
+                switch (val.estatusId){
+                    case 2: // AMARILLO  - Sin Asignar
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#D1D6D9;'>" + indice + "</td>";
+                        break;
+                    case 3: // AZUL CLARO - Solicitado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#48C4F5;'>" + indice + "</td>";
+                        break;
+                    case 4: // NARANJA - Cancelado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#F96606;'>" + indice + "</td>";
+                        break;
+                    case 5: // VERDE - Entregado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#5EF711;'>" + indice + "</td>";
+                        break;
+                    case 6: // AZUL OBSCURO - RECHAZADO
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#FA2406;'>" + indice + "</td>";
+                        break;
+                    case 7: // VERDE OSCURO - No Procede
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#1AA10C;'>" + indice + "</td>";
+                        break;
+                    case 8: // VERDE OSCURO - Reasignado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#1AA10C;'>" + indice + "</td>";
+                        break;
+                }
+                
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.numFolio + "</td>";
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.fechaRegistro + "</td>";
+                tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.fechaSolicitud + "</td>";
 
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.nombreCompleto + "</td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle;padding:1px;'>" + val.nombreCompleto + "</td>";
 
-                tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>(" + val.peticionId + ") " + val.descripcion + "</span></td>";
+                //tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>(" + val.peticionId + ") " + val.descripcion + "</span></td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>" + val.descripcion + "</span></td>";
 
                 tablaHTML += "<td style='vertical-align: middle; padding:1px;'>";
                 tablaHTML += "<table class='table table-bordered table-striped'>";
@@ -1052,43 +1293,8 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
                 tablaHTML += "</table>";
                 tablaHTML += "</td>";
 
+                tablaHTML += "<td style='text-align: left; vertical-align: middle;padding:1px;'>$ " + val.costo + "</td>";
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.estatus + "</td>";
-
-                //switch (val.estatusid) {
-                //    case EstatusIniciativa.PENDIENTE:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_1.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.RECHAZADA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_2.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.APROBADA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_3.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.RECHAZADA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_4.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.APROBADA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_5.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.PUBLICADA_SA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_6.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.SELECCIONADA_PARA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_16.png' alt='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.SELECCIONADA_PARA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_17.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.PUBLICADA_SA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_5.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.BAJA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Error.png' title='" + val.estatus + "' class='center-block responsive' height='25'/></td>";
-                //        break;
-                //    default:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.estatus + "</td>";
-                //        break;
-                //}
 
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.diasTranscurridos + "</td>";
                 if (val.diasSolucion != -1) {
@@ -1098,14 +1304,43 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
                 }
 
 
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;'>";
+                //tablaHTML += "<td style='text-align: center; vertical-align: middle;'>";
+                switch (val.estatusId) {
+                    case 2: // AMARILLO  - Sin Asignar
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#D1D6D9;'>";
+                        break;
+                    case 3: // AZUL CLARO - Solicitado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#48C4F5;'>";
+                        break;
+                    case 4: // VERDE - Atendido
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#F96606;'>";
+                        break;
+                    case 5: // NARANJA - Cancelado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#5EF711;'>";
+                        break;
+                    case 6: // AZUL OBSCURO - En Proceso
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#FA2406;'>";
+                        break;
+                    case 7: // VERDE OSCURO - No Procede
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#1AA10C;'>";
+                        break;
+                    case 8: // VERDE OSCURO - Reasignado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#1AA10C;'>";
+                        break;
+                    default:
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#fff;'>";
+                        break;
+                }
                 tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
                 tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
                 tablaHTML += "</td>";
+
                 tablaHTML += "</tr>";
             });
             tablaHTML += "</tbody>";
             tablaHTML += "</table>";
+            tablaHTML += "</div>";
+
             $("#divIniciativas").html(tablaHTML);
 
 
@@ -1140,7 +1375,7 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
     $.ajax({
         type: "GET",
         url: "/Apoyo/Peticiones/ObtieneNumeroPeticionesXfiltro",
-        data: { LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId },
+        data: { LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId, responsableId },
         cache: false,
         async: false,
         success: (response) => {
@@ -1149,10 +1384,7 @@ function GeneraTablaSolicitudApoyos(LegislaturaId, RegXpag, offsetPeticiones) {
         }
     });
 
-    //console.log(">>>>>> INICIO: " + fechaInicioRecibido);
-    //console.log(">>>>>> FIN: " + fechaFinRecibido);
-    //console.log(">>>>>> NUMERO REGISTROS FILTRADOS: " + numeroRegistrosFiltrados);
-
+    
     $("#labelNumeroRegistros").html("<strong>Total de Registros: </strong>" + numeroRegistrosFiltrados + "<strong>/</strong>" + numeroRegistros);
     $("#labelNumeroRegistros_footer").html("<strong>Total de Registros: </strong>" + numeroRegistrosFiltrados + "<strong>/</strong>" + numeroRegistros);
     var numPaginas = 0;
@@ -1201,7 +1433,7 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
     var estatusId = $("#estatusIdFiltro").val();
     var asociacionId = $("#AsociacionBusqueda").val();
     var dependenciaId = $("#DependenciaBusqueda").val();
-
+    var responsableId = $("#ResponsableBusqueda").val();
 
     var hito = $("#HitoBusqueda").val();
 
@@ -1216,19 +1448,7 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
     var fechaFinConclusion = $("#hideFechaFinConclusion").val();
 
 
-
-    //console.log("INICIO: " + fechaInicioRecibido);
-    //console.log("FIN: " + fechaFinRecibido);
-
-
-
-    //console.log("Opción BUSQUEDA Origen: " + origenInciativa);
-
-    //console.log("PARAMETROS: LegislaturaId: " + LegislaturaId + " numTurnoParam: " + numTurnoParam + " tipoIniciativaParam: " + tipoIniciativaParam + " estatusParam: " + estatusParam);
-    //console.log("PARAMETROS: LegislaturaId: " + LegislaturaId + " origenPeticion: " + origenPeticion + " nombreSolicitante: " + nombreSolicitante + " descripcion: " + descripcion);
-    //console.log("PARAMETROS: categoriaId: " + categoriaId + " subCategoriaId: " + subCategoriaId + " estatusId: " + estatusId + " fechaInicioSolicitud: " + fechaInicioSolicitud);
-    //console.log("REGISTROS POR PAGINA: " + RegXpag + "            offset = " + offsetPeticiones);
-
+    tablaHTML += "<div class='table-responsive'>";
     tablaHTML += "<table class='table table-bordered responsive-table' style = 'width:100%;padding: 1px;'>";
     tablaHTML += "<thead>";
     tablaHTML += "<tr style='text-align:center; width:98%; background-color:#3f49b4; color:whitesmoke;'>";
@@ -1237,7 +1457,8 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
     tablaHTML += "<th width='13%' style='text-align:center;'>Fecha Registro</th>";
     tablaHTML += "<th width='25%' style='text-align:center;'>Nombre Solicitante</th>";
     tablaHTML += "<th width='30%' style='text-align:center;'>Descripcion</th>";
-    tablaHTML += "<th width='15%' style='text-align:center;'>Clasificación-Subclasificación</th>";
+    tablaHTML += "<th width='15%' style='text-align:center;'>Categoría-Subcategoría</th>";
+    tablaHTML += "<th width='5%' style='text-align:center;'>Costo</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Estatus</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Días Transcurridos</th>";
     tablaHTML += "<th width='4%' style='text-align:center;'>Días Solución</th>";
@@ -1250,7 +1471,7 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
     $.ajax({
         type: "GET",
         url: "/Apoyo/Peticiones/ObtienePeticiones",
-        data: { RegXpag, offsetPeticiones, LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId },
+        data: { RegXpag, offsetPeticiones, LegislaturaID, origenPeticion, folio, hito, nombreSolicitante, descripcion, categoriaId, subCategoriaId, estatusId, fechaInicioSolicitud, fechaFinSolicitud, fechaInicioConclusion, fechaFinConclusion, asociacionId, dependenciaId, responsableId },
         cache: false,
         async: false,
         success: (response) => {
@@ -1258,13 +1479,37 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
                 //indice = index + 1;
                 indice = (pagina - 1) * RegXpag + index + 1;
                 tablaHTML += "<tr>";
-                tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle;padding:1px;'>" + indice + "</td>";
+                switch (val.estatusId) {
+                    case 2: // AMARILLO  - Sin Asignar
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#D1D6D9;'>" + indice + "</td>";
+                        break;
+                    case 3: // AZUL CLARO - Solicitado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#48C4F5;'>" + indice + "</td>";
+                        break;
+                    case 4: // VERDE - Atendido
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#F96606;'>" + indice + "</td>";
+                        break;
+                    case 5: // NARANJA - Cancelado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#5EF711;'>" + indice + "</td>";
+                        break;
+                    case 6: // AZUL OBSCURO - En Proceso
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#FA2406;'>" + indice + "</td>";
+                        break;
+                    case 7: // VERDE OSCURO - No Procede
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#1AA10C;'>" + indice + "</td>";
+                        break;
+                    case 8: // VERDE OSCURO - Reasignado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-left-width:3px; border-left-color:#1AA10C;'>" + indice + "</td>";
+                        break;
+                }
+
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.numFolio + "</td>";
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.fechaRegistro + "</td>";
+                tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.fechaSolicitud + "</td>";
 
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.nombreCompleto + "</td>";
 
-                tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>(" + val.peticionId + ") " + val.descripcion + "</span></td>";
+                //tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>(" + val.peticionId + ") " + val.descripcion + "</span></td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle; padding:2px;'><span style='font-size:12px; cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(" + val.peticionId + ");'>" + val.descripcion + "</span></td>";
 
                 tablaHTML += "<td style='vertical-align: middle; padding:1px;'>";
                 tablaHTML += "<table class='table table-bordered table-striped'>";
@@ -1286,44 +1531,10 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
                 tablaHTML += "</table>";
                 tablaHTML += "</td>";
 
+                tablaHTML += "<td style='text-align: left; vertical-align: middle;padding:1px;'>$ " + val.costo + "</td>";
                 tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.estatus + "</td>";
 
-                //switch (val.estatusid) {
-                //    case EstatusIniciativa.PENDIENTE:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_1.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.RECHAZADA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_2.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.APROBADA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_3.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.RECHAZADA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_4.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.APROBADA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_5.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.PUBLICADA_SA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_6.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.SELECCIONADA_PARA_COMISION:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_16.png' alt='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.SELECCIONADA_PARA_PLENO:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_17.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.PUBLICADA_SA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Estatus_5.png' title='" + val.estatus + "' class='center-block responsive' height='20'/></td>";
-                //        break;
-                //    case EstatusIniciativa.BAJA:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><img src='/Estadistica/IMAGES/Error.png' title='" + val.estatus + "' class='center-block responsive' height='25'/></td>";
-                //        break;
-                //    default:
-                //        tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.estatus + "</td>";
-                //        break;
-                //}
-
+ 
 
                 if (val.diasSolucion != -1) {
                     tablaHTML += "<td></td>";
@@ -1333,14 +1544,49 @@ function GeneraTablaSolicitudApoyos_2(LegislaturaId, RegXpag, offsetPeticiones, 
                     tablaHTML += "<td></td>";
                 }
 
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;'>";
-                tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit fa-lg' title='Edita datos de Solicitud Apoyo'></span></a>";
-                tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash fa-lg' title='Elimina Solicitud de Apoyo'></span></a>";
+                switch (val.estatusId) {
+                    case 2: // AMARILLO  - Sin Asignar
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#D1D6D9;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 3: // AZUL CLARO - Solicitado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#48C4F5;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 4: // VERDE - Atendido
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#F96606;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 5: // NARANJA - Cancelado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#5EF711;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 6: // AZUL OBSCURO - En Proceso
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#FA2406;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 7: // VERDE OSCURO - No Procede
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#1AA10C;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                    case 8: // VERDE OSCURO - Reasignado
+                        tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle; padding:1px; border-right-width:3px; border-right-color:#1AA10C;'>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Edit/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-edit' title='Edita datos de Solicitud Apoyo'></span></a>";
+                        tablaHTML += "<a href='/Apoyo/Peticiones/Delete/" + val.peticionId + "'><span style='cursor: pointer; color:black;' class='fas fa-trash' title='Elimina Solicitud de Apoyo'></span></a>";
+                        break;
+                }
                 tablaHTML += "</td>";
                 tablaHTML += "</tr>";
             });
             tablaHTML += "</tbody>";
             tablaHTML += "</table>";
+            tablaHTML += "</div>";
             $("#divIniciativas").html(tablaHTML);
 
 
@@ -1450,8 +1696,13 @@ function mostrarModalDetalleSolicitud(PeticionId) {
                 tablaHTML += "</table>";
                 tablaHTML += "<table class='table table-bordered' style='width:100%;'>";
                 tablaHTML += "<tr style='padding:2px;'>";
-                tablaHTML += "<td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width='30%'>Solicitante</td>";
-                tablaHTML += "<td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width='70%'>" + val.solicitanteNombre + "</td>";
+                tablaHTML += "<td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width='25%'>Solicitante</td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width='25%'>" + val.solicitanteNombre + "</td>";
+
+                tablaHTML += "<td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width='25%'>Responsable</td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width='25%'>" + val.nombreResponsable + "</td>";
+
+
                 tablaHTML += "</tr>";
                 tablaHTML += "</table>";
                 if (val.asociacionNombre != null) {
@@ -1464,14 +1715,16 @@ function mostrarModalDetalleSolicitud(PeticionId) {
                 }
                 tablaHTML += "<table class='table table-bordered' style='width:100%;'>";
                 tablaHTML += "<tr>";
-                tablaHTML += "<td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width='90%'>Descripción</td>";
+                tablaHTML += "<td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width='60%'>Descripción</td>";
+                tablaHTML += "<td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width='30%'>Costo</td>";
                 tablaHTML += "<td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width='10%'>Hito</td>";
                 tablaHTML += "</tr>";
                 tablaHTML += "<tr>";
-                tablaHTML += "<td style='text-align: center; background-color: white; color: black; padding: 2px;' width='90%'>" + val.descripcion + "</td>";
+                tablaHTML += "<td style='text-align: center; background-color: white; color: black; padding: 2px;' width='60%'>" + val.descripcion + "</td>";
+                tablaHTML += "<td style='text-align: center; background-color: white; color: black; padding: 2px;' width='30%'><table width='100%' style=' border-color: #c1c4c9;'><tr><td width='20%' style='background-color: #c1c4c9; border-radius: 10px 0px 0px 10px; text-align:center;'>$</td><td width='80%' style='text-align:left;'>" + val.costo + "</td></tr></table></td>";
                 if (val.hito == 1) {
                     tablaHTML += "<td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width='10%'>";
-                    tablaHTML += "<img src='Images/checkbox.png' height='20' />";
+                    tablaHTML += "<img src='/Apoyo/Images/checkbox.png' height='20' />";
                     tablaHTML += "</td>";
                 }
                 
@@ -1634,17 +1887,17 @@ function mostrarModalDetalleSolicitud(PeticionId) {
     tablaHTML += "Fecha Registro";
     tablaHTML += "</td>";
     tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
-    tablaHTML += "Fecha Compromiso";
+    tablaHTML += "Fecha Conclusion";
     tablaHTML += "</td>";
     tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
-    tablaHTML += "Fecha Conclusion";
+    tablaHTML += "Archivos";
     tablaHTML += "</td>";
     tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='10%'>";
     tablaHTML += "Estatus";
     tablaHTML += "</td>";
-    tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='20%'>";
-    tablaHTML += "Responsable";
-    tablaHTML += "</td>";
+    //tablaHTML += "<td style='text-align:center; background-color:white; color:black; padding:1px;' width='20%'>";
+    //tablaHTML += "Responsable";
+    //tablaHTML += "</td>";
 
     tablaHTML += "</tr>";
     var selAux = "";
@@ -1661,10 +1914,26 @@ function mostrarModalDetalleSolicitud(PeticionId) {
                 selAux = "";
                 tablaHTML += "<tr id='BitacoraRenglon_" + indice + "'>";
                 tablaHTML += "<td style='text-align:center;'>" + indice + "</td>";
-                tablaHTML += "<td style='text-align:center;'>" + val.bitacoraBase.descripcion + "</td>";
+                tablaHTML += "<td style='text-align:left;'>" + val.bitacoraBase.descripcion + "</td>";
                 tablaHTML += "<td>" + moment(val.bitacoraBase.fechaRegistro).format('DD/MM/yyyy') + "</td>";
-                tablaHTML += "<td>" + moment(val.bitacoraBase.fechaCompromiso).format('DD/MM/yyyy') + "</td>";
+                //tablaHTML += "<td>" + moment(val.bitacoraBase.fechaCompromiso).format('DD/MM/yyyy') + "</td>";
                 tablaHTML += "<td>" + moment(val.bitacoraBase.fechaConclusion).format('DD/MM/yyyy') + "</td>";
+
+
+                tablaHTML += "<td>";
+                tablaHTML += "<table style='width: 100%; border:none; margin:0; padding:0; border-collapse: collapse;' cellpadding='0' cellspacing='0'>";
+                var indiceArch = 0;
+                for (const elemento in val.archivosRelacionadosBitacora) {
+                    indiceArch++;
+                    tablaHTML += "<tr>";
+                    tablaHTML += "<td width='5%'>" + indiceArch + "</td>";
+                    tablaHTML += "<td width='95%'><a href='" + val.archivosRelacionadosBitacora[elemento].url + "' target='_blank' title='" + val.archivosRelacionadosBitacora[elemento].nombreArchivo + "'>" + val.archivosRelacionadosBitacora[elemento].nombreArchivo.substring(0, 20) + "</a></td>";
+                    tablaHTML += "</tr>";
+                }
+                tablaHTML += "</table>";
+                tablaHTML += "</td>";
+
+
                 tablaHTML += "<td>";
                 switch (val.bitacoraBase.estatus) {
                     case 0:
@@ -1683,7 +1952,7 @@ function mostrarModalDetalleSolicitud(PeticionId) {
                 tablaHTML += "</select>";
                 tablaHTML += "</td>";
 
-                tablaHTML += "<td>" + val.bitacoraBase.responsable + "</td>";
+                //tablaHTML += "<td>" + val.bitacoraBase.responsable + "</td>";
                 tablaHTML += "</tr>";
             });
         }
@@ -1848,11 +2117,12 @@ $('input[id="filtro_rangoConclusion"]').on('cancel.daterangepicker', function (e
  *********************************************************************************************************/
 $('#FolioPeticion').focusout(function () {
     var folio = $('#FolioPeticion').val();
+    var legislaturaId = $('#LegPeticionNuevo').val();
     console.log("Salio de el campo de Numero de Turno --> " + folio);
     $.ajax({
         type: "GET",
         url: "/Apoyo/Peticiones/BuscaNumeroFolio",
-        data: { folio },
+        data: { folio, legislaturaId },
         cache: false,
         async: false,
         success: (response) => {
@@ -1928,18 +2198,388 @@ $('#ClasificacionBusqueda').click(function () {
     });
 });
 
-/*
-  T A B 's
-*/
-var app = new Vue({
-    el: '#app',
 
-    mounted: function () {
-        document.querySelector('#myTab').addEventListener('mousewheel', (e) => {
-            document.querySelector('#myTab').scrollLeft = document.querySelector('#myTab').scrollLeft + e.deltaY;
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        });
-    },
+
+/*************************************************
+ * Valida que sea un NUMERO
+ *************************************************/
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+/***********************************************************************
+ *  RESUMEN APOYOS X CATEGORÍA X SUBCATEGORIA X ESTATUS
+ ***********************************************************************/
+function resumenApoyo_Cat_Subcat_Estatus(LegislaturaID, anioSel, mesSel) {
+    var totalSinClasificacion = 0;
+    var totalSolicitado = 0;
+    var totalCancelado = 0;
+    var totalEntregado = 0;
+    var totalRechazado = 0;
+
+    totalTotal = 0;
+
+    tablaHTML = "<hr/>";
+    tablaHTML += "<div align='center' class='fondoAzulClaroLetraNegra_2'>";
+    tablaHTML += "<h3>Solicitudes de Apoyos X Categoría-Subcategoría X Estatus</h3>";
+    tablaHTML += "</div>";
+    tablaHTML += "<hr/>";
+
+    tablaHTML += "<table class='table table-bordered' style = 'width:100%;padding: 1px;'>";
+    tablaHTML += "<tbody>";
+    tablaHTML += "<tr>";
+    tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle;padding:1px;'>#</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Categoría</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Subcategoría</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Sin Estatus</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Solicitado</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Cancelado</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Entregado</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Rechazado</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Total</td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>Avance</td>";
+    tablaHTML += "</tr>";
+
+    $.ajax({
+        type: "GET",
+        url: "/Apoyo/Peticiones/resumenXclasificacionXSubclasificacion_Apoyo",
+        data: { LegislaturaID, anioSel, mesSel },
+        cache: false,
+        async: false,
+        success: (response) => {
+            $.each(response, (index, val) => {
+                indice = index + 1;
+                tablaHTML += "<tr>";
+                tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle;padding:1px;'>" + indice + "</td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle;padding:5px;'>" + val.categoria + "</td>";
+                tablaHTML += "<td style='text-align: left; vertical-align: middle;padding:5px;'>" + val.subcategoria + "</td>";
+                if (val.sinEstatus != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.sinClasificacion + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+                if (val.solicitado != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.solicitado + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+                if (val.cancelado != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.cancelado + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+                if (val.entregado != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.entregado + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+                if (val.rechazado != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.rechazado + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+                if (val.total != 0) {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'>" + val.total + "</td>";
+                } else {
+                    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+                }
+
+
+                promedio = Math.round((val.cancelado + val.entregado + val.rechazado) * 100 / val.total);
+                tablaHTML += "<td class='centrarVH' style='font-size:small;'>";
+                tablaHTML += "<div class='progress centrarV' style='height: 10px;'>";
+                tablaHTML += "<div class='progress-bar bg-success' style='width:" + promedio + "%; height:20px;' title='" + promedio + "%' aria-valuenow='" + promedio + "'></div>";
+                tablaHTML += "</div>" + promedio + "%</td>";
+
+                tablaHTML += "</tr>";
+
+                totalSinClasificacion += val.sinClasificacion;
+                totalSolicitado += val.solicitado;
+                totalCancelado += val.cancelado;
+                totalEntregado += val.entregado;
+                totalRechazado += val.rechazado;
+
+                totalTotal += val.total;
+            })
+        }
+    });
+    tablaHTML += "<tr>";
+    tablaHTML += "<td scope='row' style='text-align: center; vertical-align: middle;padding:1px;'></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;' colspan='2'><strong>TOTAL</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalSinClasificacion + "</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalSolicitado + "</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalCancelado + "</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalEntregado + "</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalRechazado + "</strong></td>";
+    tablaHTML += "<td style='text-align: center; vertical-align: middle;padding:1px;'><strong>" + totalTotal + "</strong></td>";
+
+    promedio = Math.round((totalCancelado + totalEntregado + totalRechazado) * 100 / totalTotal);
+    tablaHTML += "<td class='centrarVH'>";
+    tablaHTML += "<div class='progress centrarV' style='height: 10px;'>";
+    tablaHTML += "<div class='progress-bar bg-success' style='width:" + promedio + "%; height:20px;' title='" + promedio + "%' aria-valuenow='" + promedio + "'></div>";
+    tablaHTML += "</div>" + promedio + "%</td>";
+
+    tablaHTML += "</tr>";
+
+    tablaHTML += "</tbody>";
+    tablaHTML += "</table>";
+    $("#CardClasificacionSubclasificacionApoyo").html(tablaHTML);
+}
+
+
+/****************************************************************
+ *  BORRAR Categoría y Subcategoría Apoyo
+ ****************************************************************/
+function EliminaRowPeticionCatSubcat(idPeticion, peticionCategoriaId, peticionSubcategoriaId, categoriaId, subcategoriaId) {
+    console.log("idPeticion: " + idPeticion);
+    console.log("peticionCategoriaId: " + peticionCategoriaId);
+    console.log("peticionSubCategoriaId: " + peticionSubcategoriaId);
+    console.log("categoriaId: " + categoriaId);
+    console.log("subcategoriaId: " + subcategoriaId);
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/BorrarCategoriaSubCategoria",
+        cache: false,
+        async: false,
+        data: { peticionCategoriaId, peticionSubcategoriaId },
+        success: (response) => {
+            if (response == 1) {
+                GeneraTablaCatSubCatNSolicitud(idPeticion);
+            } else {
+                console.log("NO BORRO ");
+            }
+        }
+    });
+}
+
+/****************************************************************
+ *  BORRAR Archivo Apoyo
+ ****************************************************************/
+function EliminaRowArchivoPeticion(archivoId, idPeticion) {
+    console.log("archivoId: " + archivoId);
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/BorrarArchivoPeticion",
+        cache: false,
+        async: false,
+        data: { archivoId },
+        success: (response) => {
+            if (response == 1) {
+                GeneraTablaArchivosAnexosNSolicitud(idPeticion);
+            } else {
+                console.log("NO BORRO ");
+            }
+        }
+    });
+}
+
+/****************************************************************
+ *  BORRAR Beneficiario Apoyo
+ ****************************************************************/
+function EliminaRowBeneficiarioPeticion(peticionID, ciudadanoID, beneficiariosID) {
+    console.log("peticionID: " + peticionID);
+    console.log("ciudadanoID: " + ciudadanoID);
+    console.log("beneficiariosID: " + beneficiariosID);
+
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/BorrarBeneficiarioPeticion",
+        cache: false,
+        async: false,
+        data: { beneficiariosID },
+        success: (response) => {
+            if (response == 1) {
+                GeneraTablaBeneficiariosNSolicitud(peticionID);
+            } else {
+                console.log("NO BORRO ");
+            }
+        }
+    });
+}
+
+
+/****************************************************************
+ *  BORRAR Archivo Bitácora Apoyos
+ ****************************************************************/
+function EliminaArchivoBitacoraPeticion(archivosBitacoraId, bitacoraId, idPeticion) {
+    console.log("archivosBitacoraId: " + archivosBitacoraId);
+    console.log("bitacoraId: " + bitacoraId);
+    console.log("idPeticion: " + idPeticion);
+
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/BorrarArchivoBitacoraPeticion",
+        cache: false,
+        async: false,
+        data: { archivosBitacoraId },
+        success: (response) => {
+            if (response == 1) {
+                GeneraTablaBitacoraNSolicitud(idPeticion);
+            } else {
+                console.log("NO BORRO ");
+            }
+        }
+    });
+}
+
+
+
+/****************************************************************
+ *  BORRAR Actividad Bitácora Apoyo
+ ****************************************************************/
+function EliminaRowBitacoraPeticion(bitacoraId, idPeticion) {
+
+    console.log("bitacoraId: " + bitacoraId);
+    console.log("idPeticion: " + idPeticion);
+
+    $.ajax({
+        type: "POST",
+        url: "/Apoyo/Peticiones/BorrarActividadBitacoraPeticion",
+        cache: false,
+        async: false,
+        data: { bitacoraId },
+        success: (response) => {
+            if (response == 1) {
+                GeneraTablaBitacoraNSolicitud(idPeticion);
+            } else {
+                console.log("NO BORRO ");
+            }
+        }
+    });
+}
+
+/*********************************************************************************************************************
+ * SELECCIONA LEGISLATURA
+ *********************************************************************************************************************/
+$('#LegPeticionReferencia').click(function () {
+    var LegRef = $('#LegPeticionReferencia').val();
+    console.log("VALOR DE LEGISLATURA DE REFERNCIA: " + LegRef);
+    $("#LegBusqueda").val(LegRef);
+    FiltraPeticiones();
 });
+
+///************************************************
+//  T A B 's
+//*************************************************/
+//var app = new Vue({
+//    el: '#app',
+
+//    mounted: function () {
+//        document.querySelector('#myTab').addEventListener('mousewheel', (e) => {
+//            document.querySelector('#myTab').scrollLeft = document.querySelector('#myTab').scrollLeft + e.deltaY;
+//            e.preventDefault();
+//            e.stopPropagation();
+//            return false;
+//        });
+//    },
+//});
+
+
+
+/**********************************************************************
+ *  Click Desde DashBoard para Mostrar Beneficiarios de los Apoyos
+ **********************************************************************/
+function MuestraBeneficiariosApoyo() {
+    var anioSel = $('#anioReporteId').val();
+    var mesSel = $("#mesReporteId").val();
+    var legislaturaId = $('#legislaturaId').val();
+    window.location.href = "/Apoyo/Peticiones/Beneficiarios?LegislaturaID=" + legislaturaId + "&anioSel=" + anioSel + "&mesSel=" + mesSel;
+}
+
+
+/***********************************************************************
+ * En Dashboard Selecciona MES
+ ***********************************************************************/
+$('#anioSelId').click(function () {
+    var anioSel = 0;
+    var mesSel = 0;
+    var legislaturaId = $('#legislaturaId').val();
+
+    anioSel = $('#anioReporteId').val();
+    mesSel = $("#mesReporteId").val();
+
+    console.log("MES = " + mesSel);
+
+    Resumen(legislaturaId, anioSel, mesSel);
+});
+
+/***********************************************************************
+ * En Dashboard Selecciona MES
+ ***********************************************************************/
+$('#mesSelId').click(function () {
+    var anioSel = 0;
+    var mesSel = 0;
+    var legislaturaId = $('#legislaturaId').val();
+
+    anioSel = $('#anioReporteId').val();
+    mesSel = $("#mesReporteId").val();
+
+    console.log("MES = " + mesSel);
+
+    Resumen(legislaturaId, anioSel, mesSel);
+});
+
+
+
+
+
+/***********************************************************************
+ * En BENEFICIARIOS Selecciona LEGISLATURA
+ ***********************************************************************/
+$('#legislaturaBenId').click(function () {
+    var anioSel = 0;
+    var mesSel = 0;
+    var legislaturaId = $('#legislaturaBenId').val();
+
+    anioSel = $('#anioBenId').val();
+    mesSel = $("#mesBenId").val();
+
+    console.log("MES = " + mesSel);
+
+    window.location.href = "/Apoyo/Peticiones/Beneficiarios?LegislaturaID=" + legislaturaId + "&anioSel=" + anioSel + "&mesSel=" + mesSel;
+});
+
+
+/***********************************************************************
+ * En BENEFICIARIOS Selecciona LEGISLATURA
+ ***********************************************************************/
+$('#anioBenId').click(function () {
+    var anioSel = 0;
+    var mesSel = 0;
+    var legislaturaId = $('#legislaturaBenId').val();
+
+    anioSel = $('#anioBenId').val();
+    mesSel = $("#mesBenId").val();
+
+    console.log("MES = " + mesSel);
+
+    window.location.href = "/Apoyo/Peticiones/Beneficiarios?LegislaturaID=" + legislaturaId + "&anioSel=" + anioSel + "&mesSel=" + mesSel;
+});
+
+
+/***********************************************************************
+ * En BENEFICIARIOS Selecciona LEGISLATURA
+ ***********************************************************************/
+$('#mesBenId').click(function () {
+    var anioSel = 0;
+    var mesSel = 0;
+    var legislaturaId = $('#legislaturaBenId').val();
+
+    anioSel = $('#anioBenId').val();
+    mesSel = $("#mesBenId").val();
+
+    console.log("MES = " + mesSel);
+
+    window.location.href = "/Apoyo/Peticiones/Beneficiarios?LegislaturaID=" + legislaturaId + "&anioSel=" + anioSel + "&mesSel=" + mesSel;
+});
+

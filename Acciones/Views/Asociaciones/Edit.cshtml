@@ -1,122 +1,175 @@
 ﻿@model Acciones.Models.Asociacione
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edita Asociación";
 }
 
-<h1>Edit</h1>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
 
-<h4>Asociacione</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AsociacionId" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ColoniaId" class="control-label"></label>
-                <select asp-for="ColoniaId" class="form-control" asp-items="ViewBag.ColoniaId"></select>
-                <span asp-validation-for="ColoniaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CalleId" class="control-label"></label>
-                <select asp-for="CalleId" class="form-control" asp-items="ViewBag.CalleId"></select>
-                <span asp-validation-for="CalleId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumExterior" class="control-label"></label>
-                <input asp-for="NumExterior" class="form-control" />
-                <span asp-validation-for="NumExterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumInterior" class="control-label"></label>
-                <input asp-for="NumInterior" class="form-control" />
-                <span asp-validation-for="NumInterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cp" class="control-label"></label>
-                <input asp-for="Cp" class="form-control" />
-                <span asp-validation-for="Cp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Distrito" class="control-label"></label>
-                <input asp-for="Distrito" class="form-control" />
-                <span asp-validation-for="Distrito" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Seccion" class="control-label"></label>
-                <input asp-for="Seccion" class="form-control" />
-                <span asp-validation-for="Seccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estatus" class="control-label"></label>
-                <input asp-for="Estatus" class="form-control" />
-                <span asp-validation-for="Estatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Campo1" class="control-label"></label>
-                <input asp-for="Campo1" class="form-control" />
-                <span asp-validation-for="Campo1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Campo2" class="control-label"></label>
-                <input asp-for="Campo2" class="form-control" />
-                <span asp-validation-for="Campo2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitud" class="control-label"></label>
-                <input asp-for="Latitud" class="form-control" />
-                <span asp-validation-for="Latitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitud" class="control-label"></label>
-                <input asp-for="Longitud" class="form-control" />
-                <span asp-validation-for="Longitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                <input asp-for="FechaUltimoCambio" class="form-control" />
-                <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioRegistroId" class="control-label"></label>
-                <input asp-for="UsuarioRegistroId" class="form-control" />
-                <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<h1>ACTUALIZA REGISTRO DE ASOCIACIÓN</h1>
+<br />
+<div class="card">
+    <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ASOCIACIÓN</h4>
+    <div class="card-body">
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="40%">
+                    <label id="nombreAsociacionLabel">Nombre</label>
+                </td>
+
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="40%">
+                    <label id="emailLabel">e-mail</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                    <label id="TelefonoLabel">Teléfono</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="40%">
+                    <input type="text" class="form-control" id="IngresaNombreAsociacion" asp-for="Nombre"/> 
+                </td>
+                <td style='text-align: center; color: black; padding: 2px;' width="40%">
+                    <input type="text" class="form-control" id="IngresaEmailAsociacion" asp-for="Email"/>
+                </td>
+                <td style='text-align: center; color: black; padding: 2px;' width="30%">
+                    <input type="text" class="form-control" id="IngresaTelefonoAsociacion" asp-for="Telefono"/>
+                </td>
+            </tr>
+        </table>
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td class='fondoMenuFactor' width="30%" style='text-align: center; vertical-align: middle;'>
+                    <div style="margin: auto;" class="row">
+                        <div title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' style="cursor:pointer;">
+                            <img src="~/Images/colonia_t.png" width="30px" height="20px" />
+                        </div>
+                        <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
+                    </div>
+                </td>
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoMenuFactor' width="40%">
+                    <label for="CalleLabel">Calle</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="NumeroExteriorLabel"># Exterior</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="NumeroInteriorLabel"># Interior</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="CPLabel">CP</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="30%">
+                    <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" value="@ViewBag.ColoniaVD"/>
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="40%">
+                    <input type="text" class="form-control" name="callesBuscar" id="callesBuscar" value="@ViewBag.CalleVD" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaNumExt" id="IngresaNumExt" asp-for="NumExterior"/>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaNumInt" id="IngresaNumInt" asp-for="NumInterior"/>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaCP" id="IngresaCP" asp-for="Cp"/>
+                </td>
+            </tr>
+        </table>
+
+        @*<table class='table table-bordered' style='width:100%;'>
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="25%">
+                        <label for="LatitudCiudadano" class="control-label" onclick="ObtieneLalitudLongitudActual();">Latitud</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
+                        <input type="text" class="form-control" name="Latitud" id="Latitud" />
+                    </td>
+                    <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="25%">
+                        <label for="LongitudCiudadano" class="control-label">Longitud</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
+                        <input type="text" class="form-control" name="Longitud" id="Longitud" />
+                    </td>
+                </tr>
+            </table>*@
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr style="padding:2px;">
+                <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="7%">
+                    <label for="NotasLabel" class="control-label">Notas</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="93%">
+                    <textarea id="Notas" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputNotas(event) asp-for="Descripcion"></textarea>
+                </td>
+            </tr>
+        </table>
+
     </div>
 </div>
 
+<hr />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="alert alert-success" id="mensajeAsoci_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAsoci_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAsoci_Existente" style="display:none;" align="center">
+        <strong>Ya existe una Asociación con este Nombre </strong>
+    </div>
+    <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
+        <strong> Para registrar una Asociación, deber proporcionar por lo menos Nombre, Colonia y Calle.</strong>
+    </div>
+
+</div>
+
+
+<div align="center">
+    <button type='button' onclick='ActualizaAsociacion();' class='BotonNaranjaClaro redondeada'>ACTUALIZA</button>&nbsp;
+    <a asp-action="Index"><button class="BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+</div>
+
+<input type="text" id="hAsociacionId" name="hAsociacionId" style="display:none" value="@Model.AsociacionId"/>
+<input type="text" id="hIntegranteBuscar" name="hIntegranteBuscar" style="display:none" />
+<input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" value="@Model.ColoniaId"/>
+<input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" value="@Model.CalleId"/>
+
+
+<hr style="background-color: rgba(250, 196, 94, 0.8); " />
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <ul id="tabsJustified" class="nav nav-pills flex-column" style="background-color: rgba(220,223,226,.8);">
+                    <li class="nav-item"><a id="opc_1" href="" data-target="#home1" data-toggle="tab" class="nav-link small text-uppercase active" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">INTEGRANTES</a></li>
+                </ul>
+                <div class="tab-content border rounded p-3 w-100" style="background-color: rgba(181, 185, 195, 0.3); ">
+                    <div id="home1" class="tab-pane fade active show">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>INTEGRANTES DE LA ASOCICACIÓN</h4>
+                        <div id="divIntegrantesAsociacion"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div>
+    <a asp-action="Index">Regresar</a>
 </div>
 
 @section Scripts {

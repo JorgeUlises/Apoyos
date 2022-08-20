@@ -1,0 +1,525 @@
+﻿@model Acciones.Models.Gestiones
+
+@{
+    ViewData["Title"] = "Edición";
+}
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+
+    .slide-toggle {
+        display: none;
+    }
+
+    .slidemenu {
+        font-family: arial, sans-serif;
+        max-width: 1600px;
+        margin: 50px auto;
+        overflow: hidden;
+    }
+
+        .slidemenu label {
+            width: 25%;
+            text-align: center;
+            display: block;
+            float: left;
+            color: #333;
+            opacity: 0.5;
+        }
+
+            .slidemenu label:hover {
+                cursor: pointer;
+                color: #666;
+            }
+
+            .slidemenu label span {
+                display: block;
+                padding: 10px;
+            }
+
+            .slidemenu label .icon {
+                font-size: 20px;
+                border: solid 2px #333;
+                text-align: center;
+                height: 50px;
+                width: 50px;
+                display: block;
+                margin: 0 auto;
+                line-height: 50px;
+                border-radius: 50%;
+                /*background: #ABF5B7;*/
+            }
+
+    /*Bar Style*/
+
+    .slider {
+        width: 100%;
+        height: 5px;
+        display: block;
+        background: #ccc;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+
+        .slider .bar {
+            width: 25%;
+            height: 5px;
+            background: #333;
+            border-radius: 5px;
+        }
+
+        /*Animations*/
+        .slidemenu label, .slider .bar {
+            transition: all 500ms ease-in-out;
+            -webkit-transition: all 500ms ease-in-out;
+            -moz-transition: all 500ms ease-in-out;
+        }
+
+    /*Toggle*/
+
+
+    .slidemenu .slide-toggle:checked + label {
+        opacity: 1;
+    }
+
+
+
+    .slidemenu #slide-item-1:checked ~ .slider .bar {
+        margin-left: 0;
+    }
+
+    .slidemenu #slide-item-2:checked ~ .slider .bar {
+        margin-left: 25%;
+    }
+
+    .slidemenu #slide-item-3:checked ~ .slider .bar {
+        margin-left: 50%;
+    }
+
+    .slidemenu #slide-item-4:checked ~ .slider .bar {
+        margin-left: 75%;
+    }
+
+/*    .slidemenu #slide-item-5:checked ~ .slider .bar {
+        margin-left: 40%;
+    }
+
+    .slidemenu #slide-item-6:checked ~ .slider .bar {
+        margin-left: 50%;
+    }
+
+    .slidemenu #slide-item-7:checked ~ .slider .bar {
+        margin-left: 60%;
+    }
+
+    .slidemenu #slide-item-8:checked ~ .slider .bar {
+        margin-left: 70%;
+    }
+
+    .slidemenu #slide-item-9:checked ~ .slider .bar {
+        margin-left: 80%;
+    }
+
+    .slidemenu #slide-item-10:checked ~ .slider .bar {
+        margin-left: 90%;
+    }*/
+</style>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<h1>ACTUALIZACIÓN DE SOLICITUD DE GESTIÓN</h1>
+
+<br />
+
+<div class="card">
+    <h4 class="card-header" style='text-align: center; background-color: rgba(20, 85, 236, 0.76); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>SOLICITUD DE GESTIÓN</h4>
+    <div class="card-body">
+
+        <input type="hidden" asp-for="GestionId" id="GestionId" />
+        <input type="hidden" asp-for="Folio" id="FolioOriginal" />
+        <input type="hidden" asp-for="SolicitanteId" id="hCiudadanoSolicitanteBuscar" />
+        <input type="text" id="hBeneficiarioBuscar" name="hBeneficiarioBuscar" style="display:none" />
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="LegislaturaLabel">Legislatura</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
+                    <label for="OrigenSolicitudLabel">Origen de Solicitud</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="10%">
+                    <label for="FolioLabel">Folio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
+                    <label for="FechaSolicitudLabel">Fecha Solicitud</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
+                    <label for="FechaCompromisoLabel">Fecha Compromiso</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
+                    <label for="FechaRecibidoLabel" id="FechaRecibidoLabel">Fecha Conclusión</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="20%">
+                    <label for="EstatusLabel">Estatus</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="LegislaturaId" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select for="OrigenGestion" onchange="optSelecEnOrigen_G();" id="OrigenGestion" class="form-control" asp-items="ViewBag.OrigenPeticionId"></select>
+                </td>
+
+                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="10%">
+                    <input asp-for="Folio" id="FolioGestionEdicion" class="form-control" />
+                </td>
+
+                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="15%">
+                    <div class='input-group date' id='datepickerFSolicitud'>
+                        <input asp-for="FechaSolicitud" id="FechaSolicitud" class="form-control" />
+                    </div>
+                </td>
+
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <div class='input-group date' id='datetimepickerFCompromiso'>
+                        <input asp-for="FechaCompromiso" id="FechaCompromiso" class="form-control" />
+                    </div>
+                </td>
+
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <div class='input-group date' id='datetimepickerFConclusion'>
+                        <input asp-for="FechaConclusion" id="FechaConclusion" class="form-control" />
+                    </div>
+                </td>
+
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select asp-for="Estatus" class="form-control" asp-items="ViewBag.Estatus" id="estatusGestion"></select>
+                </td>
+            </tr>
+        </table>
+
+        <div class="alert alert-danger" id="msgAlerta_Origensolicitud" style="display: none;" align="center">
+            <strong>Debe seleccionar Origen de Solicitud</strong>
+        </div>
+        <div class="alert alert-danger" id="msgAlerta_Fechasolicitud" style="display: none;" align="center">
+            <strong>Debe seleccionar Fecha de Solicitud</strong>
+        </div>
+
+        <table class='table table-bordered' style='width:100%;' id="tablaCiudadano">
+            <tr style="padding:2px;">
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_2' width="25%">
+                    <label for="SolicitanteLabel" class="control-label">Solicitante</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
+                    <input type='text' id='NombreCiudadanoSolicitante' style='width:100%; max-width:100%;' value="@ViewBag.NomSolicitante" />
+                </td>
+                <td style='text-align: center; vertical-align: middle; padding: 2px;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="ResponsableLabel" class="control-label">Responsable</label>
+                </td>
+                <td style='text-align: center;' width="25%">
+                    <select asp-for="ResponsableID" class="form-control" asp-items="ViewBag.ResponsableAtenderId" id="responsableId"></select>
+                </td>
+            </tr>
+        </table>
+
+        <table class='table table-bordered' style='width:100%;' id="tablaDependencia">
+            <tr style="padding:2px;">
+                <td style='text-align: center; vertical-align: middle; padding: 2px;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="DependenciaLabel" class="control-label">Dependencia</label>
+                </td>
+                <td style='text-align: center;' width="25%">
+                    <select asp-for="DependeciaId" class="form-control" asp-items="ViewBag.DependenciasEdit" id="dependenciaId"></select>
+                </td>
+            </tr>
+        </table>
+
+        <div class="alert alert-danger" id="msgAlerta_Solicitante" style="display: none;" align="center">
+            <strong>Debe seleccionar un Solicitante</strong>
+        </div>
+        @if (Model.OrigenPeticionId == 3)
+        {
+            <table class='table table-bordered' style='width:100%;' id="tablaAsociacion_G">
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="30%">
+                        <label for="AsociacionLabel" class="control-label">Asociación</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
+                        <select asp-for="AsociacionId" id="AsociacionIdG" class="form-control" asp-items="ViewBag.Asociaciones"></select>
+                    </td>
+                </tr>
+            </table>
+
+        }
+        else
+        {
+            <table class='table table-bordered' style='width: 100%; display: none;' id="tablaAsociacion_G">
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="30%">
+                        <label for="AsociacionLabel" class="control-label">Asociación</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
+                        <select asp-for="AsociacionId" id="AsociacionIdG" class="form-control" asp-items="ViewBag.Asociaciones"></select>
+                    </td>
+                </tr>
+            </table>
+        }
+
+        <div class="alert alert-danger" id="msgAlerta_Asociacion" style="display: none;" align="center">
+            <strong>Debe seleccionar una Asociación</strong>
+        </div>
+
+
+
+
+        @*Inicio Sección de Mensajes*@
+
+
+
+        <div class="alert alert-danger" id="msgCategoriaSubcategoria" style="display: none;" align="center">
+            <strong>Cada Categoría debe contener una Subcategoría!</strong>
+        </div>
+
+        @*Fin Sección de Mensajes*@
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="70%">
+                    <label for="ColoniaLabel" id="DescripcionLabel">Descripción</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="30%">
+                    <label for="ColoniaLabel" id="CostoLabel">Costo</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="10%">
+                    <label for="ColoniaLabel" id="HitoLabel">Hito</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="70%">
+                    <textarea asp-for="Descripcion" id="DescripcionApoyo" name="DescripcionApoyo" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                    <table width='100%' style=' border-color: #c1c4c9;'>
+                        <tr>
+                            <td width='20%' style='background-color: #c1c4c9; border-radius: 10px 0px 0px 10px; text-align:center;'>$</td>
+                            <td width='80%' style='text-align:left;'>
+                                <input asp-for="Costo" id="CostoApoyoEdit" class="form-control" onkeypress="return isNumber(event)" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                    @if (Model.Hito == 1)
+                    {
+                        <input type='checkbox' id='cboxHito' checked />
+                    }
+                    else
+                    {
+                        <input type='checkbox' id='cboxHito' />
+                    }
+                </td>
+            </tr>
+        </table>
+
+
+
+
+        <input type="text" id="hGestionId" name="hGestionId" style="display:none" />
+
+    </div>
+</div>
+
+<div>
+    <div class="alert alert-success" id="mensajeAlerta_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeAlerta_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+
+    <div class="alert alert-danger" id="msgAlertNumFolioExistente" style="display:none;" align="center">
+        <strong>Este FOLIO ya existe</strong>
+    </div>
+
+    <div class="alert alert-success" id="msg_OKCatSubCat" style="display:none;" align="center">
+        <strong>Categoría y SubCategoría Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="msg_ErrorCatSubCat" style="display:none;" align="center">
+        <strong>No se guardó Categoría y SubCategoría</strong>
+    </div>
+</div>
+<br />
+<div class="centrarVH">
+    <button type='button' onclick='GuardarActualizacionGestion(@Model.GestionId);' class='BotonNaranjaClaro redondeada'>ACTUALIZAR</button>&nbsp;
+</div>
+
+
+<hr />
+
+<input type="text" id="hCategoriaBuscar" name="hCategoriaBuscar" style="display:none" />
+<input type="text" id="hSubCategoriaBuscar" name="hSubCategoriaBuscar" style="display:none" />
+
+
+
+
+
+
+@*---------Modal Seleccionar y Subir Archivo Gestión ---------*@
+<div class="modal" id="ModalSeleccionarArchivosGestiones" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosGestiones">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosGestiones" class="modal-title" style="padding-left:10px;"><srong>Documento Anexos de Solicitud de Gestión</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFileGestion" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenGestionId" type="hidden" name="HiddenGestionId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosGestionButton('FileUploadFormFileGestion')" class="btn btn-dark">Subir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*---------Modal Seleccionar y Subir Archivo Gestión-Bitacora ---------*@
+<div class="modal" id="ModalSeleccionarArchivosGestionesBitacora" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosGestionesBitacora">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaArchBitacora" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosGestionesBitacora" class="modal-title" style="padding-left:10px;"><srong>Documento Anexos de Actividad de Seguimiento de Gestión</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFileGestionBitacora" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenGestionActId" type="hidden" name="HiddenGestionBitacoraId" value="">
+                <input id="HiddenGestionBitacoraId" type="hidden" name="HiddenGestionBitacoraId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosGestionBitacoraButton('FileUploadFormFileGestionBitacora')" class="btn btn-dark">Anexar Archivo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+
+<!--<nav class="slidemenu">-->
+    <!-- Item 1 -->
+    <!--<input type="radio" name="slideItem" id="slide-item-1" class="slide-toggle" onclick="GeneraTablaCatSubCatNSolicitudGestion((@Model.GestionId);" />
+    <label for="slide-item-1"><div class="icon"><i class="fa fa-balance-scale"></i></div><span>Categoría</span></label>-->
+
+    <!-- Item 2 -->
+    <!--<input type="radio" name="slideItem" id="slide-item-2" class="slide-toggle" onclick="GeneraTablaArchivosAnexosNSolicitudGestion(@Model.GestionId);" />
+    <label for="slide-item-2"><div class="icon"><i class="fa fa-user-plus"></i></div><span>Archivos</span></label>-->
+
+    <!-- Item 3 -->
+    <!--<input type="radio" name="slideItem" id="slide-item-3" class="slide-toggle" onclick="GeneraTablaBeneficiariosNSolicitudGestion(@Model.GestionId);" />
+    <label for="slide-item-3"><div class="icon"><i class="fa fa-gavel"></i></div><span>Beneficiarios</span></label>-->
+
+    <!-- Item 4 -->
+    <!--<input type="radio" name="slideItem" id="slide-item-4" class="slide-toggle" onclick="GeneraTablaBitacoraNSolicitudGestion(@Model.GestionId);" />
+    <label for="slide-item-4"><div class="icon"><i class="fa fa-cogs"></i></div><span>Seguimiento</span></label>
+
+    
+    <div class="clear"></div>-->
+
+    <!-- Bar -->
+    <!--<div class="slider">
+        <div class="bar"></div>
+    </div>
+
+</nav>-->
+
+
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <ul id="tabsJustified" class="nav nav-pills flex-column" style="background-color: rgba(220,223,226,.8);">
+                    <li class="nav-item"><a id="opc_1" href="" data-target="#home1" data-toggle="tab" class="nav-link small text-uppercase active" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">CATEGORÍA</a></li>
+                    <li class="nav-item"><a id="opc_2" href="" data-target="#profile1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">ARCHIVOS</a></li>
+                    <li class="nav-item"><a id="opc_3" href="" data-target="#messages1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">BENEFICIARIOS</a></li>
+                    <li class="nav-item"><a id="opc_4" href="" data-target="#messages2" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">SEGUIMIENTO</a></li>
+                </ul>
+                <div class="tab-content border rounded p-3 w-100" style="background-color: rgba(181, 185, 195, 0.3); ">
+                    <div id="home1" class="tab-pane fade active show">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>CATEGORÍA Y SUBCATEGORÍA</h4>
+                        <div id="divCatSubCatNGestion"></div>
+                    </div>
+                    <div id="profile1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
+                        <div id="divArchivosAnexosNGestion"></div>
+                    </div>
+                    <div id="messages1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BENEFICIARIOS</h4>
+                        <div id="divBeneficiariosNGestion"></div>
+                    </div>
+                    <div id="messages2" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>SEGUIMIENTO</h4>
+                        <div id="divBitacoraNGestion"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">REGRESAR</a>
+</div>
+

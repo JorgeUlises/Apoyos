@@ -21,8 +21,10 @@ namespace Acciones.ViewModel
         public int EstatusId { get; set; }
         public string Estatus { get; set; }
         public string FechaRegistro { get; set; }
+        public string FechaSolicitud { get; set; }
         public int diasSolucion { get; set; }
         public int diasTranscurridos { get; set; }
+        public float Costo { get; set; }
         public IEnumerable<DetalleCategoriaSubcategoria> detalleCategoriaSubcategoria { get; set; }
     }
 }

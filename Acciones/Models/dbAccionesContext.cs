@@ -19,20 +19,34 @@ namespace Acciones.Models
 
         public virtual DbSet<Apoyo> Apoyos { get; set; }
         public virtual DbSet<ArchivosBitacora> ArchivosBitacoras { get; set; }
+        public virtual DbSet<ArchivosBitacoraGestion> ArchivosBitacorasGestion { get; set; }
         public virtual DbSet<ArchivosEvento> ArchivosEventos { get; set; }
         public virtual DbSet<ArchivosPeticione> ArchivosPeticiones { get; set; }
+        public virtual DbSet<ArchivosGestiones> ArchivosGestiones { get; set; }
         public virtual DbSet<ArchivosVisita> ArchivosVisitas { get; set; }
+        public virtual DbSet<ArchivosPublicidad> ArchivosPublicidad { get; set; }
         public virtual DbSet<AsistentesEvento> AsistentesEventos { get; set; }
         public virtual DbSet<Asociacione> Asociaciones { get; set; }
         public virtual DbSet<Beneficiario> Beneficiarios { get; set; }
+        public virtual DbSet<BeneficiarioGestion> BeneficiariosGestion { get; set; }
         public virtual DbSet<Bitacora> Bitacoras { get; set; }
+        public virtual DbSet<BitacoraGestion> BitacorasGestion { get; set; }
+        public virtual DbSet<AutorExterno_iniciativa> AutorExterno_iniciativa { get; set; }
         public virtual DbSet<Calle> Calles { get; set; }
         public virtual DbSet<Categoria> Categorias { get; set; }
+  
         public virtual DbSet<Ciudadano> Ciudadanos { get; set; }
+        public virtual DbSet<Publicidad> Publicidad { get; set; }
         public virtual DbSet<Colonia> Colonias { get; set; }
         public virtual DbSet<Dependencia> Dependencias { get; set; }
         public virtual DbSet<Diputado> Diputados { get; set; }
         public virtual DbSet<EstatusPeticione> EstatusPeticiones { get; set; }
+        public virtual DbSet<EstatusGestion> EstatusGestion { get; set; }
+        public virtual DbSet<TiposEvento> TiposEvento { get; set; }
+        public virtual DbSet<Municipios> Municipios { get; set; }
+        public virtual DbSet<CatPartidos> CatPartidos { get; set; }
+        public virtual DbSet<TipoPublicidad> TipoPublicidad { get; set; }
+        public virtual DbSet<OrigenPublicidad> OrigenPublicidad { get; set; }
         public virtual DbSet<Evento> Eventos { get; set; }
         public virtual DbSet<IntegrantesAsociacion> IntegrantesAsociacions { get; set; }
         public virtual DbSet<Legislatura> Legislaturas { get; set; }
@@ -41,18 +55,31 @@ namespace Acciones.Models
         public virtual DbSet<PersonasVisitada> PersonasVisitadas { get; set; }
         public virtual DbSet<PeticionCategorium> PeticionCategoria { get; set; }
         public virtual DbSet<PeticionSubcategorium> PeticionSubcategoria { get; set; }
+        public virtual DbSet<GestionCategoria> GestionCategoria { get; set; }
+        public virtual DbSet<GestionSubcategoria> GestionSubcategoria { get; set; }
         public virtual DbSet<Peticione> Peticiones { get; set; }
+        public virtual DbSet<Gestiones> Gestiones { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subcategoria> Subcategorias { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<Visita> Visitas { get; set; }
 
+
+        public virtual DbSet<CatTipoIniciativa> CatTipoIniciativas { get; set; }
+        public virtual DbSet<EstatusIniciativas> EstatusIniciativas { get; set; }
+        public virtual DbSet<ArchivosIniciativas> ArchivosIniciativas { get; set; }
+        public virtual DbSet<Comisiones> Comisiones { get; set; }
+        public virtual DbSet<Iniciativas> Iniciativas { get; set; }
+        public virtual DbSet<DiputadoIniciativa> DiputadoIniciativa { get; set; }
+        public virtual DbSet<ComisionesXiniciativa> ComisionesXiniciativa { get; set; }
+        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=10.11.10.150;Database=dbAcciones;User Id=sa; Password=Sid123;");
+                //optionsBuilder.UseSqlServer("Server=APPS-TEST;Database=dbAcciones;User Id=sa; Password=Sid123;");
+                optionsBuilder.UseSqlServer("192.168.0.196;Database=dbAcciones;User Id=sa; Password=Sid123;");
             }
         }
 
@@ -82,6 +109,219 @@ namespace Acciones.Models
                     .WithMany(p => p.Apoyos)
                     .HasForeignKey(d => d.BeneficiarioId)
                     .HasConstraintName("FK_Apoyos_Beneficiarios");
+            });
+
+
+            modelBuilder.Entity<CatTipoIniciativa>(entity =>
+            {
+                entity.ToTable("CatTipoIniciativa");
+
+                entity.Property(e => e.CatTipoIniciativaId).HasColumnName("CatTipoIniciativaID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+
+            modelBuilder.Entity<EstatusIniciativas>(entity =>
+            {
+                entity.ToTable("EstatusIniciativas");
+
+                entity.Property(e => e.EstatusIniciativasId).HasColumnName("EstatusIniciativasID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+                
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(1500)
+                    .IsUnicode(false);
+            });
+
+
+            modelBuilder.Entity<ArchivosIniciativas>(entity =>
+            {
+                entity.HasKey(e => e.ArchivosIniciativaId)
+                .HasName("PK_ArchivosIniciativas");
+
+                entity.ToTable("ArchivosIniciativas");
+
+                entity.Property(e => e.ArchivosIniciativaId).HasColumnName("ArchivosIniciativaID");
+
+                entity.Property(e => e.IniciativaId).HasColumnName("IniciativaID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.NombreArchivo)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreArchivoBd)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("NombreArchivoBD");
+
+                entity.Property(e => e.Nota)
+                    .HasMaxLength(400)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("URL");
+
+            });
+
+
+            modelBuilder.Entity<Comisiones>(entity =>
+            {
+                entity.HasKey(e => e.ComisionId)
+                    .HasName("PK_Comision");
+
+                entity.Property(e => e.ComisionId).HasColumnName("ComisionID");
+
+                entity.Property(e => e.Comentario)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.LegislaturaId).HasColumnName("LegislaturaID");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UsuarioregistroId).HasColumnName("UsuarioregistroID");
+
+            });
+
+
+            modelBuilder.Entity<Iniciativas>(entity =>
+            {
+                entity.HasKey(e => e.IniciativaId)
+                .HasName("PK_Iniciativa");
+
+
+                entity.Property(e => e.IniciativaId).HasColumnName("IniciativaID");
+
+                entity.Property(e => e.EstatusIniciativaId).HasColumnName("EstatusIniciativaID");
+
+                entity.Property(e => e.CatTipoIniciativaId).HasColumnName("CatTipoIniciativaID");
+                
+                entity.Property(e => e.PresidenteId).HasColumnName("PresidenteID");
+
+                entity.Property(e => e.PromotorId).HasColumnName("PromotorID");
+
+                entity.Property(e => e.Clasificacion)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DocumentoReferencia)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaAprobabcionPleno).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaAprobacionComision).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaBaja).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaPublicacionSa)
+                    .HasColumnType("datetime")
+                    .HasColumnName("FechaPublicacionSA");
+
+                entity.Property(e => e.FechaRecibido).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaTurno).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.LegislaturaId).HasColumnName("LegislaturaID");
+
+                entity.Property(e => e.LinkReferencia)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Notas)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumTurno)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Titulo)
+                    .IsRequired()
+                    .HasMaxLength(2500)
+                    .IsUnicode(false);
+
+            });
+
+
+
+            modelBuilder.Entity<DiputadoIniciativa>(entity =>
+            {
+                entity.HasKey(e => e.DiputadoIniciativaId)
+                    .HasName("PK_DiputadoIniciativa");
+
+                entity.Property(e => e.DiputadoIniciativaId).HasColumnName("DiputadoIniciativaID");
+
+                entity.Property(e => e.DiputadoId).HasColumnName("DiputadoID");
+
+                entity.Property(e => e.IniciativaId).HasColumnName("IniciativaID");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.UsuarioRegistro).HasColumnName("UsuarioRegistro");
+
+            });
+
+
+            modelBuilder.Entity<ComisionesXiniciativa>(entity =>
+            {
+                entity.HasKey(e => e.ComisionesXiniciativaId)
+                    .HasName("PK_ComisionesXiniciativa");
+
+                entity.Property(e => e.ComisionesXiniciativaId).HasColumnName("ComisionesXiniciativaID");
+
+                entity.Property(e => e.IniciativaId).HasColumnName("IniciativaID");
+                entity.Property(e => e.ComisionId).HasColumnName("ComisionID");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.UsuarioRegistro).HasColumnName("UsuarioRegistro");
+
             });
 
             modelBuilder.Entity<ArchivosBitacora>(entity =>
@@ -123,6 +363,47 @@ namespace Acciones.Models
                     .HasForeignKey(d => d.BitacoraId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ArchivosBitacora_Bitacora");
+            });
+
+            modelBuilder.Entity<ArchivosBitacoraGestion>(entity =>
+            {
+                entity.ToTable("ArchivosBitacoraGestion");
+
+                entity.Property(e => e.ArchivosBitacoraGestionId).HasColumnName("ArchivosBitacoraGestionID");
+
+                entity.Property(e => e.BitacoraGestionId).HasColumnName("BitacoraGestionID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.NombreArchivo)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreArchivoBd)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("NombreArchivoBD");
+
+                entity.Property(e => e.Nota)
+                    .HasMaxLength(400)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("URL");
+
+                entity.HasOne(d => d.BitacoraGestion)
+                    .WithMany(p => p.ArchivosBitacorasGestion)
+                    .HasForeignKey(d => d.BitacoraGestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ArchivosBitacoraGestion_BitacoraGestion");
             });
 
             modelBuilder.Entity<ArchivosEvento>(entity =>
@@ -207,6 +488,47 @@ namespace Acciones.Models
                     .HasConstraintName("FK_ArchivosPeticiones_Peticiones");
             });
 
+            modelBuilder.Entity<ArchivosGestiones>(entity =>
+            {
+                entity.HasKey(e => e.ArchivosGestionesId);
+
+                entity.Property(e => e.ArchivosGestionesId).HasColumnName("ArchivosGestionesID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.NombreArchivo)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreArchivoBd)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("NombreArchivoBD");
+
+                entity.Property(e => e.Nota)
+                    .HasMaxLength(400)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("URL");
+
+                entity.HasOne(d => d.Gestion)
+                    .WithMany(p => p.ArchivosGestiones)
+                    .HasForeignKey(d => d.GestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ArchivosGestiones_Gestiones");
+            });
+
             modelBuilder.Entity<ArchivosVisita>(entity =>
             {
                 entity.HasKey(e => e.ArchivosVisitasId);
@@ -244,6 +566,46 @@ namespace Acciones.Models
                     .HasForeignKey(d => d.VisitaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ArchivosVisitas_Visitas");
+            });
+
+
+            modelBuilder.Entity<ArchivosPublicidad>(entity =>
+            {
+                entity.ToTable("ArchivosPublicidad");
+
+                entity.HasKey(e => e.ArchivosPublicidadId);
+
+                entity.Property(e => e.ArchivosPublicidadId).HasColumnName("ArchivosPublicidadID");
+
+                entity.Property(e => e.PublicidadId).HasColumnName("PublicidadID");
+                entity.Property(e => e.CiudadanoId).HasColumnName("CiudadanoID");
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.NombreArchivo)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NombreArchivoBd)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("NombreArchivoBD");
+
+                entity.Property(e => e.Nota)
+                    .HasMaxLength(400)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("URL");
+
             });
 
             modelBuilder.Entity<AsistentesEvento>(entity =>
@@ -297,6 +659,7 @@ namespace Acciones.Models
                 entity.Property(e => e.ColoniaId).HasColumnName("ColoniaID");
 
                 entity.Property(e => e.Cp).HasColumnName("CP");
+                entity.Property(e => e.DiputadoID).HasColumnName("DiputadoID");
 
                 entity.Property(e => e.Descripcion)
                     .HasMaxLength(3000)
@@ -398,6 +761,48 @@ namespace Acciones.Models
                     .HasConstraintName("FK_Beneficiarios_Peticiones");
             });
 
+
+            modelBuilder.Entity<BeneficiarioGestion>(entity =>
+            {
+                entity.HasKey(e => e.BeneficiariosGestionId);
+
+                entity.Property(e => e.BeneficiariosGestionId).HasColumnName("BeneficiariosGestionID");
+
+                entity.Property(e => e.Campo1)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CiudadanoId).HasColumnName("CiudadanoID");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Latitud)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Longitud)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Notas)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.HasOne(d => d.Ciudadano)
+                    .WithMany(p => p.BeneficiariosGestion)
+                    .HasForeignKey(d => d.CiudadanoId)
+                    .HasConstraintName("FK_BeneficiariosGestion_Ciudadanos");
+
+                entity.HasOne(d => d.Gestion)
+                    .WithMany(p => p.BeneficiariosGestion)
+                    .HasForeignKey(d => d.GestionId)
+                    .HasConstraintName("FK_BeneficiariosGestion_Gestiones");
+            });
+
             modelBuilder.Entity<Bitacora>(entity =>
             {
                 entity.ToTable("Bitacora");
@@ -445,6 +850,75 @@ namespace Acciones.Models
                     .HasForeignKey(d => d.ResponsableId)
                     .HasConstraintName("FK_Bitacora_Usuarios");
             });
+
+
+
+            modelBuilder.Entity<BitacoraGestion>(entity =>
+            {
+                entity.ToTable("BitacoraGestion");
+
+                entity.Property(e => e.BitacoraGestionId).HasColumnName("BitacoraGestionID");
+
+                entity.Property(e => e.DependeciaId).HasColumnName("DependeciaID");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaCompromiso).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaConclusion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Nota)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.Property(e => e.Responsable)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ResponsableId).HasColumnName("ResponsableID");
+
+                entity.HasOne(d => d.Dependecia)
+                    .WithMany(p => p.BitacorasGestion)
+                    .HasForeignKey(d => d.DependeciaId)
+                    .HasConstraintName("FK_BitacoraGestion_Dependencias");
+
+                entity.HasOne(d => d.Gestion)
+                    .WithMany(p => p.BitacorasGestion)
+                    .HasForeignKey(d => d.GestionId)
+                    .HasConstraintName("FK_BitacoraGestion_Gestiones");
+
+                entity.HasOne(d => d.ResponsableNavigation)
+                    .WithMany(p => p.BitacorasGestion)
+                    .HasForeignKey(d => d.ResponsableId)
+                    .HasConstraintName("FK_BitacoraGestion_Usuarios");
+            });
+
+
+            modelBuilder.Entity<AutorExterno_iniciativa>(entity =>
+            {
+                entity.ToTable("AutorExterno_iniciativa");
+
+                entity.HasKey(e => e.AutorExterno_iniciativaID);
+                
+                entity.Property(e => e.AutorExterno_iniciativaID).HasColumnName("AutorExterno_iniciativaID");
+
+                entity.Property(e => e.IniciativaID).HasColumnName("IniciativaID");
+
+                entity.Property(e => e.InstitucionID).HasColumnName("InstitucionID");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+            });
+
 
             modelBuilder.Entity<Calle>(entity =>
             {
@@ -494,6 +968,9 @@ namespace Acciones.Models
                 entity.Property(e => e.UsuarioRegistroId).HasColumnName("UsuarioRegistroID");
             });
 
+
+
+
             modelBuilder.Entity<Ciudadano>(entity =>
             {
                 entity.Property(e => e.CiudadanoId).HasColumnName("CiudadanoID");
@@ -511,6 +988,13 @@ namespace Acciones.Models
                 entity.Property(e => e.ColoniaId).HasColumnName("ColoniaID");
 
                 entity.Property(e => e.Cp).HasColumnName("CP");
+
+                entity.Property(e => e.recordarcumple).HasColumnName("recordarcumple");
+                entity.Property(e => e.Afin).HasColumnName("Afin");
+                entity.Property(e => e.RCasilla).HasColumnName("RCasilla");
+                entity.Property(e => e.NoAfin).HasColumnName("NoAfin");
+
+                entity.Property(e => e.DiputadoId).HasColumnName("DiputadoId");
 
                 entity.Property(e => e.Distrito)
                     .HasMaxLength(50)
@@ -576,6 +1060,22 @@ namespace Acciones.Models
                     .IsUnicode(false)
                     .HasColumnName("telefono");
 
+                entity.Property(e => e.RFC)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("RFC");
+
+                entity.Property(e => e.NombreArchivoBD)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("NombreArchivoBD");
+
+                entity.Property(e => e.URL)
+                    .HasMaxLength(500)
+                    .IsUnicode(false)
+                    .HasColumnName("URL");
+
+
                 entity.Property(e => e.TipoMiembro)
                     .HasMaxLength(80)
                     .IsUnicode(false);
@@ -591,6 +1091,78 @@ namespace Acciones.Models
                     .WithMany(p => p.Ciudadanos)
                     .HasForeignKey(d => d.ColoniaId)
                     .HasConstraintName("FK_Ciudadanos_Colonias");
+            });
+
+
+
+            modelBuilder.Entity<Publicidad>(entity =>
+            {
+                entity.Property(e => e.PublicidadId).HasColumnName("PublicidadID");
+
+
+                entity.Property(e => e.Folio)
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tamaño)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Notas)
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumExterior)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NumInterior)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Distrito)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Seccion)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Campo1)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Latitud)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Longitud)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Responsable)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaInstalacion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaRetiro).HasColumnType("datetime");
+
+                entity.Property(e => e.CiudadanoId).HasColumnName("CiudadanoID");
+                entity.Property(e => e.ColoniaId).HasColumnName("ColoniaID");
+                entity.Property(e => e.CalleId).HasColumnName("CalleID");
+                entity.Property(e => e.TipoPublicidadId).HasColumnName("TipoPublicidadID");
+                entity.Property(e => e.OrigenId).HasColumnName("OrigenID");
+                entity.Property(e => e.UsuarioRegistroId).HasColumnName("UsuarioRegistroID");
+
             });
 
             modelBuilder.Entity<Colonia>(entity =>
@@ -742,6 +1314,124 @@ namespace Acciones.Models
                     .IsUnicode(false);
             });
 
+
+            modelBuilder.Entity<EstatusGestion>(entity =>
+            {
+                entity.HasKey(e => e.EstatusGestionId);
+
+                entity.Property(e => e.EstatusGestionId).HasColumnName("EstatusGestionID");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(1500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Estatus).HasColumnName("estatus");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+            });
+
+
+            modelBuilder.Entity<TiposEvento>(entity =>
+            {
+                entity.HasKey(e => e.TipoEventoId);
+
+                entity.Property(e => e.TipoEventoId).HasColumnName("TipoEventoID");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(1500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Estatus).HasColumnName("Estatus");
+                entity.Property(e => e.DiputadoId).HasColumnName("DiputadoID");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+
+            });
+
+            modelBuilder.Entity<Municipios>(entity =>
+            {
+                entity.HasKey(e => e.MunicipioId);
+
+                entity.Property(e => e.MunicipioId).HasColumnName("MunicipioID");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+
+            });
+
+            modelBuilder.Entity<CatPartidos>(entity =>
+            {
+                entity.HasKey(e => e.PartidoId);
+
+                entity.Property(e => e.PartidoId).HasColumnName("PartidoID");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Logotipo)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+
+            });
+
+            modelBuilder.Entity<TipoPublicidad>(entity =>
+            {
+                entity.HasKey(e => e.TipoPublicidadId);
+
+                entity.Property(e => e.TipoPublicidadId).HasColumnName("TipoPublicidadID");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+            });
+
+
+            modelBuilder.Entity<OrigenPublicidad>(entity =>
+            {
+                entity.HasKey(e => e.OrigenPublicidadId);
+
+                entity.Property(e => e.OrigenPublicidadId).HasColumnName("OrigenPublicidadID");
+
+                entity.Property(e => e.Nombre)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+            });
+
+
             modelBuilder.Entity<Evento>(entity =>
             {
                 entity.Property(e => e.EventoId).HasColumnName("EventoID");
@@ -774,6 +1464,12 @@ namespace Acciones.Models
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
                 entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Lugar)
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HoraInicio).HasColumnType("timespan");
 
                 entity.Property(e => e.Latitud)
                     .HasMaxLength(50)
@@ -839,6 +1535,8 @@ namespace Acciones.Models
                 entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
                 entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Representante).HasColumnName("Representante");
 
                 entity.Property(e => e.Notas)
                     .HasMaxLength(3000)
@@ -1041,6 +1739,37 @@ namespace Acciones.Models
                     .HasConstraintName("FK_PeticionCategoria_Peticiones");
             });
 
+
+            modelBuilder.Entity<GestionCategoria>(entity =>
+            {
+                entity.HasKey(e => e.GestionCategoriaId);
+
+                entity.Property(e => e.GestionCategoriaId).HasColumnName("GestionCategoriaID");
+
+                entity.Property(e => e.CategoriaId).HasColumnName("CategoriaID");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.HasOne(d => d.Categoria)
+                    .WithMany(p => p.GestionCategoria)
+                    .HasForeignKey(d => d.CategoriaId)
+                    .HasConstraintName("FK_GestionCategoria_Categorias");
+
+                entity.HasOne(d => d.Gestion)
+                    .WithMany(p => p.GestionCategoria)
+                    .HasForeignKey(d => d.GestionId)
+                    .HasConstraintName("FK_GestionCategoria_Gestiones");
+            });
+
+
             modelBuilder.Entity<PeticionSubcategorium>(entity =>
             {
                 entity.HasKey(e => e.PeticionSubcategoriaId);
@@ -1072,6 +1801,39 @@ namespace Acciones.Models
                     .HasConstraintName("FK_PeticionSubcategoria_Subcategorias");
             });
 
+
+            modelBuilder.Entity<GestionSubcategoria>(entity =>
+            {
+                entity.HasKey(e => e.GestionSubcategoriaId);
+
+                entity.Property(e => e.GestionSubcategoriaId).HasColumnName("GestionSubcategoriaID");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.GestionCategoriaId).HasColumnName("GestionCategoriaID");
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.Property(e => e.SubcategoriaId).HasColumnName("SubcategoriaID");
+
+                entity.HasOne(d => d.Gestion)
+                    .WithMany(p => p.GestionSubcategoria)
+                    .HasForeignKey(d => d.GestionId)
+                    .HasConstraintName("FK_GestionSubcategoria_Gestiones");
+
+                entity.HasOne(d => d.Subcategoria)
+                    .WithMany(g => g.GestionSubcategoria)
+                    .HasForeignKey(d => d.SubcategoriaId)
+                    .HasConstraintName("FK_GestionSubcategoria_Subcategorias");
+            });
+
+
             modelBuilder.Entity<Peticione>(entity =>
             {
                 entity.HasKey(e => e.PeticionId);
@@ -1086,6 +1848,8 @@ namespace Acciones.Models
                     .HasColumnName("campo1");
 
                 entity.Property(e => e.Campo2).HasColumnName("campo2");
+
+                entity.Property(e => e.Costo).HasColumnName("Costo");
 
                 entity.Property(e => e.SolicitanteId).HasColumnName("SolicitanteId");
 
@@ -1115,19 +1879,22 @@ namespace Acciones.Models
 
                 entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
 
+                entity.Property(e => e.Costo).HasColumnType("float");
+                entity.Property(e => e.ResponsableID).HasColumnName("ResponsableID");
+
                 entity.Property(e => e.LegislaturaId).HasColumnName("LegislaturaID");
 
                 entity.Property(e => e.OrigenPeticionId).HasColumnName("OrigenPeticionID");
 
-                entity.HasOne(d => d.Asociacion)
-                    .WithMany(p => p.Peticiones)
-                    .HasForeignKey(d => d.AsociacionId)
-                    .HasConstraintName("FK_Peticiones_Asociaciones");
+                //entity.HasOne(d => d.Asociacion)
+                //    .WithMany(p => p.Peticiones)
+                //    .HasForeignKey(d => d.AsociacionId)
+                //    .HasConstraintName("FK_Peticiones_Asociaciones");
 
-                entity.HasOne(d => d.Dependecia)
-                    .WithMany(p => p.Peticiones)
-                    .HasForeignKey(d => d.DependeciaId)
-                    .HasConstraintName("FK_Peticiones_Dependencias");
+                //entity.HasOne(d => d.Dependecia)
+                //    .WithMany(p => p.Peticiones)
+                //    .HasForeignKey(d => d.DependeciaId)
+                //    .HasConstraintName("FK_Peticiones_Dependencias");
 
                 entity.HasOne(d => d.Diputado)
                     .WithMany(p => p.Peticiones)
@@ -1149,6 +1916,94 @@ namespace Acciones.Models
                     .HasForeignKey(d => d.OrigenPeticionId)
                     .HasConstraintName("FK_Peticiones_OrigenPeticiones");
             });
+
+
+
+
+            modelBuilder.Entity<Gestiones>(entity =>
+            {
+                entity.HasKey(e => e.GestionId);
+
+                entity.Property(e => e.GestionId).HasColumnName("GestionID");
+
+                entity.Property(e => e.AsociacionId).HasColumnName("AsociacionID");
+
+                entity.Property(e => e.Campo1)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("campo1");
+
+                entity.Property(e => e.Campo2).HasColumnName("campo2");
+
+                entity.Property(e => e.Costo).HasColumnName("Costo");
+
+                entity.Property(e => e.SolicitanteId).HasColumnName("SolicitanteId");
+
+                entity.Property(e => e.DependeciaId).HasColumnName("DependeciaID");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DiputadoId).HasColumnName("DiputadoID");
+
+                entity.Property(e => e.Distrito)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Folio)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FechaCompromiso).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaConclusion).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaSolicitud).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaUltimoCambio).HasColumnType("datetime");
+
+                entity.Property(e => e.Costo).HasColumnType("float");
+                entity.Property(e => e.ResponsableID).HasColumnName("ResponsableID");
+
+                entity.Property(e => e.LegislaturaId).HasColumnName("LegislaturaID");
+
+                entity.Property(e => e.OrigenPeticionId).HasColumnName("OrigenPeticionID");
+
+                //entity.HasOne(d => d.Asociacion)
+                //    .WithMany(g => g.Gestiones)
+                //    .HasForeignKey(d => d.AsociacionId)
+                //    .HasConstraintName("FK_Gestiones_Asociaciones");
+
+                //entity.HasOne(d => d.Dependecia)
+                //    .WithMany(g => g.Gestiones)
+                //    .HasForeignKey(d => d.DependeciaId)
+                //    .HasConstraintName("FK_Gestiones_Dependencias");
+
+                entity.HasOne(d => d.Diputado)
+                    .WithMany(g => g.Gestiones)
+                    .HasForeignKey(d => d.DiputadoId)
+                    .HasConstraintName("FK_Gestiones_Diputados");
+
+                entity.HasOne(d => d.EstatusNavigation)
+                    .WithMany(g => g.Gestion)
+                    .HasForeignKey(d => d.Estatus)
+                    .HasConstraintName("FK_Gestiones_EstatusGestion");
+
+                entity.HasOne(d => d.Legislatura)
+                    .WithMany(g => g.Gestiones)
+                    .HasForeignKey(d => d.LegislaturaId)
+                    .HasConstraintName("FK_Gestiones_Legislatura");
+
+                entity.HasOne(d => d.OrigenPeticion)
+                    .WithMany(g => g.Gestiones)
+                    .HasForeignKey(d => d.OrigenPeticionId)
+                    .HasConstraintName("FK_Gestiones_OrigenPeticiones");
+            });
+
+
 
             modelBuilder.Entity<Role>(entity =>
             {
@@ -1192,6 +2047,9 @@ namespace Acciones.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Subcategorias_Categorias");
             });
+
+
+            
 
             modelBuilder.Entity<Usuario>(entity =>
             {

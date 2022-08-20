@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Acciones.Models;
+using Microsoft.Data.SqlClient;
 
 namespace Acciones.Controllers
 {
@@ -21,6 +22,10 @@ namespace Acciones.Controllers
         // GET: Calles
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
             var dbAccionesContext = _context.Calles.Include(c => c.Colonia);
             return View(await dbAccionesContext.ToListAsync());
         }
@@ -203,6 +208,40 @@ namespace Acciones.Controllers
                 return -1;
             }
             return calle.CalleId;
+        }
+
+        /*******************************************************************
+            Obtiene Calles de una Colonia
+        ********************************************************************/
+        public IEnumerable<Calle> ObtieneCalles(int coloniaId)
+        {
+            string stm = "";
+            List<Calle> ListaObjetos = new List<Calle>();
+            SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
+
+            conn.Open();
+
+                stm = "SELECT CalleID, NombreCalle " +
+                        " FROM Calles WHERE Estatus = 1 AND ColoniaID = " + coloniaId;
+
+            SqlCommand cmd_p = new SqlCommand(stm, conn);
+
+            SqlDataReader query = cmd_p.ExecuteReader();
+            var contador = 0;
+            if (query.HasRows)
+            {
+                while (query.Read())
+                {
+                    Calle obj = new Calle();
+                    obj.CalleId = query.GetInt32(0);
+                    obj.NombreCalle = query.GetString(1);
+                    ListaObjetos.Add(obj);
+                    contador++;
+                }
+            }
+            query.Close();
+            conn.Close();
+            return ListaObjetos;
         }
     }
 }

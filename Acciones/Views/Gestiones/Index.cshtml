@@ -1,0 +1,304 @@
+﻿@model IEnumerable<Acciones.Models.Gestiones>
+
+@{
+    ViewData["Title"] = "Gestiones";
+}
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<style>
+    .circulo {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid #c6d9ec;
+        padding: 10px;
+    }
+
+        .circulo:hover {
+            /*text-decoration: none;*/
+            background-color: white;
+        }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        /*        width: 50px;
+    */
+    }
+
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+
+@{
+    List<SelectListItem> opcionesHito = new List<SelectListItem>();
+    opcionesHito.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
+    opcionesHito.Add(new SelectListItem() { Text = "SI", Value = "1" });
+    opcionesHito.Add(new SelectListItem() { Text = "NO", Value = "0" });
+}
+
+
+<div class="row">
+    <table width="100%" style="border:none;">
+        <tr>
+            <td width="20%" align="left" style="padding-left:20px;">
+                <img src="~/Images/gestion.png" height='60' style='border: none; border-radius: 0px; padding: 0px;'/>
+            </td>
+            <td width="70%" align="center">
+                <h1 class="letraAzulEncabezado">GESTIÓN</h1>
+            </td>
+            <td width="10%" align="right">
+                <div class="row">
+                    <a asp-action="Create" role='button'>
+                        <i class="circulo fas fa-plus-circle" data-toggle='tooltip' data-placement='top' data-html='true' title="Nuevo Registro de Gestión"></i>
+                    </a>
+                    <a data-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample'>
+                        <i class="circulo fas fa-filter" data-toggle='tooltip' data-placement='top' data-html='true' title="Aplicar Filtro"></i>
+                    </a>
+                    <a asp-action="WriteDataToExcel" asp-controller="Gestiones">
+                        <i class="circulo fas fa-file-excel" data-toggle='tooltip' data-placement='top' data-html='true' title="Exportar a Excel"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table width="100%" style="border:none;">
+    <tr>
+        <td width="20%" align="left" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <label>Legislatura&nbsp;</label>
+                <select id="LegGestionReferencia" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
+            </div>
+        </td>
+        <td width="50%" align="center" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Descripción ..."
+                       aria-label="Search" aria-describedby="basic-addon2" id="BRGestionId">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick='BusqudaRapGestiones();' id="BotonGestionBR">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td width="30%" align="right" style="padding-left:8px; vertical-align:middle;">
+            <label id="labelNumeroRegistros">&nbsp;</label>
+        </td>
+    </tr>
+</table>
+
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+
+
+        <table class='table responsive-table table-bordered' style='width: 100%; border-color:white;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="LegBusqLabel">Legislatura</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="NumFolioBusqLabel">Folio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="ClasificacionBusqLabel">Categoría</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="SubcalsificacionBusqLabel" id="SubcalsificacionBusqLabel">Subcategoría</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="FechaRegistroBusqLabel">Fecha Registro</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="ResponsableBusqLabel" id="ResponsableBusqLabel">Responsable</label>
+                </td>
+
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="LegBusqueda_G" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="NumFolioBusqueda" id="NumFolioBusqueda" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="ClasificacionBusqueda_G" class="form-control" asp-items="ViewBag.ClasificacionBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="SubclasificacionBusqueda_G" class="form-control" asp-items="ViewBag.SubclasificacionBusqueda" disabled></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoRegistro' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoRegistroGestion" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select id="ResponsableBusqueda_G" class="form-control" asp-items="ViewBag.ResponsableBusqueda"></select>
+                </td>
+
+            </tr>
+        </table>
+
+
+
+
+
+
+        <table class='table responsive-table table-bordered' style='width: 100%; border-color:white;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="SolicitanteBusqLabel">Solicitante</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="EstatusBusqLabel">Estatus</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="HitoBusqLabel">Hito</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="AsociacionBusqLabel">Asociación</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="OrigenBusqLabel">Origen</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoObscuroLetraBlanca_2' width="20%">
+                    <label for="FechaConclusionLabel">Fecha Conclusión</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <input type="text" class="form-control" name="solicitanteFiltro" id="solicitanteFiltro" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="EstatusBusqueda_G" class="form-control" asp-items="ViewBag.EstatusBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="HitoBusqueda_G" class="form-control" asp-items="opcionesHito"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="AsociacionBusqueda_G" class="form-control" asp-items="ViewBag.AsociacionBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="OrigenBusqueda_G" class="form-control" asp-items="ViewBag.OrigenBusqueda"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoConclusion' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoConclusion" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactorH' width="20%">
+                    <label for="TituloBusqLabel">Descripción</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' width="20%">
+                    <input type="text" class="form-control" name="descripcionFiltro" id="descripcionFiltro" />
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactorH' width="20%">
+                    <label for="TituloBusqLabel">Dependencia</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' width="20%">
+                    <select id="DependenciaBusqueda_G" class="form-control" asp-items="ViewBag.DependenciaBusqueda"></select>
+                </td>
+                <td style='text-align: center; padding: 5px;' width="20%">
+                    <button type='button' onclick='FiltraGestiones();' class='btn btn-secondary'>FILTRAR</button>&nbsp;
+                    <a asp-action="Index"><button class="btn btn-secondary">CANCELAR</button> </a>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<input id="hideFechaInicioRegistro" type="hidden" value="">
+<input id="hideFechaFinRegistro" type="hidden" value="">
+<input id="hideFechaInicioConclusion" type="hidden" value="">
+<input id="hideFechaFinConclusion" type="hidden" value="">
+
+<div id="divGestiones"></div>
+
+<div style="width: 100%">
+    <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
+</div>
+
+<div style="display: inline-block; text-align: right; width: 100%">
+    <label id="labelNumeroRegistros_footer"></label>
+    &nbsp;
+    <label>Por Página</label>
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraGestiones();">
+        <OPTION VALUE="5">5</OPTION>
+        <OPTION VALUE="10" selected="selected">10</OPTION>
+        <OPTION VALUE="20">20</OPTION>
+        <OPTION VALUE="100">100</OPTION>
+        <OPTION VALUE="200000">Todos</OPTION>
+    </SELECT>
+</div>
+
+
+<input id="hideNumPaginas" type="hidden" value="">
+<input id="hideNumRegistros" type="hidden" value="">
+
+<script>
+    var input = document.getElementById("BRGestionId");
+    document.getElementById("BRGestionId").focus();
+
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            console.log("ENTER");
+            event.preventDefault();
+            document.getElementById("BotonGestionBR").click();
+        }
+    });
+</script>
+
+@*---------Modal Muestra Detalle de una Solicitud de Apoyo ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosSolicitudGestion" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table width=100% style="border:none;">
+                    <tr width="100%;">
+                        <td align="center">
+                            <h4 class="fondoMenu" id="ModalLabelConsultaSolicitud">SOLICITUD DE GESTION</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosSolicitudGestion'></div>
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">CATEGORIA Y SUBCATEGORIA</h4>
+                </div>
+                <div id="divCatSubCatNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ARCHIVOS ANEXOS</h4>
+                </div>
+                <div id="divArchivosAnexosNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BENEFICIARIOS</h4>
+                </div>
+                <div id="divBeneficiariosNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SEGUIMIENTO</h4>
+                </div>
+                <div id="divBitacoraNGestion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

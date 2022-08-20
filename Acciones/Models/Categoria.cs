@@ -10,6 +10,7 @@ namespace Acciones.Models
         public Categoria()
         {
             PeticionCategoria = new HashSet<PeticionCategorium>();
+            GestionCategoria = new HashSet<GestionCategoria>();
             Subcategoria = new HashSet<Subcategoria>();
         }
 
@@ -19,8 +20,10 @@ namespace Acciones.Models
         public DateTime? FechaRegistro { get; set; }
         public DateTime? FechaUltimoCambio { get; set; }
         public int? UsuarioRegistroId { get; set; }
+        public int? DiputadoId { get; set; }
 
         public virtual ICollection<PeticionCategorium> PeticionCategoria { get; set; }
+        public virtual ICollection<GestionCategoria> GestionCategoria { get; set; }
         public virtual ICollection<Subcategoria> Subcategoria { get; set; }
     }
 }

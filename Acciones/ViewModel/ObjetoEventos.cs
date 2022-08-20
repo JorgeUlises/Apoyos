@@ -24,5 +24,7 @@ namespace Acciones.ViewModel
         public int EstatusId { get; set; }
         public string Estatus { get; set; }
         public string Fecha { get; set; }
+        public string Lugar { get; set; }
+        public TimeSpan HoraInicio { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Security.Claims;
 
 namespace Acciones.Controllers
 {
@@ -27,11 +28,20 @@ namespace Acciones.Controllers
         // GET: Eventoes
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
             var LegId = _context.Legislaturas.Where(l => l.Estatus == 1).Select(l => l.LegislaturaId).SingleOrDefault();
             List<SelectListItem> LLegis = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre").ToList();
             var selected = LLegis.Where(x => x.Value == LegId.ToString()).First();
             selected.Selected = true;
             ViewData["LegBusqueda"] = LLegis;
+
+            List<SelectListItem> LstTiposEvento = new SelectList(_context.TiposEvento, "TipoEventoId", "Nombre").ToList();
+            LstTiposEvento.Insert(0, new SelectListItem() { Value = "0", Text = "SIN TIPO" });
+            LstTiposEvento.Insert(0, new SelectListItem() { Value = "-1", Text = "TODO" });
+            ViewData["TiposEvento"] = LstTiposEvento;
 
             var dbAccionesContext = _context.Eventos;
             ViewBag.JavaScriptFunction = string.Format("FiltraEventos();");
@@ -44,6 +54,11 @@ namespace Acciones.Controllers
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
             }
 
             var evento = await _context.Eventos
@@ -63,10 +78,19 @@ namespace Acciones.Controllers
         // GET: Eventoes/Create
         public IActionResult Create()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
+
             ViewData["CalleId"] = new SelectList(_context.Calles, "CalleId", "NombreCalle");
             ViewData["ColoniaId"] = new SelectList(_context.Colonias, "ColoniaId", "NombreColonia");
             ViewData["DiputadoId"] = new SelectList(_context.Diputados, "DiputadoId", "DiputadoId");
             //ViewData["LegislaturaId"] = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre");
+
+            List<SelectListItem> LstTiposEvento = new SelectList(_context.TiposEvento, "TipoEventoId", "Nombre").ToList();
+            LstTiposEvento.Insert(0, new SelectListItem() { Value = "0", Text = "" });
+            ViewData["TiposEvento"] = LstTiposEvento;
 
             var LegId = _context.Legislaturas.Where(l => l.Estatus == 1).Select(l => l.LegislaturaId).SingleOrDefault();
             List<SelectListItem> LLegis = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre").ToList();
@@ -90,10 +114,21 @@ namespace Acciones.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
+
             ViewData["CalleId"] = new SelectList(_context.Calles, "CalleId", "NombreCalle", evento.CalleId);
             ViewData["ColoniaId"] = new SelectList(_context.Colonias, "ColoniaId", "NombreColonia", evento.ColoniaId);
             ViewData["DiputadoId"] = new SelectList(_context.Diputados, "DiputadoId", "DiputadoId", evento.DiputadoId);
             ViewData["LegislaturaId"] = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre", evento.LegislaturaId);
+
+            List<SelectListItem> LstTiposEvento = new SelectList(_context.TiposEvento, "TipoEventoId", "Nombre").ToList();
+            LstTiposEvento.Insert(0, new SelectListItem() { Value = "0", Text = "" });
+            ViewData["TiposEvento"] = LstTiposEvento;
+
             return View(evento);
         }
 
@@ -105,6 +140,11 @@ namespace Acciones.Controllers
                 return NotFound();
             }
 
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
+
             var evento = await _context.Eventos.FindAsync(id);
             if (evento == null)
             {
@@ -114,6 +154,21 @@ namespace Acciones.Controllers
             ViewData["ColoniaId"] = new SelectList(_context.Colonias, "ColoniaId", "NombreColonia", evento.ColoniaId);
             ViewData["DiputadoId"] = new SelectList(_context.Diputados, "DiputadoId", "DiputadoId", evento.DiputadoId);
             ViewData["LegislaturaId"] = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre", evento.LegislaturaId);
+
+            ViewData["ColoniaVD"] = _context.Colonias.Where(c => c.ColoniaId == evento.ColoniaId).Select(c => c.NombreColonia).FirstOrDefault();
+            ViewData["CalleVD"] = _context.Calles.Where(c => c.ColoniaId == evento.ColoniaId).Select(c => c.NombreCalle).FirstOrDefault();
+
+            List<SelectListItem> LstTiposEvento = new SelectList(_context.TiposEvento, "TipoEventoId", "Nombre").ToList();
+            LstTiposEvento.Insert(0, new SelectListItem() { Value = "0", Text = "" });
+            ViewData["TiposEvento"] = LstTiposEvento;
+
+            //List<SelectListItem> LLegis = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre").ToList();
+            //var selected = LLegis.Where(x => x.Value == evento.LegislaturaId.ToString()).First();
+            //selected.Selected = true;
+            //ViewData["LegislaturaId"] = LLegis;
+
+            ViewBag.JavaScriptFunction = string.Format("mostrarComplementoEvento(" + id + ");");
+
             return View(evento);
         }
 
@@ -127,6 +182,11 @@ namespace Acciones.Controllers
             if (id != evento.EventoId)
             {
                 return NotFound();
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
             }
 
             if (ModelState.IsValid)
@@ -153,6 +213,8 @@ namespace Acciones.Controllers
             ViewData["ColoniaId"] = new SelectList(_context.Colonias, "ColoniaId", "NombreColonia", evento.ColoniaId);
             ViewData["DiputadoId"] = new SelectList(_context.Diputados, "DiputadoId", "DiputadoId", evento.DiputadoId);
             ViewData["LegislaturaId"] = new SelectList(_context.Legislaturas, "LegislaturaId", "Nombre", evento.LegislaturaId);
+
+
             return View(evento);
         }
 
@@ -162,6 +224,11 @@ namespace Acciones.Controllers
             if (id == null)
             {
                 return NotFound();
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
             }
 
             var evento = await _context.Eventos
@@ -183,6 +250,13 @@ namespace Acciones.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
+
+            BORRA_EVENTO(id);
+            
             var evento = await _context.Eventos.FindAsync(id);
             _context.Eventos.Remove(evento);
             await _context.SaveChangesAsync();
@@ -195,11 +269,95 @@ namespace Acciones.Controllers
         }
 
 
+        /****************************************************************************
+             BORRA PETICIÓN
+                 1. ARCHIVOS
+                 2. ASISTENTES
+         *****************************************************************************/
+        public int BORRA_EVENTO(int idEvento)
+        {
+            int rtn;
+            SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            conn.Open();
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = "stpDELETE_Evento";
+            cmd.Parameters.Add("@EventoID", System.Data.SqlDbType.Int).Value = idEvento;
+            cmd.Parameters.Add("@ReturnValue", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;                // Parametro REGRESO DE VALORES DEL STORED PROCEDURE
+
+            try
+            {
+                var nrow = cmd.ExecuteNonQuery();
+                rtn = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
+                conn.Close();
+                if (nrow > 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                conn.Close();
+                return 0;
+            }
+        }
+
+        /************************************************************
+                    BORRAR Archivo de Eventos
+        *************************************************************/
+        [HttpPost]
+        public int BorrarArchivoEvento(int archivoId)
+        {
+            var valReturn = 0;
+            try
+            {
+                var archivoEventoObj = _context.ArchivosEventos.Find(archivoId);
+                _context.ArchivosEventos.Remove(archivoEventoObj);
+                _context.SaveChanges();
+
+                valReturn = 1;
+            }
+            catch
+            {
+                valReturn = 0;
+            }
+
+            return valReturn;
+        }
+
+        /************************************************************
+                    BORRAR Asistente al Evento
+        *************************************************************/
+        [HttpPost]
+        public int BorrarAsistenteEvento(int asistenteEventoID)
+        {
+            var valReturn = 0;
+            try
+            {
+                var asistenteObj = _context.AsistentesEventos.Find(asistenteEventoID);
+                _context.AsistentesEventos.Remove(asistenteObj);
+                _context.SaveChanges();
+
+                valReturn = 1;
+            }
+            catch
+            {
+                valReturn = 0;
+            }
+
+            return valReturn;
+        }
+
 
         /************************************************************
             Obtiene Todas los EVENTOS
         *************************************************************/
-        public IEnumerable<ObjetoEventos> ObtieneEventos(int RegXpag, int offsetPeticiones, int LegislaturaID, string folio, string descripcion, string tipoId, int estatusId, string fechaInicioEvento, string fechaFinEvento, string colonia)
+        public IEnumerable<ObjetoEventos> ObtieneEventos(int RegXpag, int offsetPeticiones, int LegislaturaID, string folio, string descripcion, int tipoId, int estatusId, string fechaInicioEvento, string fechaFinEvento, string colonia)
         {
             int diputadoId = 8;
             IEnumerable<ObjetoEventos> ListaObjetos = new List<ObjetoEventos>();
@@ -208,12 +366,13 @@ namespace Acciones.Controllers
                     join colonias in _context.Colonias on eventos.ColoniaId equals colonias.ColoniaId
                     join calles in _context.Calles on eventos.CalleId equals calles.CalleId
                     join legislatura in _context.Legislaturas on eventos.LegislaturaId equals legislatura.LegislaturaId
+                    //join tipoEvento in _context.TiposEvento on eventos.TipoEventoId equals tipoEvento.TipoEventoId
 
                     //where true && String.IsNullOrEmpty(folio) ? (true) : eventos.Folio.Contains(folio)
                     where true && String.IsNullOrEmpty(descripcion) ? (true) : eventos.Descripcion.Contains(descripcion)
                     where true && String.IsNullOrEmpty(colonia) ? (true) : colonias.NombreColonia.Contains(colonia)
                     where true && String.IsNullOrEmpty(folio) ? (true) : eventos.Folio.Contains(folio)
-                    where true && String.IsNullOrEmpty(tipoId) ? (true) : eventos.Tipo.Contains(tipoId) 
+                    where true && (tipoId < 0) ? (true) : (int)eventos.TipoEventoId == tipoId
                     where true && (estatusId < 0) ? (true) : eventos.Estatus == estatusId
                     where true && (fechaInicioEvento == "0" && fechaFinEvento == "0") ? (true) : _context.Eventos.Where(e => e.Fecha >= DateTime.ParseExact(fechaInicioEvento, "dd-MM-yyyy HH:mm", null) && e.Fecha <= DateTime.ParseExact(fechaFinEvento, "dd-MM-yyyy HH:mm", null)).Select(e => e.EventoId).Contains(eventos.EventoId)
 
@@ -225,9 +384,10 @@ namespace Acciones.Controllers
                         EventoId = eventos.EventoId,
                         LegislaturaId = (int)eventos.LegislaturaId,
                         LegislaturaNombre = legislatura.Nombre,
-                        NumFolio = eventos.Folio,
+                        NumFolio = eventos.Folio??"",
                         Descripcion = eventos.Descripcion,
-                        Tipo = eventos.Tipo,
+                        //Tipo = eventos.Tipo,
+                        Tipo = _context.TiposEvento.Where(te => te.TipoEventoId == eventos.TipoEventoId).Select(te=>te.Nombre).FirstOrDefault()??"", 
                         NumeroAsistentes = (int)eventos.NumAsistentes,
                         Colonia = colonias.NombreColonia,
                         Calle = calles.NombreCalle,
@@ -238,6 +398,7 @@ namespace Acciones.Controllers
                         CP = (int)eventos.Cp,
                         EstatusId = (int)eventos.Estatus,
                         Fecha = eventos.Fecha != null ? ((DateTime)eventos.Fecha).ToShortDateString() : "",
+
                     }).Skip(offsetPeticiones).Take(RegXpag);
             return ListaObjetos;
         }
@@ -245,7 +406,7 @@ namespace Acciones.Controllers
         /************************************************************
             Obtiene Número de Registros aplicando FILTRO
         *************************************************************/
-        public int ObtieneNumeroEventosXfiltro(int LegislaturaID, string folio, string descripcion, string tipoId, int estatusId, string fechaInicioEvento, string fechaFinEvento, string colonia)
+        public int ObtieneNumeroEventosXfiltro(int LegislaturaID, string folio, string descripcion, int tipoId, int estatusId, string fechaInicioEvento, string fechaFinEvento, string colonia)
         {
             int diputadoId = 8;
             var results =
@@ -253,12 +414,13 @@ namespace Acciones.Controllers
                         join colonias in _context.Colonias on eventos.ColoniaId equals colonias.ColoniaId
                         join calles in _context.Calles on eventos.CalleId equals calles.CalleId
                         join legislatura in _context.Legislaturas on eventos.LegislaturaId equals legislatura.LegislaturaId
+                        //join tipoEvento in _context.TiposEvento on eventos.TipoEventoId equals tipoEvento.TipoEventoId
 
                         //where true && String.IsNullOrEmpty(folio) ? (true) : eventos.Folio.Contains(folio)
                         where true && String.IsNullOrEmpty(descripcion) ? (true) : eventos.Descripcion.Contains(descripcion)
                         where true && String.IsNullOrEmpty(colonia) ? (true) : colonias.NombreColonia.Contains(colonia)
                         where true && String.IsNullOrEmpty(folio) ? (true) : eventos.Folio.Contains(folio)
-                        where true && String.IsNullOrEmpty(tipoId) ? (true) : eventos.Tipo.Contains(tipoId)
+                        where true && (tipoId < 0) ? (true) : (int)eventos.TipoEventoId == tipoId
                         where true && (estatusId < 0) ? (true) : eventos.Estatus == estatusId
                         where true && (fechaInicioEvento == "0" && fechaFinEvento == "0") ? (true) : _context.Eventos.Where(e => e.Fecha >= DateTime.ParseExact(fechaInicioEvento, "dd-MM-yyyy HH:mm", null) && e.Fecha <= DateTime.ParseExact(fechaFinEvento, "dd-MM-yyyy HH:mm", null)).Select(e => e.EventoId).Contains(eventos.EventoId)
 
@@ -286,19 +448,59 @@ namespace Acciones.Controllers
 
 
         /************************************************************
+            Obtiene un EVENTO identificado por un Id
+        *************************************************************/
+        public IEnumerable<ObjetoEvento> ObtieneDetalleEvento(int idEvento)
+        {
+            IEnumerable<ObjetoEvento> ListaObjetos = new List<ObjetoEvento>();
+            ListaObjetos = (IEnumerable<ObjetoEvento>)(
+                    from eventos in _context.Eventos.Where(eve => eve.EventoId == idEvento)
+                    join legislatura in _context.Legislaturas on eventos.LegislaturaId equals legislatura.LegislaturaId
+                    join colonia in _context.Colonias on eventos.ColoniaId equals colonia.ColoniaId
+                    join calle in _context.Calles on eventos.CalleId equals calle.CalleId
+                    select new ObjetoEvento
+                    {
+                        EventoId = eventos.EventoId,
+                        LegislaturaId = eventos.LegislaturaId,
+                        NombreLegislatura = legislatura.Nombre,
+                        Folio = eventos.Folio,
+                        EstatusId = eventos.Estatus,
+                        NumAsistentes = eventos.NumAsistentes,
+                        FechaEvento = eventos.Fecha,
+                        Tipo = _context.TiposEvento.Where(te => te.TipoEventoId == eventos.TipoEventoId).Select(te => te.Nombre).FirstOrDefault(),
+                        ColoniaId = eventos.ColoniaId,
+                        Colonia = colonia.NombreColonia,
+                        CalleId = eventos.CalleId,
+                        Calle = calle.NombreCalle,
+                        NumExterior = eventos.NumExterior,
+                        NumInterior = eventos.NumInterior,
+                        CP = eventos.Cp,
+                        Latitud = eventos.Latitud,
+                        Longitud = eventos.Longitud,
+                        NombreEvento = eventos.Descripcion,
+                        HoraInicio = eventos.HoraInicio.ToString(@"hh\:mm"),
+                        Lugar = eventos.Lugar??""
+                    });
+            return ListaObjetos;
+        }
+
+        /************************************************************
             Nuevo Evento
         *************************************************************/
         [HttpPost]
-        public int NuevoEvento(int legislaturaId, string folioEvento, int estatusId, int numAsistentes, string fechaEvento, string tipoEvento, int coloniaId, int calleId, string numExt, string numInt, int CP, string latitud, string longitud, string descripcionEvento)
+        public int NuevoEvento(int legislaturaId, string folioEvento, int estatusId, int numAsistentes, string fechaEvento, int tipoEvento, int coloniaId, int calleId, string numExt, string numInt, int CP, string latitud, string longitud, string descripcionEvento, string horaInicioEvento, string lugar)
         {
+            string idU = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var idUsr = Int32.Parse(idU);
             Evento evento = new Evento
             {
                 LegislaturaId = legislaturaId,
-                Folio = folioEvento,
+                Folio = folioEvento ?? "",
                 Estatus = estatusId,
                 NumAsistentes = numAsistentes,
                 Fecha = fechaEvento == null || fechaEvento == "" ? new DateTime(1900, 1, 1) : Convert.ToDateTime(fechaEvento + " 00:00:00"),
-                Tipo = tipoEvento ?? "",
+                Tipo = "",
+                TipoEventoId = (int)tipoEvento,
                 ColoniaId = coloniaId,
                 CalleId = calleId,
                 NumExterior = numExt ?? "",
@@ -315,7 +517,9 @@ namespace Acciones.Controllers
                 Seccion = "",
                 FechaRegistro = DateTime.Now,
                 FechaUltimoCambio = DateTime.Now,
-                UsuarioRegistro = 1
+                UsuarioRegistro = idUsr,
+                HoraInicio = TimeSpan.Parse(horaInicioEvento),
+                Lugar = lugar ?? ""
             };
 
 
@@ -341,12 +545,73 @@ namespace Acciones.Controllers
             }
         }
 
+        /************************************************************
+            ACTUALIZA Evento
+        *************************************************************/
+        [HttpPost]
+        public int ActualizaEvento(int eventoId,int legislaturaId, string folioEvento, int estatusId, int numAsistentes, string fechaEvento, int tipoEvento, int coloniaId, int calleId, string numExt, string numInt, int CP, string latitud, string longitud, string descripcionEvento, DateTime FechaRegistro, string horaInicioEvento, string lugar)
+        {
+            string idU = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var idUsr = Int32.Parse(idU);
+
+            Evento evento = new Evento
+            {
+                EventoId = eventoId,
+                LegislaturaId = legislaturaId,
+                Folio = folioEvento,
+                Estatus = estatusId,
+                NumAsistentes = numAsistentes,
+                Fecha = fechaEvento == null || fechaEvento == "" ? new DateTime(1900, 1, 1) : Convert.ToDateTime(fechaEvento + " 00:00:00"),
+                TipoEventoId = tipoEvento,
+                ColoniaId = coloniaId,
+                CalleId = calleId,
+                NumExterior = numExt ?? "",
+                NumInterior = numInt ?? "",
+                Cp = CP,
+                Latitud = latitud ?? "",
+                Longitud = longitud ?? "",
+                Descripcion = descripcionEvento,
+                Campo1 = "",
+                Campo2 = 0,
+
+                DiputadoId = 8,
+                Distrito = "V",
+                Seccion = "",
+                FechaRegistro = FechaRegistro,
+                FechaUltimoCambio = DateTime.Now,
+                UsuarioRegistro = idUsr,
+
+                HoraInicio = TimeSpan.Parse(horaInicioEvento),
+                Lugar = lugar,
+            };
+
+            try
+            {
+                _context.Update(evento);
+                _context.SaveChanges();
+
+                if (evento.EventoId != 0)
+                {
+                    return evento.EventoId;
+                }
+                else
+                {
+                    Console.WriteLine("No se actualizó en la BD el Evento");
+                    return -1;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error al Insertar el Evento: {0}", e.Message);
+                return -2;
+            }
+        }
 
         /*******************************************************************
             Obtiene Resumen de Eventos X Tipo X Estatus
         ********************************************************************/
         [HttpGet]
-        public List<ObjetoEventoTipoEstatus> resumenXtipo(int LegislaturaID)
+        public List<ObjetoEventoTipoEstatus> resumenXtipo(int LegislaturaId, int anioSel, int mesSel)
         {
             List<ObjetoEventoTipoEstatus> ListaObjetos = new List<ObjetoEventoTipoEstatus>();
             SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
@@ -355,7 +620,9 @@ namespace Acciones.Controllers
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "stpResumenEventosXtipoXestatus";
-            cmd.Parameters.Add("@LegislaturaId", System.Data.SqlDbType.Int).Value = LegislaturaID;
+            cmd.Parameters.Add("@LegislaturaId", System.Data.SqlDbType.Int).Value = LegislaturaId;
+            cmd.Parameters.Add("@Anio", System.Data.SqlDbType.Int).Value = anioSel;
+            cmd.Parameters.Add("@Mes", System.Data.SqlDbType.Int).Value = mesSel;
 
             SqlDataReader query = cmd.ExecuteReader();
             var contador = 0;
@@ -390,6 +657,51 @@ namespace Acciones.Controllers
         }
 
 
+
+        /****************************************************************************
+            Obtiene Lista de Asistentes a un Evento
+        *****************************************************************************/
+        [HttpGet]
+        public List<ObjetoAsistente> ObtieneListaAsistentesEvento(int idEvento)
+        {
+            List<ObjetoAsistente> ListaObjetos = new List<ObjetoAsistente>();
+            SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            conn.Open();
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = "stpObtieneAsistentes_De_Evento";
+            cmd.Parameters.Add("@EventoID", System.Data.SqlDbType.Int).Value = idEvento;
+            cmd.Parameters.Add("@ReturnValue", System.Data.SqlDbType.Int).Direction = ParameterDirection.Output;                // Parametro REGRESO DE VALORES DEL STORED PROCEDURE
+
+            SqlDataReader query = cmd.ExecuteReader();
+            var contador = 0;
+            if (query.HasRows)
+            {
+                while (query.Read())
+                {
+                    ObjetoAsistente obj = new ObjetoAsistente();
+                    obj.AsistenteEventoID = query.GetInt32(0);
+                    obj.EventoID = query.GetInt32(1);
+                    obj.CiudadanoID = query.GetInt32(2);
+                    obj.NombreCompleto = query.GetString(3);
+                    obj.Asistencia = query.GetInt32(4);
+                    obj.ColoniaID = query.GetInt32(5);
+                    obj.Colonia = query.GetString(6);
+                    obj.CalleID = query.GetInt32(7);
+                    obj.Calle = query.GetString(8);
+                    obj.Comentarios = query.GetString(9);
+                    obj.Estatus = query.GetInt32(10);
+                    ListaObjetos.Add(obj);
+                    contador++;
+                }
+            }
+            query.Close();
+            conn.Close();
+            return ListaObjetos;
+        }
+
+
         /****************************************************************************
             Obtiene Lista de Archivos de un Evento
         *****************************************************************************/
@@ -416,6 +728,7 @@ namespace Acciones.Controllers
                     obj.EventoID = query.GetInt32(0);
                     obj.NombreArchivo = query.GetString(1);
                     obj.URL = query.GetString(2);
+                    obj.ArchivoID = query.GetInt32(3);
                     ListaObjetos.Add(obj);
                     contador++;
                 }
@@ -449,7 +762,7 @@ namespace Acciones.Controllers
                     posicionPunto = item.FileName.IndexOf(".");
                     extensionArchivo = item.FileName.Substring(posicionPunto + 1);
 
-                    nombreArchivoBD = Convert.ToString(EventoId) + "_" + numeroArchivosXeventoId(EventoId) + "." + extensionArchivo;
+                    nombreArchivoBD = TokenProvider.ComputeSha256Hash(Convert.ToString(EventoId) + "_" + numeroArchivosXeventoId(EventoId)) + "." + extensionArchivo;
 
                     filePath = Path.Combine(@"C:\ARCHIVOS_APP\PETICIONES\EVENTOS\", nombreArchivoBD);
 
@@ -547,6 +860,93 @@ namespace Acciones.Controllers
             }
         }
 
+
+        /****************************************************************************
+            Guarda Nuevo Asistente a un Evento
+        *****************************************************************************/
+        [HttpPost]
+        public int GuardaNuevoAsistente(int idEvento, int asistenteId, string comentarios, int cbAsisEvento)
+        {
+            int rtn;
+            SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            conn.Open();
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = "stpAgregaAsistenteEvento_Notas";
+            cmd.Parameters.Add("@EventoID", System.Data.SqlDbType.Int).Value = idEvento;
+            cmd.Parameters.Add("@AsistenteID", System.Data.SqlDbType.Int).Value = asistenteId;
+            cmd.Parameters.Add("@Comentario", System.Data.SqlDbType.VarChar, 1500).Value = comentarios??"";
+            cmd.Parameters.Add("@UsuarioID", System.Data.SqlDbType.Int).Value = 1;
+            cmd.Parameters.Add("@Asistencia", System.Data.SqlDbType.Int).Value = cbAsisEvento;
+            
+            cmd.Parameters.Add("@ReturnValue", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;                // Parametro REGRESO DE VALORES DEL STORED PROCEDURE
+
+            try
+            {
+                var nrow = cmd.ExecuteNonQuery();
+                rtn = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
+                conn.Close();
+                if (nrow > 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                conn.Close();
+                return 0;
+            }
+        }
+
+        
+        /****************************************************************************
+        ACTUALIZA Asistente a un Evento
+        *****************************************************************************/
+        [HttpPost]
+        public int ActualizaAsistenteEvento(int asistenteEventoID, int idEvento, int asistenteId, string comentarios, int cbAsisEvento)
+        {
+            int rtn;
+            SqlConnection conn = (SqlConnection)this._context.Database.GetDbConnection();
+            SqlCommand cmd = conn.CreateCommand();
+            conn.Open();
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = "stpACTUALIZAasistenteEvento_Notas";
+            cmd.Parameters.Add("@AsistenteEventoID", System.Data.SqlDbType.Int).Value = asistenteEventoID;
+            cmd.Parameters.Add("@EventoID", System.Data.SqlDbType.Int).Value = idEvento;
+            cmd.Parameters.Add("@AsistenteID", System.Data.SqlDbType.Int).Value = asistenteId;
+            cmd.Parameters.Add("@Comentario", System.Data.SqlDbType.VarChar, 1500).Value = comentarios ?? "";
+            cmd.Parameters.Add("@UsuarioID", System.Data.SqlDbType.Int).Value = 1;
+            cmd.Parameters.Add("@Asistencia", System.Data.SqlDbType.Int).Value = cbAsisEvento;
+
+            cmd.Parameters.Add("@ReturnValue", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;                // Parametro REGRESO DE VALORES DEL STORED PROCEDURE
+
+            try
+            {
+                var nrow = cmd.ExecuteNonQuery();
+                rtn = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
+                conn.Close();
+                if (nrow > 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                conn.Close();
+                return 0;
+            }
+        }
+
         public partial class ObjetoEventoTipoEstatus
         {
             public string Tipo { get; set; }
@@ -563,6 +963,46 @@ namespace Acciones.Controllers
             public int EventoID { get; set; }
             public string NombreArchivo { get; set; }
             public string URL { get; set; }
+            public int ArchivoID { get; set; }
+        }
+
+        public partial class ObjetoEvento
+        {
+            public int EventoId { get; set; }
+            public int? LegislaturaId { get; set; }
+            public string NombreLegislatura { get; set; }
+            public string Folio { get; set; }
+            public int? EstatusId { get; set; }
+            public int? NumAsistentes { get; set; }
+            public DateTime? FechaEvento { get; set; }
+            public string Tipo { get; set; }
+            public int? ColoniaId { get; set; }
+            public string Colonia { get; set; }
+            public int? CalleId { get; set; }
+            public string Calle { get; set; }
+            public string NumExterior { get; set; }
+            public string NumInterior { get; set; }
+            public int? CP { get; set; }
+            public string Latitud { get; set; }
+            public string Longitud { get; set; }
+            public string NombreEvento { get; set; }
+            public string Lugar { get; set; }
+            public string HoraInicio { get; set; }
+        }
+
+        public partial class ObjetoAsistente
+        {
+            public int AsistenteEventoID { get; set; }
+            public int EventoID { get; set; }
+            public int CiudadanoID { get; set; }
+            public string NombreCompleto { get; set; }
+            public int Asistencia { get; set; }
+            public int ColoniaID { get; set; }
+            public string Colonia { get; set; }
+            public int CalleID { get; set; }
+            public string Calle { get; set; }
+            public string Comentarios { get; set; }
+            public int Estatus { get; set; }
         }
 
     }

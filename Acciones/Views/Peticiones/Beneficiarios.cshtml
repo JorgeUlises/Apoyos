@@ -1,0 +1,211 @@
+﻿@model IEnumerable<Acciones.ViewModel.CategoriaBeneficiariosVM>
+
+@{
+    List<SelectListItem> opcionesHito = new List<SelectListItem>();
+    opcionesHito.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
+    opcionesHito.Add(new SelectListItem() { Text = "SI", Value = "1" });
+    opcionesHito.Add(new SelectListItem() { Text = "NO", Value = "0" });
+}
+
+
+@{
+    List<SelectListItem> selectAnio = new List<SelectListItem>();
+    selectAnio.Add(new SelectListItem() { Text = "TODO", Value = "0" });
+    selectAnio.Add(new SelectListItem() { Text = "2018", Value = "2018" });
+    selectAnio.Add(new SelectListItem() { Text = "2019", Value = "2019" });
+    selectAnio.Add(new SelectListItem() { Text = "2020", Value = "2020" });
+    selectAnio.Add(new SelectListItem() { Text = "2021", Value = "2021" });
+    selectAnio.Add(new SelectListItem() { Text = "2022", Value = "2022" });
+    selectAnio.Add(new SelectListItem() { Text = "2023", Value = "2023" });
+    selectAnio.Add(new SelectListItem() { Text = "2024", Value = "2024" });
+}
+
+@{
+    List<SelectListItem> selectMes = new List<SelectListItem>();
+    selectMes.Add(new SelectListItem() { Text = "TODO", Value = "0" });
+    selectMes.Add(new SelectListItem() { Text = "ENERO", Value = "1" });
+    selectMes.Add(new SelectListItem() { Text = "FEBRERO", Value = "2" });
+    selectMes.Add(new SelectListItem() { Text = "MARZO", Value = "3" });
+    selectMes.Add(new SelectListItem() { Text = "ABRIL", Value = "4" });
+    selectMes.Add(new SelectListItem() { Text = "MAYO", Value = "5" });
+    selectMes.Add(new SelectListItem() { Text = "JUNIO", Value = "6" });
+    selectMes.Add(new SelectListItem() { Text = "JULIO", Value = "7" });
+    selectMes.Add(new SelectListItem() { Text = "AGOSTO", Value = "8" });
+    selectMes.Add(new SelectListItem() { Text = "SEPTIEMBRE", Value = "9" });
+    selectMes.Add(new SelectListItem() { Text = "OCTUBRE", Value = "10" });
+    selectMes.Add(new SelectListItem() { Text = "NOVIEMBRE", Value = "11" });
+    selectMes.Add(new SelectListItem() { Text = "DICIEMBRE", Value = "12" });
+}
+
+
+<div align="center">
+    <table style='width:40%; border:none;' id="tablaSeleccionMesAnio">
+        <tr style="padding:2px;">
+            <td style='text-align: right; vertical-align: middle; padding-right:5px;' width="10%">
+                <label for="LegislaturaLabel" class="control-label">Legislatura</label>
+            </td>
+            <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                <select id="legislaturaBenId" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
+            </td>
+
+            <td style='text-align: right; vertical-align: middle; padding-right:5px;' width="10%">
+                    <label for="AnioLabel" class="control-label">Año</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                    <select id="anioBenId" class="form-control" asp-items="selectAnio"></select>
+                </td>
+                <td style='text-align: right; vertical-align: middle; padding-right: 5px;' width="10%">
+                    <label for="MesLabel" class="control-label">Mes</label>
+                </td>
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                    <select id="mesBenId" class="form-control" asp-items="selectMes"></select>
+                </td>
+        </tr>
+    </table>
+</div>
+<div class="text-center">
+    <h2 class="display-4" style="color: rgba(38, 112, 233, 1); "><strong>BENEFICIARIOS X CATEGORIA</strong></h2>
+</div>
+
+
+<div id="accordion">
+    @{int indiceExterno = 0;
+        int totalBeneficiarios = 0;  }
+    <div class="card" style="background-color:white;">
+        @foreach (var areaPivote in Model)
+        {
+            indiceExterno++;
+
+            <div class="card-header" id="headingOne_@areaPivote.CategoriaId" style="background-color:white;">
+                <h5 class="mb-0">
+                    <table class="table table-sm table-bordered" width="100%">
+                        <tr>
+                            <td class="centrarVH" width="5%">
+                                @indiceExterno
+                            </td>
+                            <td class="centrarVH" width="5%">
+                                @if (@areaPivote.BeneficiariosPeticiones.Count() != 0)
+                                {
+                                    @areaPivote.BeneficiariosPeticiones.Count()
+                                    totalBeneficiarios += @areaPivote.BeneficiariosPeticiones.Count();
+                                }
+                            </td>
+                            <td width="90%">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne_@areaPivote.CategoriaId" aria-expanded="true" aria-controls="collapseOne_@areaPivote.CategoriaId">
+                                    @areaPivote.Categoria
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </h5>
+            </div>
+
+            if (areaPivote.BeneficiariosPeticiones.Count() != 0)
+            {
+                <div id="collapseOne_@areaPivote.CategoriaId" class="collapse " aria-labelledby="headingOne_@areaPivote.CategoriaId" data-parent="#accordion">
+                    <div class="card-body">
+                        <table class="table table-sm table-bordered" width="100%">
+                            <thead>
+                                <tr style='text-align:center; background-color:white; color:whitesmoke' width="100%">
+                                    <th width="5%">
+                                        No
+                                    </th>
+                                    <th width="25%">
+                                        Beneficiario
+                                    </th>
+                                    <th width="65%">
+                                        Apoyo
+                                    </th>
+                                    <th width="5%">
+                                        Folios
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int indice = 0;}
+                                @foreach (var item in areaPivote.BeneficiariosPeticiones)
+                                {
+                                    indice++;
+                                    <tr>
+                                        <td class="centrarVH">
+                                            @indice
+                                        </td>
+                                        <td style="vertical-align:central">
+                                            @*<a href='@item.CiudadnoId' style='cursor:pointer; color:blue;' target='_blank' title='@item.Nombre'> @item.Nombre</a>*@
+                                            <span style='cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Ciudadano'> <a href='/Apoyo/Ciudadanoes/DetalleCiudadano?id=@item.CiudadnoId'>@item.Nombre</a></span>
+                                        </td>
+                                        <td style="vertical-align:central">
+                                            <span style='cursor:pointer; color:blue; text-decoration: underline;' title='Detalle de Solicitud de Apoyo' onclick='mostrarModalDetalleSolicitud(@item.PeticionId);'>@item.Peticion</span>
+                                        </td>
+                                        <td style="vertical-align:central">
+                                            @item.Folio
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    <table class="table table-sm table-bordered" width="100%">
+        <tr>
+            <td class="centrarVH" width="5%">
+            </td>
+            <td class="centrarVH" width="5%">
+                @totalBeneficiarios
+            </td>
+            <td class="centrarVH" width="90%">
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
+
+@*---------Modal Muestra Detalle de una Solicitud de Apoyo ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosSolicitud" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table width=100% style="border:none;">
+                    <tr width="100%;">
+                        <td align="center">
+                            <h4 class="fondoMenu" id="ModalLabelConsultaSolicitud">SOLICITUD DE APOYO</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosSolicitud'></div>
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">CATEGORIA Y SUBCATEGORIA</h4>
+                </div>
+                <div id="divCatSubCatNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ARCHIVOS ANEXOS</h4>
+                </div>
+                <div id="divArchivosAnexosNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BENEFICIARIOS</h4>
+                </div>
+                <div id="divBeneficiariosNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SEGUIMIENTO</h4>
+                </div>
+                <div id="divBitacoraNPeticion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

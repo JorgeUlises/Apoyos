@@ -21,7 +21,11 @@ namespace Acciones.Controllers
         // GET: Colonias
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Colonias.ToListAsync());
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
+            return View(await _context.Colonias.OrderBy(c=>c.NombreColonia).ToListAsync());
         }
 
         // GET: Colonias/Details/5

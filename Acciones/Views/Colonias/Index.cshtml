@@ -12,63 +12,25 @@
 <table class="table">
     <thead>
         <tr>
+            <th>No</th>
             <th>
                 @Html.DisplayNameFor(model => model.NombreColonia)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Distrito)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Seccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstatusColonia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
-            </th>*@
             <th></th>
         </tr>
     </thead>
     <tbody>
+        @{var indice = 0; }
 @foreach (var item in Model) {
+    indice++;
         <tr>
+            <td>@indice</td>
             <td>
                 @Html.DisplayFor(modelItem => item.NombreColonia)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Distrito)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Seccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstatusColonia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
-            </td>*@
         <td>
-            @*<a asp-action="Edit" asp-route-id="@item.ColoniaId">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.ColoniaId">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.ColoniaId">Delete</a>*@
-
-            <a asp-action="Edit" asp-route-id="@item.ColoniaId"><span style='cursor: pointer' class='fas fa-edit fa-lg' title='Editar'></span></a>
-            <a asp-action="Delete" asp-route-id="@item.ColoniaId"><span style='cursor: pointer' class='fas fa-trash fa-lg' title='Eliminar'></span></a>
-
-
+            <a asp-action="Edit" asp-route-id="@item.ColoniaId"><span style='cursor: pointer' class='fas fa-edit' title='Editar'></span></a>
+            <a asp-action="Delete" asp-route-id="@item.ColoniaId"><span style='cursor: pointer' class='fas fa-trash' title='Eliminar'></span></a>
         </td>
         </tr>
 }

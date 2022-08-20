@@ -10,6 +10,7 @@ namespace Acciones.Models
         public Subcategoria()
         {
             PeticionSubcategoria = new HashSet<PeticionSubcategorium>();
+            GestionSubcategoria = new HashSet<GestionSubcategoria>();
         }
 
         public int SubcategoriasId { get; set; }
@@ -22,5 +23,6 @@ namespace Acciones.Models
 
         public virtual Categoria Categoria { get; set; }
         public virtual ICollection<PeticionSubcategorium> PeticionSubcategoria { get; set; }
+        public virtual ICollection<GestionSubcategoria> GestionSubcategoria { get; set; }
     }
 }

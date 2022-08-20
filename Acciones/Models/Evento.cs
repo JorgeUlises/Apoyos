@@ -18,6 +18,7 @@ namespace Acciones.Models
         public int? DiputadoId { get; set; }
         [DataType(DataType.Date)]
         public DateTime? Fecha { get; set; }
+
         public string Descripcion { get; set; }
         public int? ColoniaId { get; set; }
         public int? CalleId { get; set; }
@@ -37,11 +38,14 @@ namespace Acciones.Models
         public DateTime? FechaRegistro { get; set; }
         public DateTime? FechaUltimoCambio { get; set; }
         public int? UsuarioRegistro { get; set; }
-
+        public string Lugar { get; set; }
+        public TimeSpan HoraInicio { get; set; }
+        public int? TipoEventoId { get; set; }
         public virtual Calle Calle { get; set; }
         public virtual Colonia Colonia { get; set; }
         public virtual Diputado Diputado { get; set; }
         public virtual Legislatura Legislatura { get; set; }
+        
         public virtual ICollection<ArchivosEvento> ArchivosEventos { get; set; }
         public virtual ICollection<AsistentesEvento> AsistentesEventos { get; set; }
     }

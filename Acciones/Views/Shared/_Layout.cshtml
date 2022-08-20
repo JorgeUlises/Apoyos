@@ -1,18 +1,24 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es-mx">
+
+
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Acciones</title>
 
     @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>*@
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>*@
 
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-    <link href="~/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
-    
+    @*<link href="~/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />*@
+
+    <link href="~/js/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
     @*<link href="~/js/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />*@
 
     <link href="~/font-awesome/css/fontawesome.css" rel="stylesheet" />
@@ -22,7 +28,8 @@
     <link href="~/font-awesome/css/brands.css" rel="stylesheet" />
     <link rel="shortcut icon" href='@Url.Content("~/favicon.ico")'>
     <link href="~/js/jqueryui/jquery-ui.css" rel="stylesheet" />
-
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="~/css/SideModal.css" rel="stylesheet" />
 
     <style>
         .dropdown .dropbtn {
@@ -69,60 +76,98 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fondoMenu">
-            <a style="vertical-align: middle;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home">&nbsp;</i><strong>Inicio</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Peticiones" asp-action="Index">Apoyos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Eventoes" asp-action="Index">Eventos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Visitas" asp-action="Index">Visitas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Proyectos" asp-action="Index">Proyectos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Reportes" asp-action="Index">Reportes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Ciudadanoes" asp-action="Index">Ciudadanos</a>
-                    </li>
-                    <li class="nav-item dropdown" style="vertical-align: middle;">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Catálogos
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-area="" asp-controller="Colonias" asp-action="Index">Colonias</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Calles" asp-action="Index">Calles</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="" asp-controller="Dependencias" asp-action="Index">Dependencias</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Asociaciones" asp-action="Index">Asociaciones</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">Categorías</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Subcategorias" asp-action="Index">Subcategorías</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="" asp-controller="Legislaturas" asp-action="Index">Legislaturas</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Diputadoes" asp-action="Index">Diputados</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" asp-area="" asp-controller="EstatusPeticiones" asp-action="Index">Estatus</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                            <a class="dropdown-item" asp-area="" asp-controller="OrigenPeticiones" asp-action="Index">Origen Peticiones</a>
-                        </div>
-                    </li>
-                </ul>
 
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <nav class="navbar navbar-expand-lg navbar-dark fondoMenu">
+                <a style="vertical-align: middle;" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home">&nbsp;</i><strong>Inicio</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Gestiones" asp-action="Index" style="color:white;">Gestión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Peticiones" asp-action="Index" style="color:white;">Apoyo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Eventoes" asp-action="Index" style="color:white;">Eventos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Asociaciones" asp-action="Index" style="color:white;">Asociaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Ciudadanoes" asp-action="Index" style="color:white;">Ciudadanos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Publicidad" asp-action="Index" style="color:white;">Promocionales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Reportes" asp-action="Index" style="color:white;">Reportes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Iniciativas" asp-action="Index" style="color:white;">Iniciativas</a>
+                        </li>
+
+                        <li class="nav-item dropdown" style="vertical-align: middle;">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Catálogos
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Colonias" asp-action="Index">Colonias</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Calles" asp-action="Index">Calles</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Municipios" asp-action="Index">Municipios</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Dependencias" asp-action="Index">Dependencias</a>
+                                @*<a class="dropdown-item" asp-area="" asp-controller="Asociaciones" asp-action="Index">Asociaciones</a>*@
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">Categorías</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Subcategorias" asp-action="Index">Subcategorías</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="TipoPublicidad" asp-action="Index">Tipo de Publicidad</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="OrigenPublicidad" asp-action="Index">Origen de la Publicidad</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Legislaturas" asp-action="Index">Legislaturas</a>
+
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="EstatusPeticiones" asp-action="Index">Estatus Apoyo</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="EstatusGestions" asp-action="Index">Estatus Gestión</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="OrigenPeticiones" asp-action="Index">Origen Peticiones</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="TiposEventos" asp-action="Index">Tipos de Eventos</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="CatPartidos" asp-action="Index">Partidos</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="CatTipoIniciativas" asp-action="Index">Tipo Iniciativas</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="EstatusIniciativas" asp-action="Index">Estatus Iniciativas</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Diputadoes" asp-action="Index">Diputados</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Comisiones" asp-action="Index">Comisiones</a>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="alignright centrarVH" style="padding-right:30px">
+                    <label class="text-white centrarVH">@User.Identity.Name</label>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">&nbsp;<img src="~/images/img-avatar1.png" class="rounded-circle" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; padding: 0px;" title='Usuario Identificado' />&nbsp;</a>
+                    <a asp-area="" asp-controller="Home" asp-action="LogOff"><span class='fas fa-sign-out-alt fa-1x' style="vertical-align: middle; color:white;" title='Salir'></span></a>
+                </div>
+            </nav>
+        }
+        else
+        {
+            <div class="alignright" style="padding-right:30px">
+                <a class="nav-link text-white"><span class='fas fa-sign-in-alt fa-1x' onclick='muestraModalLogin()' title='Ingresar'></span></a>
             </div>
-        </nav>
+        }
+
 
     </header>
-    <div style="margin: 30px; font-size: 14px;">
+    <div style="margin: 15px; font-size: 14px;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -130,7 +175,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Acciones
+            &copy; 2022 - Control y Seguimiento
         </div>
     </footer>
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
@@ -154,11 +199,17 @@
     <script src="~/js/jquery/jquery.js"></script>
     <script src="~/js/jqueryui/jquery-ui.js"></script>
     @*<script src="~/js/bootstrap-daterangepicker/moment.min.js"></script>*@
-    <script src="~/moment.js/moment.min.js"></script>
+    
+    <script src="~/moment.js/moment.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    <script src="~/bootstrap-daterangepicker/daterangepicker.js"></script>
+    @*<script src="~/bootstrap-daterangepicker/daterangepicker.js"></script>*@
+
+    <script src="~/js/bootstrap-daterangepicker/moment.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/bootstrap-daterangepicker/daterangepicker.js"></script>
 
     <script src="~/js/jquery.twbsPagination.js"></script>
     <script src="~/moment.js/moment-with-locales.min.js"></script>
@@ -167,97 +218,42 @@
 
     <script src="~/jquery-datetimepicker/jquery.datetimepicker.js"></script>
 
-    <script src="~/lib/chart-master/Chart.js"></script>
+    @*<script src="~/lib/chart-master/Chart.js"></script>*@
     <script src="~/vendor/easy-pie-chart/easypiechart.js"></script>
     <script src="~/vendor/easy-pie-chart/jquery.easypiechart.js"></script>
     @*    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>*@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+
+    @*<script src="~/lib/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="~/lib/jquery.scrollTo.min.js"></script>
+    <script src="~/lib/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="~/lib/jquery.sparkline.js"></script>*@
+
+    <script src="~/js/Chart.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Ciudadanos.js"></script>
     <script src="~/js/Peticiones.js"></script>
+    <script src="~/js/Gestiones.js"></script>
     <script src="~/js/Eventos.js"></script>
+    <script src="~/js/Asociaciones.js"></script>
+    <script src="~/js/Colonias.js"></script>
+    <script src="~/js/Reportes.js"></script>
+    <script src="~/js/lonas.js"></script>
+    <script src="~/js/Iniciativas.js"></script>
+    <script src="~/js/jquery.backstretch.min.js.js"></script>
+    <script src="~/js/wow.min.js"></script>
+    <script src="~/js/carousel.js"></script>
+
+
+    @*<script src="~/js/main.js"></script>*@
+
+    @*<script src="~/js/JavaScript.js"></script>*@
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - Acciones</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Acciones</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
-
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2021 - Acciones - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @RenderSection("Scripts", required: false)
-    </body>
-    </html>*@

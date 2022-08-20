@@ -11,6 +11,7 @@ namespace Acciones.Models
         {
             Eventos = new HashSet<Evento>();
             Peticiones = new HashSet<Peticione>();
+            Gestiones = new HashSet<Gestiones>();
             Visita = new HashSet<Visita>();
         }
 
@@ -24,6 +25,7 @@ namespace Acciones.Models
 
         public virtual ICollection<Evento> Eventos { get; set; }
         public virtual ICollection<Peticione> Peticiones { get; set; }
+        public virtual ICollection<Gestiones> Gestiones { get; set; }
         public virtual ICollection<Visita> Visita { get; set; }
     }
 }

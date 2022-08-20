@@ -1,204 +1,94 @@
 ﻿@model Acciones.Models.Colonia
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nueva Colonia";
 }
 
-<h1>Create</h1>
+<div class="card">
+    <h4 class="card-header" style='text-align: center; background-color: #4F8BCD; color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>REGISTRO DE COLONIA</h4>
+    <div class="card-body">
+        <table class='table' style='width:100%; border:0px;'>
+            <tr>
+                <td style='width:50%;'>
+                    <table class='table table-bordered' style='width:100%;'>
+                        <tr>
+                            <td style='text-align: center; padding: 5px; color: white; background-color: #4F8BCD; border-radius: 10px 10px 0px 0px;' width="100%" colspan="2">
+                                <label>Colonia</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="85%">
+                                <input type="text" id="coloniasBuscar_2" placeholder="Escriba y seleccione de la lista la Colonia" class="form-control datoRequerido" />
+                            </td>
+                            <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                                <button type="button" id="saveNewColoniaId" onclick="GuardarNuevaColoniaButton_2()" class='btn btn-warning redondeada' style="color:black;" disabled>Guardar</button>
+                            </td>
 
-<h4>Colonia</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombreColonia" class="control-label"></label>
-                <input asp-for="NombreColonia" class="form-control" />
-                <span asp-validation-for="NombreColonia" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                    <label asp-for="Distrito" class="control-label"></label>
-                    <input asp-for="Distrito" class="form-control" />
-                    <span asp-validation-for="Distrito" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seccion" class="control-label"></label>
-                    <input asp-for="Seccion" class="form-control" />
-                    <span asp-validation-for="Seccion" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="EstatusColonia" class="control-label"></label>
-                    <input asp-for="EstatusColonia" class="form-control" />
-                    <span asp-validation-for="EstatusColonia" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaRegistro" class="control-label"></label>
-                    <input asp-for="FechaRegistro" class="form-control" />
-                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                    <input asp-for="FechaUltimoCambio" class="form-control" />
-                    <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UsuarioRegistroId" class="control-label"></label>
-                    <input asp-for="UsuarioRegistroId" class="form-control" />
-                    <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
-                </div>*@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                        </tr>
+                    </table>
+                </td>
+                <td style='width:50%;'>
+                    <table class='table table-bordered' style='width:100%;'>
+                        <tr>
+                            <td style='text-align: center; padding: 5px; color: white; background-color: #4F8BCD; border-radius: 10px 10px 0px 0px;' width="100%" colspan="2">
+                                <label for="PaternoLabel">Calle</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="85%">
+                                <input type="text" id="callesBuscar_2" name="callesBuscar" placeholder="Escriba y seleccione de la lista la Calle" class="form-control" />
+                            </td>
+                            <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                                <button type="button" id="saveNewCalleId_2" onclick="GuardarNuevaCalleButton_2()" class='btn btn-warning redondeada' style="color:black;" disabled>Guardar</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div id="divCallesDeColonia"></div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
+<input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
+<input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="alert alert-success" id="mensajeColonia_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeColonia_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeColonia_Existente" style="display:none;" align="center">
+        <strong>Ya existe una Colonia con el mismo nombre</strong>
+    </div>
+
+    <div class="alert alert-danger" id="msgSelColonia_AntesDeNvaCalle" style="display:none;" align="center">
+        <strong>Para registrar una nueva calle, debe seleccionar una colonia</strong>
+    </div>
+    <div class="alert alert-success" id="mensajeCalle_OK" style="display:none;" align="center">
+        <strong>Los Datos Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeCalle_Error" style="display:none;" align="center">
+        <strong>Los Datos NO Fueron Guardados</strong>
+    </div>
+    <div class="alert alert-danger" id="mensajeCalle_Existente" style="display:none;" align="center">
+        <strong>Ya existe una Colonia con el mismo nombre</strong>
+    </div>
 </div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
-
-<table class='table' style='width:100%; border:0px;'>
-    <tr>
-        <td style='width:50%;'>
-            <table class='table table-bordered' style='width:100%;'>
-                <tr>
-                    <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="20%">
-                        <label for="PaternoLabel">Colonia</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        @*<input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />*@
-                        <input type="text" id="coloniasBuscar" name="coloniasBuscar" placeholder="Escriba y seleccione de la lista la Colonia" class="form-control" />
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td style='width:50%;'>
-            <table class='table table-bordered' style='width:100%;'>
-                <tr>
-                    <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="20%">
-                        <label for="PaternoLabel">Calle</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        @*<input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />*@
-                        <input type="text" id="callesBuscar" name="callesBuscar" placeholder="Escriba y seleccione de la lista la Calle" class="form-control" />
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-
-<input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
-<input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
-
-<table class='table' style='width:100%; border:0px;'>
-    <tr>
-        <td style='width:50%;'>
-            +
-            <div style="display:none">
-                <table class='table table-bordered' style='width:100%;'>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-        <td style='width:50%;'>
-            +
-            <div style="display:none">
-                <table class='table table-bordered' style='width:100%;'>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                            <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-    </tr>
-</table>
-
-<table class='table' style='width:100%; border:0px;'>
-    <tr>
-        <td style='width:50%;'>
-            <table class='table table-bordered' style='width:100%;'>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td style='width:50%;'>
-            <table class='table table-bordered' style='width:100%;'>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
-                        <input type="text" class="form-control" name="IngresaNumeroTurno" id="IngresaPaterno" />
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<div align="center">
+    <a asp-action="Index"><button class="btn BotonAzulClaro redondeada">CANCELAR</button> </a>
+</div>

@@ -13,6 +13,13 @@
     opcionesGenero.Add(new SelectListItem() { Text = "OTRO", Value = "OTRO" });
 }
 
+@{
+    List<SelectListItem> miembroPartido = new List<SelectListItem>();
+    miembroPartido.Add(new SelectListItem() { Text = "", Value = "" });
+    miembroPartido.Add(new SelectListItem() { Text = "SI", Value = "SI" });
+    miembroPartido.Add(new SelectListItem() { Text = "NO", Value = "NO" });
+}
+
 <h1>REGISTRO DE CIUDADANO</h1>
 <br />
 <div class="card">
@@ -21,31 +28,38 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="20%">
-                    <label for="PaternoLabel">Paterno</label>
-                </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="20%">
-                    <label for="MaternoLabel">Materno</label>
-                </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="30%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
                     <label for="NombreLabel">Nombres</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="15%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="PaternoLabel">Paterno</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="MaternoLabel">Materno</label>
+                </td>
+
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="NombreLabel">Cumpleaños</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
                     <label for="FechaNacimientoLabel" id="FechaRecibidoLabel">Fecha Nacimiento</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="15%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
                     <label for="GeneroLabel">Genero</label>
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
+                    <input type="text" class="form-control" name="IngresaNombre" id="IngresaNombre" />
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
                     <input type="text" class="form-control" name="IngresaPaterno" id="IngresaPaterno" />
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
                     <input type="text" class="form-control" name="IngresaMaterno" id="IngresaMaterno" />
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
-                    <input type="text" class="form-control" name="IngresaNombre" id="IngresaNombre" />
+                <td style='text-align: center; background-color: white; color: black; padding: 2px; vertical-align: middle;' width="10%">
+                    <input type='checkbox' id='cboxRecordarCumple'>
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
                     <div class='input-group date' id='datetimepickerFN'>
@@ -60,34 +74,39 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td  class='fondoGrisLetraNegra_2' width="30%" style='text-align: center; vertical-align: middle;'>
-                @*<td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' class='fondoGrisLetraNegra_2' width="30%">*@
-                    <div>
+                <td class='fondoMenuFactor' width="20%" style='text-align: center; vertical-align: middle;'>
+                    <div style="margin: auto;" class="row">
                         <div title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' style="cursor:pointer;">
                             <img src="~/Images/colonia_t.png" width="30px" height="20px" />
                         </div>
                         <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
                     </div>
                 </td>
-                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoGrisLetraNegra_2' width="40%">
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoMenuFactor' width="30%">
                     <label for="CalleLabel">Calle</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="NumeroExteriorLabel">Municipio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="NumeroExteriorLabel"># Exterior</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="NumeroInteriorLabel"># Interior</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="CPLabel">CP</label>
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="20%">
                     <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" />
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="40%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="30%">
                     <input type="text" class="form-control" name="callesBuscar" id="callesBuscar" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select asp-for="MunicipioId" class="form-control" asp-items="ViewBag.Municipio" id="MunicipioId"></select>
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <input type="text" class="form-control" name="IngresaNumExt" id="IngresaNumExt" />
@@ -103,6 +122,7 @@
 
         <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
         <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+        <input type="text" id="hCiudadanoId" name="hCiudadanoId" style="display:none" />
 
         <div>
             <div class="alert alert-success" id="mensajeColonia_OK" style="display:none;" align="center">
@@ -122,19 +142,19 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="40%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="40%">
                     <label for="emailLabel" id="emailLabel">e-mail</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="30%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
                     <label for="TelefonoLabel">Teléfono</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="PartidoLabel">Partido</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="MiembroLabel">Miembro</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoGrisLetraNegra_2' width="10%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="SeccionLabel">Sección</label>
                 </td>
             </tr>
@@ -146,10 +166,10 @@
                     <input type="text" class="form-control" name="IngresaTelefono" id="IngresaTelefono" />
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
-                    <select asp-for="Partido" id="CatPartidoId" class="form-control" asp-items="ViewBag.CatPartidoId"></select>
+                    <select asp-for="PartidoId" id="PartidoId" class="form-control" asp-items="ViewBag.Partidos"></select>
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
-                    <select asp-for="TipoMiembro" id="TipoMiembroId" class="form-control" asp-items="ViewBag.CatTipoMiembroId"></select>
+                    <select asp-for="TipoMiembro" id="TipoMiembroId" class="form-control" asp-items="miembroPartido"></select>
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <input type="text" class="form-control" name="IngresaSeccion" id="IngresaSeccion" />
@@ -157,6 +177,50 @@
             </tr>
         </table>
 
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                    <label for="RFCLabel" id="emailLabel">RFC</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                    <label for="CURPLabel">CURP</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="AfinLabel">Afin</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="RCAsillaLabel">Representante de Casilla</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="LNegraLabel">Lista Negra</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="LDistritoDig">Distrito Digital</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="30%">
+                    <input type='text' class="form-control" id='RFCciudadanoSolicitante' style='width:100%; max-width:100%;' />
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="30%">
+                    <input type="text" class="form-control" name="CURPciudadanoSolicitante" id="CURPciudadanoSolicitante" />
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type='checkbox' id='cboxAfin'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type='checkbox' id='cboxRCasilla'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type='checkbox' id='cboxLNegra'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type='checkbox' id='cboxDDigital'>
+                </td>
+
+            </tr>
+        </table>
 
 
         <div>
@@ -167,38 +231,73 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr style="padding:2px;">
-                <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="25%">
+                <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="15%">
                     <label for="LatitudCiudadano" class="control-label" onclick="ObtieneLalitudLongitudActual();">Latitud</label>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
-                    <input type="text" class="form-control" name="Latitud" id="Latitud" />
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="15%">
+                    <input type="text" class="form-control" name="Latitud" id="Latitud" onkeypress='validaNumerosPuntoMenos(event)' />
                 </td>
-                <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="25%">
+                <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="15%">
                     <label for="LongitudCiudadano" class="control-label">Longitud</label>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
-                    <input type="text" class="form-control" name="Longitud" id="Longitud" />
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="15%">
+                    <input type="text" class="form-control" name="Longitud" id="Longitud" onkeypress='validaNumerosPuntoMenos(event)' />
                 </td>
+                @*<td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="15%">
+                        <label for="RFCLabel" class="control-label">RFC</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px;' width="25%">
+                        <input type='text' class="form-control" id='RFCciudadanoSolicitante' style='width:100%; max-width:100%;' />
+                    </td>*@
             </tr>
         </table>
 
 
-        <table class='table table-bordered' style='width:100%;'>
-            <tr style="padding:2px;">
-                <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="7%">
-                    <label for="NotasLabel" class="control-label">Notas</label>
+
+
+
+
+        <table class='table' style='width:100%; border:0px;'>
+            <tr>
+                <td style='width:100%;'>
+                    <table class='table table-bordered' style='width:100%;'>
+                        <tr style="padding:2px;">
+                            <td style='text-align: center; vertical-align: middle;' class='fondoMenuFactorH' width="7%">
+                                <label for="NotasLabel" class="control-label">Notas</label>
+                            </td>
+                            <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="93%">
+                                <textarea id="Notas" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputNotas(event) on></textarea>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="93%">
-                    <textarea id="Notas" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputNotas(event)></textarea>
-                </td>
+                @*<td style='width:40%;'>
+                        <table class='table table-bordered' style='width:100%;'>
+                            <tr>
+                                <td align="center" width="40%">
+                                    <img src="~/Images/avatar.png" height='40' />
+                                </td>
+                                <td width="60%">
+                                    <div class="centrarVH">
+                                        <div class="custom-file">
+                                            <input type="file" multiple accept="image/*" class="custom-file-input" id="FileUploadFormFileFoto" lang="es" placeholder="">
+                                            <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                                        </div>
+                                        <button type="button" onclick="subirArchivosFotoButton('FileUploadFormFileFoto')" class="btn BotonNaranjaClaro">Subir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>*@
             </tr>
         </table>
+
     </div>
 </div>
 
 <div>
     <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
-        <strong> Debe registrar por lo menos nombre y teléfono o correo electrónico.</strong>
+        <strong> Debe registrar por lo menos nombre, Colonia y Calle.</strong>
     </div>
     <div class="alert alert-success" id="mensajeAlerta_OK" style="display:none;" align="center">
         <strong>Los Datos Fueron Guardados</strong>
@@ -212,224 +311,88 @@
 
 
 </div>
-<button type='button' onclick='GuardarNuevoCiudadano();' class='btn btn-dark redondeada'>GUARDAR</button>&nbsp;
 
-<a asp-action="Index">CANCELAR</a>
+<div align="center">
+    <button type='button' onclick='GuardarNuevoCiudadano();' class='btn btn-warning redondeada'>GUARDAR</button>&nbsp;
+    @*<a asp-action="Index"><button class="btn BotonAzulClaro redondeada">CANCELAR</button> </a>*@
+    <a href="javascript:history.back()"><button class="btn btn-warning redondeada">REGRESAR</button></a>
+</div>
 
 <div id="dvMap" style="width: 500px; height: 500px"></div>
 
 
 
-    @*---------Modal Alta Colonia ---------*@
-    <div class="modal" id="divModalAltaColonia" tabindex="-2" role="dialog" aria-labelledby="divModalAltaColonia">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <p class="centrarVH">
-                        <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
-                    </p>
-                    <p>
-                        <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Colonia</srong></h4>
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <br />
-                    <div style='width:100%; max-width:100%;'>
-                        <input id="inputNombreColonia" lang="es" placeholder="Proporcione el nombre de la colonia" style='width:100%; max-width:100%;'>
-                    </div>
-
-                    <input id="HiddenColoniaId" type="hidden" name="HiddenColoniaId" value="">
-
+@*---------Modal Alta Colonia ---------*@
+<div class="modal" id="divModalAltaColonia" tabindex="-2" role="dialog" aria-labelledby="divModalAltaColonia">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Colonia</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreColonia" lang="es" placeholder="Proporcione el nombre de la colonia" style='width:100%; max-width:100%;'>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
-                    <button type="button" onclick="GuardarNuevaColoniaButton()" class="btn btn-dark">Guardar</button>
-                </div>
+                <input id="HiddenColoniaId" type="hidden" name="HiddenColoniaId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaColoniaButton()" class="btn btn-dark">Guardar</button>
             </div>
         </div>
     </div>
+</div>
 
 
 
-    @*---------Modal Alta Calle ---------*@
-    <div class="modal" id="divModalAltaCalle" tabindex="-2" role="dialog" aria-labelledby="divModalAltaCalle">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <p class="centrarVH">
-                        <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
-                    </p>
-                    <p>
-                        <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Calle</srong></h4>
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <br />
-                    <div style='width:100%; max-width:100%;'>
-                        <input id="inputNombreCalle" lang="es" placeholder="Proporcione el nombre de la calle" style='width:100%; max-width:100%;'>
-                    </div>
-
-                    <input id="HiddenCalleId" type="hidden" name="HiddenCalleId" value="">
-
+@*---------Modal Alta Calle ---------*@
+<div class="modal" id="divModalAltaCalle" tabindex="-2" role="dialog" aria-labelledby="divModalAltaCalle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Calle</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreCalle" lang="es" placeholder="Proporcione el nombre de la calle" style='width:100%; max-width:100%;'>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
-                    <button type="button" onclick="GuardarNuevaCalleButton()" class="btn btn-dark">Guardar</button>
-                </div>
+                <input id="HiddenCalleId" type="hidden" name="HiddenCalleId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaCalleButton()" class="btn btn-dark">Guardar</button>
             </div>
         </div>
     </div>
+</div>
 
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
 
-
-
-    @*<h1>Create</h1>
-
-        <h4>Ciudadano</h4>
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Paterno" class="control-label"></label>
-                        <input asp-for="Paterno" class="form-control" />
-                        <span asp-validation-for="Paterno" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Materno" class="control-label"></label>
-                        <input asp-for="Materno" class="form-control" />
-                        <span asp-validation-for="Materno" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Nombre" class="control-label"></label>
-                        <input asp-for="Nombre" class="form-control" />
-                        <span asp-validation-for="Nombre" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ColoniaId" class="control-label"></label>
-                        <select asp-for="ColoniaId" class="form-control" asp-items="ViewBag.ColoniaId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="CalleId" class="control-label"></label>
-                        <select asp-for="CalleId" class="form-control" asp-items="ViewBag.CalleId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="NumExterior" class="control-label"></label>
-                        <input asp-for="NumExterior" class="form-control" />
-                        <span asp-validation-for="NumExterior" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="NumInterior" class="control-label"></label>
-                        <input asp-for="NumInterior" class="form-control" />
-                        <span asp-validation-for="NumInterior" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Cp" class="control-label"></label>
-                        <input asp-for="Cp" class="form-control" />
-                        <span asp-validation-for="Cp" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Telefono" class="control-label"></label>
-                        <input asp-for="Telefono" class="form-control" />
-                        <span asp-validation-for="Telefono" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Partido" class="control-label"></label>
-                        <input asp-for="Partido" class="form-control" />
-                        <span asp-validation-for="Partido" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TipoMiembro" class="control-label"></label>
-                        <input asp-for="TipoMiembro" class="form-control" />
-                        <span asp-validation-for="TipoMiembro" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Distrito" class="control-label"></label>
-                        <input asp-for="Distrito" class="form-control" />
-                        <span asp-validation-for="Distrito" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Seccion" class="control-label"></label>
-                        <input asp-for="Seccion" class="form-control" />
-                        <span asp-validation-for="Seccion" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FechaNacimiento" class="control-label"></label>
-                        <input asp-for="FechaNacimiento" class="form-control" />
-                        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Estatus" class="control-label"></label>
-                        <input asp-for="Estatus" class="form-control" />
-                        <span asp-validation-for="Estatus" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Genero" class="control-label"></label>
-                        <input asp-for="Genero" class="form-control" />
-                        <span asp-validation-for="Genero" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Notas" class="control-label"></label>
-                        <input asp-for="Notas" class="form-control" />
-                        <span asp-validation-for="Notas" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Campo1" class="control-label"></label>
-                        <input asp-for="Campo1" class="form-control" />
-                        <span asp-validation-for="Campo1" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Campo2" class="control-label"></label>
-                        <input asp-for="Campo2" class="form-control" />
-                        <span asp-validation-for="Campo2" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Latitud" class="control-label"></label>
-                        <input asp-for="Latitud" class="form-control" />
-                        <span asp-validation-for="Latitud" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Longitud" class="control-label"></label>
-                        <input asp-for="Longitud" class="form-control" />
-                        <span asp-validation-for="Longitud" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FechaRegistro" class="control-label"></label>
-                        <input asp-for="FechaRegistro" class="form-control" />
-                        <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                        <input asp-for="FechaUltimoCambio" class="form-control" />
-                        <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UsuarioRegistroId" class="control-label"></label>
-                        <input asp-for="UsuarioRegistroId" class="form-control" />
-                        <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-        </div>*@

@@ -10,7 +10,8 @@ namespace Acciones.Models
         public Asociacione()
         {
             IntegrantesAsociacions = new HashSet<IntegrantesAsociacion>();
-            Peticiones = new HashSet<Peticione>();
+            //Peticiones = new HashSet<Peticione>();
+            //Gestiones = new HashSet<Gestiones>();
         }
 
         public int AsociacionId { get; set; }
@@ -21,6 +22,7 @@ namespace Acciones.Models
         public string NumExterior { get; set; }
         public string NumInterior { get; set; }
         public int? Cp { get; set; }
+        public int? DiputadoID { get; set; }
         public string Email { get; set; }
         public string Telefono { get; set; }
         public string Distrito { get; set; }
@@ -37,6 +39,8 @@ namespace Acciones.Models
         public virtual Calle Calle { get; set; }
         public virtual Colonia Colonia { get; set; }
         public virtual ICollection<IntegrantesAsociacion> IntegrantesAsociacions { get; set; }
-        public virtual ICollection<Peticione> Peticiones { get; set; }
+        //public virtual ICollection<Peticione> Peticiones { get; set; }
+
+        //public virtual ICollection<Gestiones> Gestiones { get; set; }
     }
 }

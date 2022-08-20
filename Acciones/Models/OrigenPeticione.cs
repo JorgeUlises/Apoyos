@@ -10,6 +10,7 @@ namespace Acciones.Models
         public OrigenPeticione()
         {
             Peticiones = new HashSet<Peticione>();
+            Gestiones = new HashSet<Gestiones>();
         }
 
         public int OrigenPeticionesId { get; set; }
@@ -21,5 +22,6 @@ namespace Acciones.Models
         public int? UsuarioRegistro { get; set; }
 
         public virtual ICollection<Peticione> Peticiones { get; set; }
+        public virtual ICollection<Gestiones> Gestiones { get; set; }
     }
 }

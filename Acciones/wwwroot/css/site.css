@@ -73,6 +73,9 @@ body {*/
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -82,6 +85,12 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
+}
+
+
+a:hover {
+    /*background-color: rgba(3,112,214,.3);*/
+    border-color:black;
 }
 
 .btn-primary {
@@ -170,18 +179,25 @@ body {
     border-radius: 10px 10px 0px 0px;
 }
 
-.fondoMenuFactor {
+.fondoMenuH {
     color: #fff;
     border-color: white;
-    background-color: rgba(13, 77, 168, .5);
+    background-color: rgba(13, 77, 168, 1);
+    border-radius: 10px 0px 0px 10px;
+}
+
+.fondoMenuFactor {
+    color: #000;
+    border-color: white;
+    background-color: rgba(13, 77, 168, .3);
     border-radius: 10px 10px 0px 0px;
 }
 
 .fondoMenuFactorH {
-    color: #fff;
+    color: #000;
     border-color: white;
-    background-color: rgba(13, 77, 168, .5);
-    border-radius: 10px 10px 0px 0px;
+    background-color: rgba(13, 77, 168, .3);
+    border-radius: 10px 0px 0px 10px;
 }
 
 .fondoNaranjaClaro {
@@ -198,18 +214,24 @@ body {
     /*border-radius: 10px 10px 10px 10px;*/
 }
 
+.BotonAzulClaro {
+    color: #fff;
+    border-color: white;
+    background-color: #0366d6;
+}
+
 .fondoAzul_p_LetraNegra_2 { /* fondo azul claro letra blanca  */
-    color: #000;
+    color: #fff;
     border-color: white;
     /*background-color: rgba(236, 143, 29, 1);*/
-    background-color: rgba(85, 167, 250, .98);
+    background-color: rgba(38, 112, 233, 1);
     border-radius: 10px 10px 0px 0px;
 }
 
 .fondoAzul_p_LetraNegra_3v { /* fondo azul claro letra blanca  */
     color: #000;
     border-color: white;
-    background-color: rgba(19, 104, 173, 0.2);
+    background-color: rgba(13, 77, 168, .3);
     border-radius: 10px 10px 0px 0px;
 }
 
@@ -272,6 +294,49 @@ body {
     background-color: #7B7C7D;
     border-radius: 10px 0px 0px 10px;
 }
+
+.datoRequerido {
+    text-align: center;
+    background-color: rgba(250, 196, 94, 0.2);
+    color: black;
+    padding: 2px;
+    border-left-color: rgba(250, 196, 94, 0.78);
+    border-left-width: 3px;
+}
+
+.datoRequerido_OK {
+    text-align: center;
+    background-color: rgba(15, 188, 15, 0.2);
+    color: black;
+    padding: 2px;
+    border-left-color: rgba(15, 188, 15, 0.85);
+    border-left-width: 3px;
+}
+
+.numberCircle {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid #666;
+    color: #666;
+    text-align: center;
+    font: 14px Arial, sans-serif;
+}
+
+.numberCircleCumple {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    background: rgba(65, 243, 52, 0.3);
+    border: 1px solid #666;
+    color: #666;
+    text-align: center;
+    font: 14px Arial, sans-serif;
+}
+
 /******************************************* 
  *   
  *   Tabla Encabezado Fijo   
@@ -283,6 +348,7 @@ body {
     color: #333;
     background-color: #fff;
     padding: 0 5vw;
+    font-weight: normal;
 }
 
 /* Standard Tables */
@@ -309,7 +375,7 @@ td {
 
 th {
     vertical-align: bottom;
-    background-color: rgba(13, 77, 168, .8);
+    background-color: rgba(13, 77, 168, 0.7);
     color: #fff;
 }
 
@@ -329,14 +395,6 @@ tr:nth-child(odd) {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-/*td:nth-of-type(2) {
-    font-style: italic;
-}*/
-
-/*th:nth-of-type(3),
-td:nth-of-type(3) {
-    text-align: right;
-}*/
 
 /* Fixed Headers */
 
@@ -345,6 +403,7 @@ th {
     position: sticky;
     top: 0;
     z-index: 2;
+    font-weight: normal;
 }
 
     th[scope=row] {
@@ -512,3 +571,39 @@ hr {
     background-color: rgba(236, 143, 29, 1);
     border: none;
 }
+
+/* CIRULO */
+.circle {
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    padding: 10px;
+    background: #0366d6;
+    border: 3px solid #000;
+    color: #fff;
+    text-align: center;
+    font: 32px Arial, sans-serif;
+}
+
+
+@media only screen and (min-width: 768px) {
+    .table-responsive {
+        overflow-x: hidden;
+    }
+}
+
+
+/***************************** 
+    IMAGENES 
+******************************/
+
+.img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 40px;
+}
+
+    .img:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }

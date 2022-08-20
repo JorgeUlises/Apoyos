@@ -21,6 +21,10 @@ namespace Acciones.Controllers
         // GET: Diputadoes
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Apoyo/Home/Inicio");
+            }
             return View(await _context.Diputados.ToListAsync());
         }
 

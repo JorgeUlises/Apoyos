@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -41,9 +42,11 @@ namespace Acciones.Models
         public DateTime? FechaRegistro { get; set; }
         public DateTime? FechaUltimoCambio { get; set; }
         public int? UsuarioRegistro { get; set; }
+        public float? Costo { get; set; }
+        public int? ResponsableID { get; set; }
 
-        public virtual Asociacione Asociacion { get; set; }
-        public virtual Dependencia Dependecia { get; set; }
+        //public virtual Asociacione Asociacion { get; set; }
+        //public virtual Dependencia Dependecia { get; set; }
         public virtual Diputado Diputado { get; set; }
         public virtual EstatusPeticione EstatusNavigation { get; set; }
         public virtual Legislatura Legislatura { get; set; }

@@ -1,0 +1,60 @@
+﻿<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+
+<div class="row">
+    <table width="100%" style="border:none;">
+        <tr>
+            <td align="center">
+                <h1 class="letraAzulEncabezado">INTEGRANTES DE ASOCIACIONES</h1>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<table width="100%" style="border:none;">
+    <tr>
+        <td width="70%" align="center" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Nombre, Paterno, Materno ..."
+                       aria-label="Search" aria-describedby="basic-addon2" id="BRciudadanoId">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick='BusqudaRapIntegranteAsociacion();'>
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td width="30%" align="right" style="padding-left:8px; vertical-align:middle;">
+            <label id="labelNumeroRegistros">&nbsp;</label>
+        </td>
+    </tr>
+</table>
+
+<div id="divListaIntegrantesAsociacion"></div>
+
+<div style="display: inline-block; text-align: right; width: 100%">
+    <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
+</div>
+
+<div align="right">
+    <label id="labelNumeroRegistros_footer"></label>
+    &nbsp;
+    <label>Por Página</label>
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraIntegrantesAsociacion();">
+        <OPTION VALUE="5">5</OPTION>
+        <OPTION VALUE="10" selected="selected">10</OPTION>
+        <OPTION VALUE="20">20</OPTION>
+        <OPTION VALUE="100">100</OPTION>
+        <OPTION VALUE="200000">Todos</OPTION>
+    </SELECT>
+</div>
+
+
+<input id="hideNumPaginas" type="hidden" value="">
+<input id="hideNumRegistros" type="hidden" value="">
+
+<input id="NombreBuscar" type="hidden" value="">

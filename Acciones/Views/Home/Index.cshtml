@@ -8,172 +8,508 @@
     });
 </script>
 
+@{
+    List<SelectListItem> selectAnio = new List<SelectListItem>();
+    selectAnio.Add(new SelectListItem() { Text = "TODO", Value = "0" });
+    selectAnio.Add(new SelectListItem() { Text = "2018", Value = "2018" });
+    selectAnio.Add(new SelectListItem() { Text = "2019", Value = "2019" });
+    selectAnio.Add(new SelectListItem() { Text = "2020", Value = "2020" });
+    selectAnio.Add(new SelectListItem() { Text = "2021", Value = "2021" });
+    selectAnio.Add(new SelectListItem() { Text = "2022", Value = "2022" });
+    selectAnio.Add(new SelectListItem() { Text = "2023", Value = "2023" });
+    selectAnio.Add(new SelectListItem() { Text = "2024", Value = "2024" });
+}
+
+@{
+    List<SelectListItem> selectMes = new List<SelectListItem>();
+    selectMes.Add(new SelectListItem() { Text = "TODO", Value = "0" });
+    selectMes.Add(new SelectListItem() { Text = "ENERO", Value = "1" });
+    selectMes.Add(new SelectListItem() { Text = "FEBRERO", Value = "2" });
+    selectMes.Add(new SelectListItem() { Text = "MARZO", Value = "3" });
+    selectMes.Add(new SelectListItem() { Text = "ABRIL", Value = "4" });
+    selectMes.Add(new SelectListItem() { Text = "MAYO", Value = "5" });
+    selectMes.Add(new SelectListItem() { Text = "JUNIO", Value = "6" });
+    selectMes.Add(new SelectListItem() { Text = "JULIO", Value = "7" });
+    selectMes.Add(new SelectListItem() { Text = "AGOSTO", Value = "8" });
+    selectMes.Add(new SelectListItem() { Text = "SEPTIEMBRE", Value = "9" });
+    selectMes.Add(new SelectListItem() { Text = "OCTUBRE", Value = "10" });
+    selectMes.Add(new SelectListItem() { Text = "NOVIEMBRE", Value = "11" });
+    selectMes.Add(new SelectListItem() { Text = "DICIEMBRE", Value = "12" });
+}
+<style>
+    .subrayadoLink:hover {
+       display: inline-block;
+       text-decoration: underline;
+       position: relative;
+       color: #0087ca;
+       }
+</style>
+
+<div align="center">
+    <table style='width:40%; border:none;' id="tablaSeleccionMesAnio">
+        <tr style="padding:2px;">
+            <td style='text-align: right; vertical-align: middle; padding-right:5px;' width="10%">
+                <label for="LegislaturaLabel" class="control-label">Legislatura</label>
+            </td>
+            <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                <select id="legislaturaId" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
+            </td>
+
+            <td style='text-align: right; vertical-align: middle; padding-right:5px;' width="10%">
+                <label for="AnioLabel" class="control-label">Año</label>
+            </td>
+            <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                <select id="anioReporteId" class="form-control" asp-items="selectAnio"></select>
+            </td>
+            <td style='text-align: right; vertical-align: middle; padding-right: 5px;' width="10%">
+                <label for="MesLabel" class="control-label">Mes</label>
+            </td>
+            <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="23%">
+                <select id="mesReporteId" class="form-control" asp-items="selectMes"></select>
+            </td>
+        </tr>
+    </table>
+</div>
 <div class="text-center">
-    <h2 class="display-4" style="color: rgba(38, 112, 233, 1); "><strong>ACTIVIDADES</strong></h2>
+    <a style='cursor:pointer' asp-controller='Reportes' asp-action='SolXsemana'><h2 class="display-4" style="color: rgba(38, 112, 233, 1); "><strong>ACTIVIDADES</strong></h2></a>
 </div>
 
 <div style='width: 100%; background-color: #f7f8fc; color: black;'>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 row" align="center">
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center; border:none; border-color:white;" class="fondoAzul_p_LetraNegra_2"><h4>Solicitudes</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumSol"></td></tr>
-                    </table>
+    <div class="container-fluid">
+        <div class="row" align="center">
+            <div class="col-md-12 col-sm-12 row" align="center">
 
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Eventos</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumEventos"></td></tr>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Visitas</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumVisitas"></td></tr>
-                    </table>
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center; border: none; border-color: white;" class="fondoAzul_p_LetraNegra_2" colspan="2"><a asp-action="ResumenGestiones" style="color:white; text-decoration:none;" title="Resumen de Gesiones"><h4>Gestiones</h4></a></td></tr>
+                            <tr><td style="text-align: center; background-color: #E2E6EC;"><a style='font-size:25px; cursor:pointer' asp-controller='Gestiones' asp-action='Index' title="Ir a Gestiones"><div id="resumenNumGestiones"></div></a></td></tr>
 
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Ciudadanos</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumCiudadanos"></td></tr>
-                    </table>
+                            @*<tr>
+                                    <td style="text-align: center; background-color: #E2E6EC;"><a style='font-size:25px; cursor:pointer' asp-controller='Gestiones' asp-action='Index'><div id="resumenNumGestiones"></div></a></td>
+                                    <td style="text-align: center; background-color: white;" id="resumenNumBeneficiariosGestion"></td>
+                                </tr>*@
 
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Asociaciones</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumAsociaciones"></td></tr>
-                    </table>
 
+
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center; border: none; border-color: white;" class="fondoAzul_p_LetraNegra_2" colspan="2"><a asp-action="ResumenApoyos" style="color:white; text-decoration:none;" title="Resumen de Apoyos"><h4>Apoyos</h4></a></td></tr>
+                            @*<tr><td style="text-align: center; background-color: white;" id="resumenNumSol"></td></tr>*@
+                            @*<tr><td style="text-align: center; background-color: white;"><a style='font-size:25px; cursor:pointer' asp-controller='Peticiones' asp-action='Index'><div id="resumenNumSol"></div></a></td></tr>*@
+
+                            <tr>
+                                <td style="text-align: center; background-color: #E2E6EC;"><a style='font-size:25px; cursor:pointer' asp-controller='Peticiones' asp-action='Index' title="Ir a Apoyos"><div id="resumenNumSol"></div></a></td>
+                                @*<td style="text-align: center; background-color: white;"><a asp-action="Beneficiarios" asp-controller="Peticiones" asp-route-LegislaturaID="0" asp-route-anioSel="0" asp-route-mesSel="0"> <div id="resumenNumBeneficiariosSolicitudes" title="Beneficiarios por Categoría"></div></a></td>*@
+                                <td style="text-align: center; background-color: white;"><a style='font-size:25px; cursor:pointer;' class="subrayadoLink"><div onclick="MuestraBeneficiariosApoyo();" id="resumenNumBeneficiariosSolicitudes" title="Beneficiarios por Categoría"></div></a></td>
+                            </tr>
+
+                        </table>
+
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2 col-sm-2" align="center">
-                <div align="center">
-                    <table width="100%">
-                        <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Hitos</h4></td></tr>
-                        <tr><td style="text-align: center; background-color: white;" id="resumenNumHitos"></td></tr>
-                    </table>
 
+
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Eventos</h4></td></tr>
+                            @*<tr><td style="text-align: center; background-color: white;" id="resumenNumEventos"></td></tr>*@
+                            <tr><td style="text-align: center; background-color: white;"><a style='font-size:25px; cursor:pointer' asp-controller='Eventoes' asp-action='Index'><div id="resumenNumEventos"></div></a></td></tr>
+                        </table>
+                    </div>
+                </div>
+                @*<div class="col-md-2 col-sm-2" align="center">
+                        <div align="center">
+                            <table width="100%">
+                                <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Proyectos</h4></td></tr>
+                                <tr><td style="text-align: center; background-color: white;" id="resumenNumVisitas"></td></tr>
+                            </table>
+
+                        </div>
+                    </div>*@
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Ciudadanos</h4></td></tr>
+                            @*<tr><td style="text-align: center; background-color: white;" id="resumenNumCiudadanos"></td></tr>*@
+                            <tr><td style="text-align: center; background-color: white;"><a style='font-size:25px; cursor:pointer' asp-controller='Ciudadanoes' asp-action='Index'><div id="resumenNumCiudadanos"></div></a></td></tr>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2"><h4>Asociaciones</h4></td></tr>
+                            @*<tr><td style="text-align: center; background-color: white;" id="resumenNumAsociaciones"></td></tr>*@
+                            <tr><td style="text-align: center; background-color: white;"><a style='font-size:25px; cursor:pointer' asp-controller='Asociaciones' asp-action='Index'><div id="resumenNumAsociaciones"></div></a></td></tr>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2" align="center">
+                    <div align="center">
+                        <table width="100%">
+                            <tr><td style="text-align: center;" class="fondoAzul_p_LetraNegra_2" colspan="2"><h4>Hitos</h4></td></tr>
+                            <tr>
+                                <td style="text-align: center; background-color: #E2E6EC; " id="resumenNumHitosGestion"></td>
+                                <td style="text-align: center; background-color: white;" id="resumenNumHitos"></td>
+                            </tr>
+                        </table>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
-        <div class="col-md-12 col-sm-12" align="center" style='text-align: center; width: 98%; background-color: rgba(38, 112, 233, 1); color: white; '>
-            <h3>APOYOS SOLICITADOS</h3>
+        <div class="col-md-12 col-sm-12 fondoAzul_p_LetraNegra_2" align="center" style='text-align: center; width: 100%;'>
+            <h3>GESTIONES</h3>
         </div>
 
+        <br />
 
-
-        <div class="col-md-12 col-sm-12 row" align="center">
-
-            <div class="col-md-6 col-sm-6">
-                @*<div align="center">
-                        <h3>Estatus</h3>
+        @*GESTION*@
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="col" style="display:inline-block;">
+                                <div id="CardEstatusGestion"></div>
+                            </div>
+                        </div>
                     </div>
-                    <hr />*@
-                <div align="center">
+                </div>
+
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <br />
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <div align='center' class='fondoAzulClaroLetraNegra_2' width="100%">
+                                <h3>Avance Global de Solicitudes de Gestión</h3>
+                            </div>
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                     aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Opciones:</div>
+                                    <a class="dropdown-item" href="#">Opción 1</a>
+                                    <a class="dropdown-item" href="#">Opción 2</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Opción 3</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="centrarVH">
+                                <canvas id="avanceGlobalDonutGestion" width="200" height="200"></canvas>
+                            </div>
+                            <div id="NumGestiones" align="center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12">
+            <div class="col-md-12 col-sm-12">
+                <div class="col" style="display:inline-block;">
+                    <div id="CardClasificacionGestion"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GASTOS GESTION -->
+
+
+    <div class="row ">
+        <div class="col-xl-3 col-md-6 mb-5">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="text-sm-center font-weight-bold text-primary text-uppercase mb-1 text-center">
+                                Gestión CEA
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cGestionCEA"> </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="col-xl-2 col-md-6 mb-5">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="text-sm-center font-weight-bold text-success text-uppercase mb-1 text-center">
+                                Gestión SEGURIDAD
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cGestionSeguridad"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="col-xl-2 col-md-6 mb-5">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="text-sm-center font-weight-bold text-success text-uppercase mb-1 text-center">
+                                Gestión SALUD
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cGestionSalud"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="col-xl-2 col-md-6 mb-5">
+            <div class="card border-left-warning  shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="text-sm-center font-weight-bold text-success text-uppercase mb-1 text-center">
+                                Gestión DEPORTES
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cGestionDeportes"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div class="col-xl-3 col-md-6 mb-5">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                        <div class="col mr-2">
+                            <div class="text-sm-center font-weight-bold text-primary text-uppercase mb-1 text-center">
+                                Gestión SOCIAL
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cGestionSocial"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cGestionSinCategoria"></div>
+
+@*APOYOS*@
+<div class="col-md-12 col-sm-12 fondoAzul_p_LetraNegra_2" align="center" style='text-align: center; width: 100%;'>
+    <h3>APOYOS</h3>
+</div>
+
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-body">
                     <div class="col" style="display:inline-block;">
                         <div id="CardEstatus"></div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-6 col-sm-6" align='center'>
-                @*<div align="center">
-                        <h3>Estatus</h3>
-                    </div>
-                    <hr />*@
-
-
-                <div>
-                    <div class="col" style="text-align:center; vertical-align:central; position:absolute; top:0; left:0;">
-                        <div id="CardEstatusAvanceGlobal"></div>
-                        @*<div id="donutchart" style="width: 400px; height: 500px;"></div>*@
-                    </div>
-                </div>
-
-
-            </div>
-
-            <hr />
-            <div class="col-md-12 col-sm-12">
-                @*<div align="center">
-                        <h3>Clasificación</h3>
-                    </div>
-                    <hr />*@
-                <div class="col-md-12 col-sm-12">
-                    <div class="col" style="display:inline-block;">
-                        <div id="CardClasificacion"></div>
-                    </div>
-                </div>
-                @*<div>
-                    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-                </div>*@
-            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12 col-sm-12 row">
-            <div align="center" style='text-align: center; width: 98%; background-color: rgba(38, 112, 233, 1); color: white;'>
-                <h3>EVENTOS</h3>
-            </div>
-            <div class="col-md-12 col-sm-12">
-                <div class="col" style="display:inline-block;">
-                    <div id="CardEventos"></div>
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <br />
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div align='center' class='fondoAzulClaroLetraNegra_2' width="100%">
+                        <h3>Avance Global de Solicitudes de Apoyo</h3>
+                    </div>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                             aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Opciones:</div>
+                            <a class="dropdown-item" href="#">Opción 1</a>
+                            <a class="dropdown-item" href="#">Opción 2</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Opción 3</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="centrarVH">
+                        <canvas id="avanceGlobalDonut" width="200" height="200"></canvas>
+                    </div>
+                    <div id="NumSolicitudes" align="center"></div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 row">
-            <div align="center" style='text-align: center; width: 98%; background-color: rgba(38, 112, 233, 1); color: white;'>
-                <h3>VISITAS</h3>
-            </div>
-            <hr />
-            <div align="center">
-                <div class="col" style="display:inline-block;">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-    @*<div class="row">
-            <div class="col-md-12 col-sm-12 row">
-                <div class="col-md-6 col-sm-6">
-                    <div align="center" style='text-align:center; width:98%; background-color:#1e81b0; color:whitesmoke;'>
-                        <h3>ASOCIACIONES</h3>
-                    </div>
-                    <hr />
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <div align="center" style='text-align:center; width:98%; background-color:#1e81b0; color:whitesmoke;'>
-                        <h3>DEPENDENCIAS</h3>
-                    </div>
-                    <hr />
-                    <div align="center">
-                        <div id="Resultados"></div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
 </div>
+
+
+<hr />
+<div class="col-md-12 col-sm-12">
+    <div class="col-md-12 col-sm-12">
+        <div class="col" style="display:inline-block;">
+            <div id="CardClasificacion"></div>
+        </div>
+    </div>
+</div>
+</div>
+@*</div>*@
+
+<!-- GASTOS APOYO -->
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 text-center">
+                            Apoyo CEA
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cPeticionCEA"> </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="col-xl-2 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
+                            Apoyo SEGURIDAD
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cPeticionSeguridad"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="col-xl-2 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
+                            Apoyo SALUD
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cPeticionSalud"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="col-xl-2 col-md-6 mb-4">
+        <div class="card border-left-warning  shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
+                            Apoyo DEPORTES
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cPeticionDeportes"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GASTOS -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 text-center">
+                            Apoyo SOCIAL
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 text-center" id="cPeticionSocial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cPeticionSinCategoria"></div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 row">
+        <div align="center" style='text-align: center; width: 98%;' class="fondoAzul_p_LetraNegra_2">
+            <h3>EVENTOS</h3>
+        </div>
+        <div class="col-md-12 col-sm-12">
+            <div class="col" style="display:inline-block;">
+                <div id="CardEventos"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

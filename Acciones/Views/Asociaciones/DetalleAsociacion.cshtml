@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<div id="DetalleAsociacion"></div>
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">INTEGRANTES DE LA ASOCIACIÓN</h4>
+</div>
+<div id="IntegrantesAsociacionId"></div>

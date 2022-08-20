@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Acciones.Models.OrigenPublicidad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de Origen de Publicidad</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Registro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.OrigenPublicidadId"><span style='cursor: pointer' class='fas fa-edit' title='Editar'></span></a>
+            <a asp-action="Delete" asp-route-id="@item.OrigenPublicidadId"><span style='cursor: pointer' class='fas fa-trash' title='Eliminar'></span></a>
+        </td>
+        </tr>
+}
+    </tbody>
+</table>

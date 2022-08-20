@@ -1,0 +1,80 @@
+﻿@model Acciones.Models.Gestiones
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>ELIMINAR REGISTRO DE GESTIÓN</h1> 
+
+<div>
+    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Folio)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Folio)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.Raw("Fecha de Solicitud")
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaSolicitud)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.Raw("Solicitante")
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.NombreSolicitante 
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.Raw("Responsable")
+        </dt>
+        <dd class = "col-sm-10">
+            @ViewBag.NombreResponsable
+        </dd>
+        
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Legislatura)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Legislatura.Nombre)
+        </dd class>
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OrigenPeticion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OrigenPeticion.Nombre)
+        </dd class>
+
+    </dl>
+    
+    <h4>Se eliminará</h4>
+    <ol>
+        <li>Categorías</li>
+        <li>Subcategorías</li>
+        <li>Archivos Anexos</li>
+        <li>Beneficiarios</li>
+        <li>Archivos Anexos en las Actividades de Seguimiento</li>
+        <li>Actividades de Seguimiento</li>
+    </ol>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="GestionId" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Cancelar</a>
+    </form>
+</div>

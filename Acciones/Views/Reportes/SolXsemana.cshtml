@@ -1,0 +1,52 @@
+﻿
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<div class="row">
+    <table width="100%" style="border:none;">
+        <tr>
+            @*<td align="left">
+                    <img src="~/Images/cumple.jpg" height='100' />
+                </td>*@
+            <td align="center">
+                <h1 class="letraAzulEncabezado">SOLICITUDES X SEMANA</h1>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+<div class="container-fluid">
+    <div class="col" align="center">
+        <div class="col-md-4">
+            <select id="reporteLegSelect" class="form-control" asp-items=ViewBag.LegislaturaId></select>
+        </div>
+        <div class="col-md-4">
+            <br />
+        </div>
+        <div class="col-md-4">
+            <select id="UsrResponsablesSelect" class="form-control" asp-items=ViewBag.UsuariosResponsables></select>
+        </div>
+        <div class="col-md-4">
+            <br />
+        </div>
+        <div class="col-md-4 row">
+            <div class="col-md-6">
+                <div align="center">
+                    <div id="R_S_G"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div align="center">
+                    <div id="R_S_A"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="TablaNumeroSolicitudesXSemana"></div>

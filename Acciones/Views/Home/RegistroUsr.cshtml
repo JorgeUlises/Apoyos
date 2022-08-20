@@ -1,0 +1,61 @@
+﻿
+
+
+<div align="center">
+    <div class="col-md-6 col-sm-6">
+        <div class="text-center">
+            <hr />
+            <h2>Identificación de Usuario</h2>
+            <hr />
+        </div>
+        <table class="table table-bordered" width="100%">
+            <tbody>
+                <tr>
+                    <td bgcolor="#C2D4E6" width="30%" style="Padding-left: 10px;">
+                        <label class="control-label" style="color:black;">&nbsp;&nbsp;Usuario</label>
+                    </td>
+                    <td width="70%">
+                        <div class="row" style="Padding-left: 10px; padding-right:10px;">
+                            <i class="fas fa-user" style="position: absolute; padding-left: 5px; padding-top:7px;"></i>
+                            <input class="form-control" style="Padding-left: 25px;" id="inputUsrId">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#C2D4E6" width="30%">
+                        <label class="control-label" style="color:black;">&nbsp;&nbsp;Contraseña</label>
+                    </td>
+                    <td width="70%" style="vertical-align:middle;">
+                        <div class="row" style="Padding-left: 10px; padding-right:10px; vertical-align:middle;">
+                            <div>
+                                <i class="fas fa-lock" style="position: absolute; padding-left: 5px; padding-top: 7px;"></i>
+                            </div>
+                            <input class="form-control" type="password" style="Padding-left: 25px;" id="inputPswId">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align:center;">
+            <div class="row-cols-2">
+                <button class="btn btn-secondary" type="button" onclick="location.href='@Url.Action("Index", "Home")'">Cancelar</button>
+                <input class="btn btn-secondary" id="SubmitClaveContrasena" type="submit" value="Ingresar" />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    console.log("Inicio Login");
+    var input = document.getElementById("inputPswId");
+    document.getElementById("inputUsrId").focus();
+
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            console.log("ENTER");
+            event.preventDefault();
+            document.getElementById("SubmitClaveContrasena").click();
+        }
+    });
+</script>

@@ -1,185 +1,323 @@
 ﻿@model IEnumerable<Acciones.Models.Ciudadano>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ciudadanos";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<style>
+    .circulo {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid #c6d9ec;
+        padding: 10px;
+    }
+
+        .circulo:hover {
+            /*text-decoration: none;*/
+            background-color: white;
+        }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        /*        width: 50px;
+    */
+    }
+
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+
+    [data-title]:hover:after {
+        opacity: 1;
+        transition: all 0.1s ease 0.5s;
+        visibility: visible;
+    }
+    /* box for title text */
+    [data-title]:after {
+        content: attr(data-title);
+        /* position for title view box */
+        position: absolute;
+        bottom: -1.6em;
+        left: 100%;
+        z-index: 99999;
+        visibility: hidden;
+        /* optional */
+        white-space: nowrap;
+        /* stilization */
+        background-color: #00FF00;
+        color: #111;
+        font-size: 150%;
+        padding: 1px 5px 2px 5px;
+        box-shadow: 1px 1px 3px #222222;
+        opacity: 0;
+        border: 1px solid #111111;
+    }
+
+    [data-title] {
+        position: relative;
+    }
+</style>
+
+
+@{
+    List<SelectListItem> opcionesGenero = new List<SelectListItem>();
+    opcionesGenero.Add(new SelectListItem() { Text = "TODO", Value = "" });
+    opcionesGenero.Add(new SelectListItem() { Text = "FEMENINO", Value = "FEMENINO" });
+    opcionesGenero.Add(new SelectListItem() { Text = "MASCULINO", Value = "MASCULINO" });
+}
+
+@{
+    List<SelectListItem> opcionesCumple = new List<SelectListItem>();
+    opcionesCumple.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
+    opcionesCumple.Add(new SelectListItem() { Text = "SI", Value = "1" });
+    opcionesCumple.Add(new SelectListItem() { Text = "NO", Value = "0" });
+}
+ 
+@{
+    List<SelectListItem> selectMes = new List<SelectListItem>();
+    selectMes.Add(new SelectListItem() { Text = "TODO", Value = "0" });
+    selectMes.Add(new SelectListItem() { Text = "ENERO", Value = "1" });
+    selectMes.Add(new SelectListItem() { Text = "FEBRERO", Value = "2" });
+    selectMes.Add(new SelectListItem() { Text = "MARZO", Value = "3" });
+    selectMes.Add(new SelectListItem() { Text = "ABRIL", Value = "4" });
+    selectMes.Add(new SelectListItem() { Text = "MAYO", Value = "5" });
+    selectMes.Add(new SelectListItem() { Text = "JUNIO", Value = "6" });
+    selectMes.Add(new SelectListItem() { Text = "JULIO", Value = "7" });
+    selectMes.Add(new SelectListItem() { Text = "AGOSTO", Value = "8" });
+    selectMes.Add(new SelectListItem() { Text = "SEPTIEMBRE", Value = "9" });
+    selectMes.Add(new SelectListItem() { Text = "OCTUBRE", Value = "10" });
+    selectMes.Add(new SelectListItem() { Text = "NOVIEMBRE", Value = "11" });
+    selectMes.Add(new SelectListItem() { Text = "DICIEMBRE", Value = "12" });
 }
 
 <div class="row">
     <table width="100%" style="border:none;">
         <tr>
-            <td align="left">
-                <img src="~/Images/ciudadanos_2.png" height='60' />
+            <td width="20%" align="left">
+                <img src="~/Images/Ciudadanos.jpg" height='80' style='border: none; border-radius: 0px; padding: 0px;'/>
             </td>
-            <td align="center">
+            <td width="70%" align="center">
                 <h1 class="letraAzulEncabezado">CIUDADANOS</h1>
             </td>
-            <td align="right">
-                <a asp-action="Create"><button class="btn btn-dark redondeada">NUEVO REGISTRO</button> </a>
-                <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    <i class="fas fa-filter" title="Aplicar Filtro"></i>
-                </button>
+            <td width="10%" align="right">
+                <div class="row">
+                    <a asp-action="Create" role='button'>
+                        <i class="circulo fas fa-plus-circle" data-toggle='tooltip' data-placement='top' data-html='true' title="Nuevo Registro e Ciudadano"></i>
+                    </a>
+                    <a data-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample'>
+                        <i class="circulo fas fa-filter" data-toggle='tooltip' data-placement='top' data-html='true' title="Aplicar Filtro"></i>
+                    </a>
+                    <a asp-controller="Reportes" asp-action="Cumples">
+                        <i class="circulo fa fa-birthday-cake" data-toggle='tooltip' data-placement='top' data-html='true' title="Cumpleaños"></i>
+                    </a>
+                    <a asp-controller="Reportes" asp-action="UbicacionCiudadanos">
+                        <i class="circulo fas fa-map-marker-alt fa-lg text-danger" data-toggle='tooltip' data-placement='top' data-html='true' title="Ubicación de Ciudadanos"></i>
+                    </a>
+                    <a asp-action="WriteDataToExcel" asp-controller="Ciudadanoes">
+                        <i class="circulo fas fa-file-excel" data-toggle='tooltip' data-placement='top' data-html='true' title="Exportar a Excel"></i>
+                    </a>
+                </div>
             </td>
         </tr>
     </table>
 </div>
 
-<table class="table table-bordered" style='width:100%;'>
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Paterno)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Materno)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Colonia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Calle)
-            </th>
-            <th>
-                # Ext.
-            </th>
-            <th>
-                # Int.
-            </th>
-            <th>
-                CP
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.Partido)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoMiembro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Distrito)
-        </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Seccion)
-            </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </th>*@
-            @*<th>
-            @Html.DisplayNameFor(model => model.Estatus)
-        </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Genero)
-            </th>
-            @*<th>
-            @Html.DisplayNameFor(model => model.Notas)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Campo1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Campo2)
-        </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Latitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Longitud)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioRegistroId)
-            </th>
-            *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Paterno)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Materno)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Colonia.NombreColonia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Calle.NombreCalle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumExterior)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumInterior)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Partido)
+<table width="100%" style="border:none;">
+    <tr>
+        @*<td width="20%" align="left" style="padding-left:8px; vertical-align:middle;">
+                <div class="input-group">
+                    <label>Legislatura&nbsp;</label>
+                    <select id="LegGestionReferencia" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
+                </div>
+            </td>*@
+        <td width="70%" align="center" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Nombre, Paterno, Materno ..."
+                       aria-label="Search" aria-describedby="basic-addon2" id="BRciudadanoId">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick='BusqudaRapCiudadano();' id="BotonCiudadanoBR">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoMiembro)
+        <td width="30%" align="right" style="padding-left:8px; vertical-align:middle;">
+            <label id="labelNumeroRegistros">&nbsp;</label>
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Distrito)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Seccion)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.FechaNacimiento)
-        </td>*@
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Estatus)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Genero)
-            </td>
-
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CiudadanoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CiudadanoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CiudadanoId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+    </tr>
 </table>
 
+@*<p align="right">
+        <label id="labelNumeroRegistros">&nbsp;</label>
+    </p>*@
+
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="25%">
+                    <label for="NombreLabel">Nombres</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="FechaNacimientoLabel" id="FechaRecibidoLabel">Mes de Nacimiento</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="GeneroLabel">Genero</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="GeneroLabel">Cumpleaños</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="25%">
+                    <input type="text" class="form-control" name="IngresaNombre" id="IngresaNombre" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    @*<div class='input-group date' id='datetimepickerFN'>
+                        <input id="FechaNacimiento" class="form-control" />
+                    </div>*@
+
+                    <select id="opcionMesCumple" class="form-control" asp-items="selectMes"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="opcionGeneroId" class="form-control" asp-items="opcionesGenero"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="opcionCumpleId" class="form-control" asp-items="opcionesCumple"></select>
+                </td>
+            </tr>
+        </table>
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td class='fondoMenuFactor' width="20%" style='text-align: center; vertical-align: middle;'>
+                    <div>
+                        <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
+                    </div>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                    <label for="CalleLabel">Calle</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label for="MunicipioLabel">Municipio</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
+                    <label for="CPLabel">CP</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscarCiudadano" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                    <input type="text" class="form-control" name="callesBuscar" id="callesBuscarCiudadano" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="MunicipioBusqueda" class="form-control" asp-items="ViewBag.Municipio"></select>
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <input type="text" class="form-control" name="IngresaCP" id="IngresaCP" />
+                </td>
+            </tr>
+        </table>
+
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
+                    <label>Partido</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="16%">
+                    <label>Representante</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="16%">
+                    <label>Afin</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="16%">
+                    <label>Representante de Casilla</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="16%">
+                    <label>Lista Negra</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="16%">
+                    <label>Distrito Digital</label>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="20%">
+                    <select id="PartidoBusqueda" class="form-control" asp-items="ViewBag.Partidos"></select>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="16%">
+                    <input type='checkbox' id='cboxLider' onclick='FiltraCiudadanos();'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="16%">
+                    <input type='checkbox' id='cboxAfin' onclick='FiltraCiudadanos();'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="16%">
+                    <input type='checkbox' id='cboxRCasilla' onclick='FiltraCiudadanos();'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="16%">
+                    <input type='checkbox' id='cboxLNegra' onclick='FiltraCiudadanos();'>
+                </td>
+                <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="16%">
+                    <input type='checkbox' id='cboxDDigital' onclick='FiltraCiudadanos();'>
+                </td>
+            </tr>
+        </table>
+
+
+        <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
+        <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+        <input type="text" id="hMunicipioBuscar" name="hMunicipioBuscar" style="display:none" />
+
+
+        <table class='table table-bordered' style='width:100%;'>
+            <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="40%">
+                    <label for="emailLabel" id="emailLabel">e-mail</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                    <label for="TelefonoLabel">Teléfono</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="30%">
+                </td>
+            </tr>
+            <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="40%">
+                    <input type="text" class="form-control" name="IngresaEmail" id="IngresaEmail" />
+                </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                    <input type="text" class="form-control" name="IngresaTelefono" id="IngresaTelefono" />
+                </td>
+                <td style='text-align: center; padding: 5px;' width="20%">
+                    <button type='button' onclick='FiltraCiudadanos();' class='btn btn-secondary'>FILTRAR</button>&nbsp;
+                    <a asp-action="Index"><button class="btn btn-secondary">CANCELAR</button> </a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+<div id="divCiudadanos"></div>
+
 <div style="display: inline-block; text-align: right; width: 100%">
-    <ul id="pagina-solicitudes" class="pagination-sm"></ul>
+    <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
 </div>
 
 <div align="right">
     <label id="labelNumeroRegistros_footer"></label>
     &nbsp;
     <label>Por Página</label>
-    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraIniciativa();">
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraCiudadanos();">
         <OPTION VALUE="5">5</OPTION>
         <OPTION VALUE="10" selected="selected">10</OPTION>
         <OPTION VALUE="20">20</OPTION>
@@ -191,3 +329,16 @@
 
 <input id="hideNumPaginas" type="hidden" value="">
 <input id="hideNumRegistros" type="hidden" value="">
+
+<script>
+    var input = document.getElementById("BRciudadanoId");
+    document.getElementById("BRciudadanoId").focus();
+
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            console.log("ENTER");
+            event.preventDefault();
+            document.getElementById("BotonCiudadanoBR").click();
+        }
+    });
+</script>

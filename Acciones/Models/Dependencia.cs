@@ -10,7 +10,9 @@ namespace Acciones.Models
         public Dependencia()
         {
             Bitacoras = new HashSet<Bitacora>();
-            Peticiones = new HashSet<Peticione>();
+            BitacorasGestion = new HashSet<BitacoraGestion>();
+            //Peticiones = new HashSet<Peticione>();
+            //Gestiones = new HashSet<Gestiones>();
         }
 
         public int DependenciaId { get; set; }
@@ -36,6 +38,8 @@ namespace Acciones.Models
         public virtual Calle Calle { get; set; }
         public virtual Colonia Colonia { get; set; }
         public virtual ICollection<Bitacora> Bitacoras { get; set; }
-        public virtual ICollection<Peticione> Peticiones { get; set; }
+        public virtual ICollection<BitacoraGestion> BitacorasGestion { get; set; }
+        //public virtual ICollection<Peticione> Peticiones { get; set; }
+        //public virtual ICollection<Gestiones> Gestiones { get; set; }
     }
 }

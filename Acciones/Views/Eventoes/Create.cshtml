@@ -31,10 +31,10 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
                     <label for="LegislaturaLabel">Legislatura</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
                     <label for="FolioLabel">Folio</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="20%">
@@ -46,15 +46,18 @@
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="20%">
                     <label for="FechaEventoLabel" id="FechaRecibidoLabel">Fecha Evento</label>
                 </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="HoraLabel" id="HoraLabel">Hora Inicio</label>
+                </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="15%">
                     <label for="TipoLabel">Tipo</label>
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <select id="LegEventosNuevo" class="form-control" asp-items="ViewBag.LegEventoNvoReg"></select>
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <input type="text" class="form-control" name="FolioEvento" id="FolioEvento" />
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
@@ -63,23 +66,31 @@
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
                     <input type="text" class="form-control" name="NumAsistentes" id="NumAsistentes" />
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="20%">
                     <div class='input-group date' id='datetimepickerFEvento'>
                         <input asp-for="Fecha" id="FechaEvento" class="form-control" />
                     </div>
                 </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="10%">
+                    <input class="form-control" type="time" id="HoraInicioEvento" name="HoraInicioEvento">
+                </td>
+
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
-                    <select asp-for="Tipo" id="opcionTipoEventos" class="form-control" asp-items="tipoEvento"></select>
+                    @*<select asp-for="Tipo" id="opcionTipoEventos" class="form-control" asp-items="tipoEvento"></select>*@
+                    <select class="form-control" asp-items="ViewBag.TiposEvento" id="TipoEventoId"></select>
                 </td>
             </tr>
         </table>
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' class='fondoAzul_p_LetraNegra_3v' width="30%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="30%">
+                    <label for="LugarLabel" id="ColoniaLabel">Lugar</label>
+                </td>
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();' class='fondoAzul_p_LetraNegra_3v' width="20%">
                     <label for="ColoniaLabel" id="ColoniaLabel">Colonia</label>
                 </td>
-                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoAzul_p_LetraNegra_3v' width="40%">
+                <td style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();' class='fondoAzul_p_LetraNegra_3v' width="20%">
                     <label for="CalleLabel">Calle</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
@@ -93,10 +104,13 @@
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="30%">
+                    <input type="text" class="form-control" name="Lugar" id="Lugar" />
+                </td>
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="20%">
                     <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" />
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="40%">
+                <td style='text-align: center; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px; ' width="20%">
                     <input type="text" class="form-control" name="callesBuscar" id="callesBuscar" />
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
@@ -114,7 +128,7 @@
         <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
         <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
         <input type="text" id="hEventoId" name="hEventoId" style="display:none" />
-
+        <input type="text" id="hAsistenteBuscar" name="hAsistenteBuscar" style="display:none" />
 
         <div>
             <div class="alert alert-success" id="mensajeColonia_OK" style="display:none;" align="center">
@@ -161,17 +175,20 @@
                 <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_3' width="15%">
                     <label for="DescripcionLabel" class="control-label">Nombre del Evento</label>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="85%">
+                <td style='text-align: left; vertical-align: middle; background-color: rgba(250, 196, 94, 0.4); color: black; padding: 2px; border-left-color: rgba(250, 196, 94, 0.78); border-left-width: 3px;' width="85%">
                     <textarea id="DescripcionEvento" name="Notas" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcionEvento(event)></textarea>
                 </td>
             </tr>
         </table>
+
+        <label for="SolicitanteLabel" class="control-label"><a asp-controller="Ciudadanoes" asp-action="Create" style="color:blue; text-decoration:underline;">Nuevo registro de ciudadano</a></label>
+
     </div>
 </div>
 
 <div>
     <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
-        <strong> Debe registrar por lo menos Folio, Calle, Colonia, Fecha y Nombre del Evento.</strong>
+        <strong> Debe registrar por lo menos Lugar, Calle, Colonia, Fecha, Hora y Nombre del Evento.</strong>
     </div>
     <div class="alert alert-success" id="mensajeAlerta_OK" style="display:none;" align="center">
         <strong>Los Datos Fueron Guardados</strong>
@@ -182,50 +199,36 @@
 </div>
 
 <div align="center">
-    <button type='button' onclick='GuardarNuevoEvento();' class='btn BotonNaranjaClaro redondeada'>GUARDAR</button>&nbsp;
-    <a asp-action="Index"><button class="btn BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+    <button type='button' onclick='GuardarNuevoEvento();' class='btn btn-warning redondeada'>GUARDAR</button>&nbsp;
+    <a asp-action="Index"><button class="btn btn-warning redondeada">CANCELAR</button> </a>
 </div>
 
 
-@*<div id="dvMap" style="width: 500px; height: 500px"></div>*@
+<hr style="background-color: rgba(250, 196, 94, 0.8); " />
 
-
-@*<div id="divEventoComplemento" style="display:none;">
-
-        <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ARCHIVOS ANEXOS</h4>
-        <div id="divArchivosAnexosNevento"></div>
-
-        <h4 class="card-header" style='text-align: center; background-color: black; color: white; border-radius: 10px 10px 10px 10px; padding:2px;'>ASISTENTES</h4>
-        <div id="divAsistentesNevento"></div>
-
-    </div>*@
-
-
-<div class="col-md-12 col-sm-12" id="app">
-    @*<p class="alert alert-primary">Use mousewheel to scroll the tabs while preventing vertical page scroll</p>*@
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-pills flex-nowrap" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ARCHIVOS ANEXOS</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ASISTENTES</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content col-md-12 col-sm-12">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
-            <div id="divArchivosAnexosNvoEvento"></div>
-        </div>
-        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ASISTENTES</h4>
-            <div id="divAsistentesNvoEvento"></div>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <ul id="tabsJustified" class="nav nav-pills flex-column" style="background-color: rgba(220,223,226,.8);">
+                    <li class="nav-item"><a id="opc_1" href="" data-target="#home1" data-toggle="tab" class="nav-link small text-uppercase active" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">ARCHIVOS</a></li>
+                    <li class="nav-item"><a id="opc_2" href="" data-target="#profile1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">INVITADOS</a></li>
+                </ul>
+                <div class="tab-content border rounded p-3 w-100" style="background-color: rgba(181, 185, 195, 0.3); ">
+                    <div id="home1" class="tab-pane fade active show">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
+                        <div id="divArchivosAnexosNvoEvento"></div>
+                    </div>
+                    <div id="profile1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>INVITADOS</h4>
+                        <div id="divAsistentesNvoEvento"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 @*---------Modal Alta Colonia ---------*@
 <div class="modal" id="divModalAltaColonia" tabindex="-2" role="dialog" aria-labelledby="divModalAltaColonia">

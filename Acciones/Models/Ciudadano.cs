@@ -12,6 +12,7 @@ namespace Acciones.Models
         {
             AsistentesEventos = new HashSet<AsistentesEvento>();
             Beneficiarios = new HashSet<Beneficiario>();
+            BeneficiariosGestion = new HashSet<BeneficiarioGestion>();
             IntegrantesAsociacions = new HashSet<IntegrantesAsociacion>();
             PersonasVisitada = new HashSet<PersonasVisitada>();
         }
@@ -32,7 +33,7 @@ namespace Acciones.Models
         public string TipoMiembro { get; set; }
         public string Distrito { get; set; }
         public string Seccion { get; set; }
-        [DataType(DataType.Date)] 
+        [DataType(DataType.Date)]
         public DateTime? FechaNacimiento { get; set; }
         public int? Estatus { get; set; }
         public string Genero { get; set; }
@@ -44,11 +45,27 @@ namespace Acciones.Models
         public DateTime? FechaRegistro { get; set; }
         public DateTime? FechaUltimoCambio { get; set; }
         public int? UsuarioRegistroId { get; set; }
+        public int? recordarcumple { get; set; }
+        public int? DiputadoId { get; set; }
+        public string RFC { get; set; }
+        public string CURP { get; set; }
+        public int? Afin { get; set; }
+        public int? RCasilla { get; set; }
+        public int? NoAfin { get; set; }
+        public int? DDigital { get; set; }
+        public string NombreArchivoBD { get; set; }
+        public string URL { get; set; }
 
+        public string ArchivoINE_BD { get; set; }
+        public string INE_URL { get; set; }
+
+        public int? MunicipioId { get; set; }
+        public int? PartidoId { get; set; }
         public virtual Calle Calle { get; set; }
         public virtual Colonia Colonia { get; set; }
         public virtual ICollection<AsistentesEvento> AsistentesEventos { get; set; }
         public virtual ICollection<Beneficiario> Beneficiarios { get; set; }
+        public virtual ICollection<BeneficiarioGestion> BeneficiariosGestion { get; set; }
         public virtual ICollection<IntegrantesAsociacion> IntegrantesAsociacions { get; set; }
         public virtual ICollection<PersonasVisitada> PersonasVisitada { get; set; }
     }

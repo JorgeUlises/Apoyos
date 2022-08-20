@@ -1,0 +1,238 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">PERFIL DE CIUDADANO</h4>
+</div>
+<div id="DetalleCiudadano"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SOLICITUDES DE APOYO REALIZADAS</h4>
+</div>
+<div id="divSolicitudesCiudadano"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SOLICITUDES DE GESTION REALIZADAS</h4>
+</div>
+<div id="divSolicitudesGestionCiudadano"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BENEFICIOS RECIBIDOS</h4>
+</div>
+<div id="divBeneficios"></div>
+<div id="divBeneficios_Gestion"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">PARTICIPACIÓN EN EVENTOS</h4>
+</div>
+<div id="divAsistenciaEventos"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ASOCIACIONES A LAS QUE PERTENECE</h4>
+</div>
+<div id="divAsociacionesPertenece"></div>
+
+<div class="text-center">
+    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">PROMOCIONALES</h4>
+</div>
+<div id="divListaLonasBardasXpersona"></div>
+
+
+@*---------Modal Muestra Detalle de una Solicitud de Apoyo ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosSolicitud" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table width=100% style="border:none;">
+                    <tr width="100%;">
+                        <td align="center">
+                            <h4 class="fondoMenu" id="ModalLabelConsultaSolicitud">SOLICITUD DE APOYO</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosSolicitud'></div>
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">CATEGORIA Y SUBCATEGORIA</h4>
+                </div>
+                <div id="divCatSubCatNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ARCHIVOS ANEXOS</h4>
+                </div>
+                <div id="divArchivosAnexosNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BENEFICIARIOS</h4>
+                </div>
+                <div id="divBeneficiariosNPeticion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SEGUIMIENTO</h4>
+                </div>
+                <div id="divBitacoraNPeticion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*--------- GESTIÓN - Modal Muestra Detalle de una Solicitud de Apoyo ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosSolicitudGestion" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table width=100% style="border:none;">
+                    <tr width="100%;">
+                        <td align="center">
+                            <h4 class="fondoMenu" id="ModalLabelConsultaSolicitud">SOLICITUD DE GESTIÓN</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosSolicitudGestion'></div>
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">CATEGORIA Y SUBCATEGORIA</h4>
+                </div>
+                <div id="divCatSubCatNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ARCHIVOS ANEXOS</h4>
+                </div>
+                <div id="divArchivosAnexosNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BENEFICIARIOS</h4>
+                </div>
+                <div id="divBeneficiariosNGestion"></div>
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SEGUIMIENTO</h4>
+                </div>
+                <div id="divBitacoraNGestion"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*---------Modal Muestra Detalle de Evento ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosEvento" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosEvento'></div>
+                <hr />
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ARCHIVOS ANEXOS</h4>
+                </div>
+                <div id='ListaArchivosEventoId'></div>
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">ASISTENTES AL EVENTO</h4>
+                </div>
+                <div id='AsistenciaEventoId'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*---------Modal Muestra Detalle de Asociación ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosAsociacion" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='DetalleAsociacion'></div>
+                <hr />
+                <hr />
+                <div class="text-center">
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">INTEGRANTES</h4>
+                </div>
+                <div id='IntegrantesAsociacionId'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*---------Modal Muestra Detalle de Publicidad ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosPublicidad" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl sombraModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4 col-md-3 col-xxl-3">
+                        <div class="card">
+                            <div id='FotoPersonaPub'></div>
+                            <div class="card-body">
+                                <div id='NombrePersonaPub'></div>
+                            </div>
+                            <div class="card-footer">
+                                <div id='DatosPersonaPub'></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8 col-md-6 col-xxl-3 col-sm-3">
+                        <div class="col">
+                            <div class='container-fluid'>
+                                <div class="row row-cols-5">
+                                    <div id="divCarrouselFotosPublicidad"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div id="divFotoAmpliada" style="align-content:center;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

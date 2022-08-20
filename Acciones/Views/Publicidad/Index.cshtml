@@ -1,0 +1,620 @@
+﻿@model IEnumerable<Acciones.Models.Publicidad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+
+</script>
+
+<link href="@Url.Content("~/css/mapa.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("//cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.min.css")" rel="stylesheet" type="text/css" />
+
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.min.js"></script>
+<script type="text/javascript" src="~/js/ol-popup.js"></script>
+
+
+<input id="hiddeCoordenadas" type="hidden" value="@ViewBag.Coordenadas">
+<input id="hiddeCoordenadas_2" type="hidden" value="@ViewBag.Coordenadas_2">
+
+<style>
+    .circulo {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid #c6d9ec;
+        padding: 10px;
+    }
+
+        .circulo:hover {
+            /*text-decoration: none;*/
+            background-color: white;
+        }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        /*        width: 50px;
+    */
+    }
+
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <table width="100%" style="border:none;">
+            <tr>
+                <td width="20%" align="left" style="padding-left:20px;">
+                    <img src="~/Images/foco.png" height='70' style="border:#fff;" />
+                </td>
+                <td width="70%" align="center">
+                    <h1 class="letraAzulEncabezado">PROMOCIONALES</h1>
+                </td>
+                <td width="10%">
+                    <div class="row">
+                        <a data-toggle='collapse' href='#collapseDatosPublicidad' role='button' aria-expanded='true' aria-controls='collapseDatosPublicidad'>
+                            <i class="circulo fas fa-plus-circle" data-toggle='tooltip' data-placement='top' data-html='true' title="Nuevo Registro"></i>
+                        </a>
+                        <a onclick='initialize_mapPublicidad()' style='cursor:pointer;'>
+                            <i class="circulo fas fa-map-marker-alt fa-lg text-danger" data-toggle='tooltip' data-placement='top' data-html='true' title="Ubicación de Promocionales"></i>
+                        </a>
+                        <a onclick='initialize_mapPublicidadYciudadanos()' style='cursor:pointer;'>
+                            <i class="circulo fas fa-address-card fa-lg text-danger" data-toggle='tooltip' data-placement='top' data-html='true' title="Ubicación de Promocionales y Ciudadanos"></i>
+                        </a>
+
+                        <a data-toggle='collapse' href='#collapseFiltroPub' role='button' aria-expanded='false' aria-controls='collapseFiltroPub'>
+                            <i class="circulo fas fa-filter" data-toggle='tooltip' data-placement='top' data-html='true' title="Aplicar Filtro"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div>
+        <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
+            <strong> Debe registrar por lo menos Ciudadano y Tipo de Publicidad</strong>
+        </div>
+    </div>
+
+
+    <div style="width: 100%; height: 100vh; display: none;" id="cardMapa">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6>UBICACIÓN DE PROMOCIONALES</h6>
+            </div>
+            <div class="card-body">
+                <div id="map" style="width: 100%; height: 100vh;">
+                    <div id="popup" class="ol-popup">
+                        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                        <div id="popup-content"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 100%; height: 100vh; display: none;" id="cardMapaCiudadanos">
+        <div class="card h-100">
+            <div class="card-header">
+                <h6>UBICACIÓN DE PROMOCIONALES Y CIUDADANOS</h6>
+            </div>
+            <div class="card-body">
+
+
+
+                <div>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/azul.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Distrito Digital Panistas</label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/naranja.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Distrito Digital </label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/AzulMar.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Representante, Afín ó Panista</label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/rojo.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Representante</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/verde.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Afín Panista</label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/turqueza.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>Afín</label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/morado.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>No Afín, Panista</label>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="row">
+                                <img src="~/Images/rosa.png" height='20' style='border: none; border-radius: 0px; padding: 0px;' />&nbsp;
+                                <label>No Afín</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="mapCiudadano" style="width: 100%; height: 100vh;">
+                    <div id="popup" class="ol-popup">
+                        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                        <div id="popup-content"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    @*---------Collapse Nuevo Registro de Publicidad ---------*@
+    <div id="main">
+        <div class="collapse" id="collapseDatosPublicidad">
+
+            <div class="card">
+                <div class="card-header" style="background-color: #d7d9db; ">
+                    <h5 class="card-title mb-0">Registro de Publicidad</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-3 col-md-2">
+                            <label class="form-label" for="inputTipo">Folio</label>
+                            <input type="text" class="form-control" id="inputFolioPublicidad">
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTipo">Tipo</label>
+                            <select class="form-control" asp-items="ViewBag.TipoPublicidad" id="TipoPublicidadId"></select>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputOrigen">Origen</label>
+                            <select class="form-control" asp-items="ViewBag.OrigenPublicidad" id="OrigenPublicidadId"></select>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label class="form-label" for="inputTamaño">Tamaño</label>
+                            <input type="text" class="form-control" id="inputTamañoPublicidad">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            @*<label class="form-label" for="inputTipo">Ciudadano</label>*@
+                            <label for="SolicitanteLabel" class="control-label"><a asp-controller="Ciudadanoes" asp-action="Create" style="color:blue; text-decoration:underline;">Ciudadano</a></label>
+                            <input class="form-control" type='text' id='NombreCiudadanoPublicidad' style='width:100%; max-width:100%;' />
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTipo" style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Colonia' onclick='mostrarModalNuevaColonia();'>Colonia</label>
+                            <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscar" />
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputOrigen" style='text-align: center; padding: 5px; cursor: pointer; color: blue; text-decoration: underline;' title='Registra Nueva Calle' onclick='mostrarModalNuevaCalle();'>Calle</label>
+                            <input type="text" class="form-control" name="callesBuscar" id="callesBuscar" />
+                        </div>
+                        <div class="mb-3 col-md-1">
+                            <label class="form-label" for="inputTamaño">#</label>
+                            <input type="text" class="form-control" id="inputNumExtPublicidad">
+                        </div>
+                        <div class="mb-3 col-md-2">
+                            <label class="form-label" for="inputTamaño">CP</label>
+                            <input type="text" class="form-control" id="inputCpPublicidad">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTamaño">Latitud</label>
+                            <input type="text" class="form-control" id="inputLatitudPublicidad">
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTamaño">Longitud</label>
+                            <input type="text" class="form-control" id="inputLongitudPublicidad">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="inputTamaño">Notas</label>
+                            <input type="text" class="form-control" id="inputNotasPublicidad">
+                        </div>
+                    </div>
+                    <div align="right">
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseDatosPublicidad">CANCELAR</button>
+                        <button type='button' onclick='GuardarNuevaPublicidad();' class='btn btn-primary'>GUARDAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*---------Collapse FILTRA Registros de Publicidad ---------*@
+
+        <div class="collapse" id="collapseFiltroPub">
+
+            <div class="card">
+                <div class="card-header" style="background-color: #e6f2ff;">
+                    <h5 class="card-title mb-0">Filtra Registros de Publicidad</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-3 col-md-2">
+                            <label class="form-label" for="inputTipo">Folio</label>
+                            <input type="text" class="form-control" id="BuscarFolioPublicidad" autocomplete="off">
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTipo">Tipo</label>
+                            <select class="form-control" asp-items="ViewBag.TipoPublicidad" id="BuscarTipoPublicidadId"></select>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputOrigen">Origen</label>
+                            <select class="form-control" asp-items="ViewBag.OrigenPublicidad" id="BuscarOrigenPublicidadId"></select>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label class="form-label" for="inputTamaño">Tamaño</label>
+                            <input type="text" class="form-control" id="BuscarTamañoPublicidad" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTipo">Ciudadano</label>
+                            <input class="form-control" type='text' id='BuscarPubCiudadano' style='width:100%; max-width:100%;' autocomplete="off" />
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputTipo">Colonia</label>
+                            <input type="text" class="form-control" name="BuscarColonia" id="coloniasBuscar" autocomplete="off" />
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="form-label" for="inputOrigen">Calle</label>
+                            <input type="text" class="form-control" name="BuscarCalle" id="callesBuscar" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div align="right">
+                        @*<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseFiltroPub" asp-action="Index">CANCELAR</button>*@
+                        <a asp-action="Index"><button class="btn btn-primary">CANCELAR</button> </a>
+                        <button type='button' onclick='FiltraPublicidad();' class='btn btn-primary'>BUSCAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*Búsqueda Rápida*@
+        <table width="100%" style="border:none;">
+            <tr>
+                <td width="70%" align="center" style="padding-left:8px; vertical-align:middle;">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Colonia"
+                               aria-label="Search" aria-describedby="basic-addon2" id="BRpubColonia">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" onclick='BusRapPubColonia();' id="BotonPublicidadBR">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td width="30%" align="right" style="padding-left:8px; vertical-align:middle;">
+                    <label id="labelNumeroRegistros">&nbsp;</label>
+                </td>
+            </tr>
+        </table>
+
+        <div id="divListaLonasBardas"></div>
+
+        @*Opciones de Paginación*@
+        <div style="display: inline-block; text-align: right; width: 100%">
+            <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
+        </div>
+
+        <div align="right">
+            <label id="labelNumeroRegistros_footer"></label>
+            &nbsp;
+            <label>Por Página</label>
+            <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraPublicidad();">
+                <OPTION VALUE="5">5</OPTION>
+                <OPTION VALUE="10" selected="selected">10</OPTION>
+                <OPTION VALUE="20">20</OPTION>
+                <OPTION VALUE="100">100</OPTION>
+                <OPTION VALUE="200000">Todos</OPTION>
+            </SELECT>
+        </div>
+
+
+        <input id="hideNumPaginas" type="hidden" value="">
+        <input id="hideNumRegistros" type="hidden" value="">
+
+        <script>
+            var input = document.getElementById("BRpubColonia");
+            document.getElementById("BRpubColonia").focus();
+
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    console.log("ENTER");
+                    event.preventDefault();
+                    document.getElementById("BotonPublicidadBR").click();
+                }
+            });
+        </script>
+
+
+
+
+
+        <input type="text" id="hCiudadanoSolicitanteBuscar" name="hCiudadanoSolicitanteBuscar" style="display:none" />
+        <input type="text" id="hCiudadanoPublicidadBuscar" name="hCiudadanoSolicitanteBuscar" style="display:none" />
+        <input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
+        <input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+        <input type="text" id="hCiudadanoId" name="hCiudadanoId" style="display:none" />
+
+        <input type="text" id="hColoniaBuscarEdit" style="display:none" />
+        <input type="text" id="hCalleBuscarEdit" style="display:none" />
+        <input type="text" id="hCiudadanoIdEdit" style="display:none" />
+
+        <input type="text" id="hCiudadanoPublicidadBuscar" style="display:none" />
+
+        @*---------Modal Seleccionar y Subir Archivos de Publicidad ---------*@
+        <div class="modal" id="ModalSeleccionarArchivosPublicidad" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosPublicidad">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="centrarVH">
+                            <span style='font-size:25px; cursor:pointer' id="referenciaArchBitacora" class="badge"></span>
+                        </p>
+                        <p>
+                            <h4 id="idTituloSubirArchivosGestionesBitacora" class="modal-title" style="padding-left:10px;"><strong>Documento Anexos de Promocionales</strong></h4>
+                        </p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <br />
+                        <div class="custom-file">
+                            <input type="file" multiple class="custom-file-input" id="FileUploadFormFilePublicidad" lang="es" placeholder="">
+                            <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                        </div>
+
+                        <input id="HiddenPublicidadId" type="hidden" name="HiddenPublicidadId" value="">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                        <button type="button" onclick="subirArchivosPublicidadButton('FileUploadFormFilePublicidad')" class="btn btn-dark">Anexar Archivo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*---------Modal Lateral Derecho para Editar datos de Publicidad ---------*@
+        <div class="modal modal_outer right_modal fade" id="information_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Edición de Registro de Publicidad</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body get_quote_view_modal_body">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Registro de Publicidad</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="mb-3 col-md-2">
+                                        <label class="form-label" for="inputTipo">Folio</label>
+                                        <input type="text" class="form-control" id="inputFolioPublicidadEdit">
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputTipo">Tipo</label>
+                                        <select class="form-control" asp-items="ViewBag.TipoPublicidad" id="TipoPublicidadIdEdit"></select>
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputOrigen">Origen</label>
+                                        <select class="form-control" asp-items="ViewBag.OrigenPublicidad" id="OrigenPublicidadIdEdit"></select>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label class="form-label" for="inputTamaño">Tamaño</label>
+                                        <input type="text" class="form-control" id="inputTamañoPublicidadEdit" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputTipo">Ciudadano</label>
+                                        <input class="form-control" type='text' id='NombreCiudadanoPublicidadEdit' style='width:100%; max-width:100%;' />
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputTipo">Colonia</label>
+                                        <input type="text" class="form-control" name="coloniasBuscar" id="coloniasBuscarEdit" />
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputOrigen">Calle</label>
+                                        <input type="text" class="form-control" name="callesBuscar" id="callesBuscarEdit" />
+                                    </div>
+                                    <div class="mb-3 col-md-1">
+                                        <label class="form-label" for="inputTamaño">#</label>
+                                        <input type="text" class="form-control" id="inputNumExtPublicidadEdit" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label class="form-label" for="inputTamaño">CP</label>
+                                        <input type="text" class="form-control" id="inputCpPublicidadEdit" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputTamaño">Latitud</label>
+                                        <input type="text" class="form-control" id="inputLatitudPublicidadEdit" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label class="form-label" for="inputTamaño">Longitud</label>
+                                        <input type="text" class="form-control" id="inputLongitudPublicidadEdit" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label" for="inputTamaño">Notas</label>
+                                        <input type="text" class="form-control" id="inputNotasPublicidadEdit" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div align="right">
+                                    <button type='button' onclick='CerrarModalEditarPublicidad();' class='btn btn-primary'>CANCELAR</button>
+                                    <button type='button' onclick='GuardarActualizacionPublicidad();' class='btn btn-primary'>GUARDAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
+    </div>
+
+
+    @*---------Modal Muestra Detalle de Publicidad ---------*@
+
+    <div class="modal fade bd-example-modal-xl" id="modalMuestraDatosPublicidad" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl sombraModal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4 col-md-3 col-xxl-3">
+                            <div class="card">
+                                <div id='FotoPersonaPub'></div>
+                                <div class="card-body">
+                                    <div id='NombrePersonaPub'></div>
+                                </div>
+                                <div class="card-footer">
+                                    <div id='DatosPersonaPub'></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 col-md-6 col-xxl-3 col-sm-3">
+                            <div class="col">
+                                <div class='container-fluid'>
+                                    <div class="row row-cols-5">
+                                        <div id="divCarrouselFotosPublicidad"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div id="divFotoAmpliada" style="align-content:center;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*---------Modal Alta Colonia ---------*@
+<div class="modal" id="divModalAltaColonia" tabindex="-2" role="dialog" aria-labelledby="divModalAltaColonia">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Colonia</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreColonia" lang="es" placeholder="Proporcione el nombre de la colonia" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenColoniaId" type="hidden" name="HiddenColoniaId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaColoniaButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*---------Modal Alta Calle ---------*@
+<div class="modal" id="divModalAltaCalle" tabindex="-2" role="dialog" aria-labelledby="divModalAltaCalle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaRequisito" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloNuevaColonia" class="modal-title" style="padding-left:10px;"><srong>Registro de Nueva Calle</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div style='width:100%; max-width:100%;'>
+                    <input id="inputNombreCalle" lang="es" placeholder="Proporcione el nombre de la calle" style='width:100%; max-width:100%;'>
+                </div>
+
+                <input id="HiddenCalleId" type="hidden" name="HiddenCalleId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarNuevaCalleButton()" class="btn btn-dark">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/mapa.js"></script>
+<script src="~/js/carousel.js" defer="defer"></script>
+

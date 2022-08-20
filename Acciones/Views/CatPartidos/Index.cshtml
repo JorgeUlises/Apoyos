@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Acciones.Models.CatPartidos>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de Partidos Políticos</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Registro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Logotipo)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.FechaRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioRegistro)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var indice = 0; }
+        @foreach (var item in Model)
+        {
+            indice++;
+            <tr>
+                <td>@indice</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    <img src="~/Images/@item.Logotipo" height='30' style="border:#fff;" />
+                    @Html.DisplayFor(modelItem => item.Logotipo)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.FechaRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioRegistro)
+                </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PartidoId"><span style='cursor: pointer' class='fas fa-edit' title='Editar'></span></a>
+                    <a asp-action="Delete" asp-route-id="@item.PartidoId"><span style='cursor: pointer' class='fas fa-trash' title='Eliminar'></span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

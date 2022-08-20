@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Acciones.Models.Comisiones>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de Comisiones</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Registro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroSecuencial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LegislaturaId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comentario)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Estatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaUltimoCambio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UsuarioregistroId)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var indice = 0; }
+        @foreach (var item in Model)
+        {
+            indice++;
+            <tr>
+                <td>@indice</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroSecuencial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LegislaturaId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comentario)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Estatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioregistroId)
+                    </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ComisionId"><span style='cursor: pointer' class='fas fa-edit' title='Editar'></span></a>
+                    <a asp-action="Delete" asp-route-id="@item.ComisionId"><span style='cursor: pointer' class='fas fa-trash' title='Eliminar'></span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

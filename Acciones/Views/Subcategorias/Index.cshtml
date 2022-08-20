@@ -4,21 +4,24 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>LISTA DE SUBCATEGORÍAS</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
+                No
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </th>
+            <th>
+                Subcategoría    
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Estatus)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.FechaRegistro)
             </th>
             <th>
@@ -27,39 +30,46 @@
             <th>
                 @Html.DisplayNameFor(model => model.UsuarioRegistroId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categoria)
-            </th>
-            <th></th>
+
+            <th></th>*@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria.CategoriaId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SubcategoriasId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SubcategoriasId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SubcategoriasId">Delete</a>
-            </td>
-        </tr>
-}
+        @{var indice = 0; }
+        @foreach (var item in Model)
+        {
+            indice++;
+            <tr>
+                <td>
+                    @indice
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @if (item.Estatus == 1)
+                    {<p style="color:green;">Habilitado</p> }
+                    else
+                    { <p style="color:red;">Deshabilitado</p>}
+                </td>                @*<td>
+                    @Html.DisplayFor(modelItem => item.FechaRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaUltimoCambio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioRegistroId)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SubcategoriasId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SubcategoriasId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SubcategoriasId">Delete</a>
+                </td>*@
+            </tr>
+        }
     </tbody>
 </table>

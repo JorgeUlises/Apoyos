@@ -6,116 +6,14 @@
 
 
 
+
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
         @Html.Raw(ViewBag.JavaScriptFunction)
     });
 </script>
 
-@*<h1>Edit</h1>
-
-    <h4>Peticione</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="PeticionId" />
-                <div class="form-group">
-                    <label asp-for="LegislaturaId" class="control-label"></label>
-                    <select asp-for="LegislaturaId" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
-                    <span asp-validation-for="LegislaturaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DiputadoId" class="control-label"></label>
-                    <select asp-for="DiputadoId" class="form-control" asp-items="ViewBag.DiputadoId"></select>
-                    <span asp-validation-for="DiputadoId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="AsociacionId" class="control-label"></label>
-                    <select asp-for="AsociacionId" class="form-control" asp-items="ViewBag.AsociacionId"></select>
-                    <span asp-validation-for="AsociacionId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaSolicitud" class="control-label"></label>
-                    <input asp-for="FechaSolicitud" class="form-control" />
-                    <span asp-validation-for="FechaSolicitud" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaCompromiso" class="control-label"></label>
-                    <input asp-for="FechaCompromiso" class="form-control" />
-                    <span asp-validation-for="FechaCompromiso" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaConclusion" class="control-label"></label>
-                    <input asp-for="FechaConclusion" class="form-control" />
-                    <span asp-validation-for="FechaConclusion" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Descripcion" class="control-label"></label>
-                    <input asp-for="Descripcion" class="form-control" />
-                    <span asp-validation-for="Descripcion" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Distrito" class="control-label"></label>
-                    <input asp-for="Distrito" class="form-control" />
-                    <span asp-validation-for="Distrito" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="OrigenPeticionId" class="control-label"></label>
-                    <select asp-for="OrigenPeticionId" class="form-control" asp-items="ViewBag.OrigenPeticionId"></select>
-                    <span asp-validation-for="OrigenPeticionId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DependeciaId" class="control-label"></label>
-                    <select asp-for="DependeciaId" class="form-control" asp-items="ViewBag.DependeciaId"></select>
-                    <span asp-validation-for="DependeciaId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Estatus" class="control-label"></label>
-                    <select asp-for="Estatus" class="form-control" asp-items="ViewBag.Estatus"></select>
-                    <span asp-validation-for="Estatus" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Hito" class="control-label"></label>
-                    <input asp-for="Hito" class="form-control" />
-                    <span asp-validation-for="Hito" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Campo1" class="control-label"></label>
-                    <input asp-for="Campo1" class="form-control" />
-                    <span asp-validation-for="Campo1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Campo2" class="control-label"></label>
-                    <input asp-for="Campo2" class="form-control" />
-                    <span asp-validation-for="Campo2" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaRegistro" class="control-label"></label>
-                    <input asp-for="FechaRegistro" class="form-control" />
-                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                    <input asp-for="FechaUltimoCambio" class="form-control" />
-                    <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UsuarioRegistro" class="control-label"></label>
-                    <input asp-for="UsuarioRegistro" class="form-control" />
-                    <span asp-validation-for="UsuarioRegistro" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>*@
-
-
-
-<h1>EDICIÓN DE SOLICITUD DE APOYO</h1>
+<h1>ACTUALIZACIÓN DE SOLICITUD DE APOYO</h1>
 
 <br />
 
@@ -125,15 +23,19 @@
 
         <input type="hidden" asp-for="PeticionId" id="PeticionId" />
         <input type="hidden" asp-for="Folio" id="FolioOriginal" />
-        <input type="hidden" asp-for="SolicitanteId" id="SolicitanteOriginalId" />
-        <input type="hidden" asp-for="SolicitanteId" id="hCiudadanoSolicitanteBuscar"/>
+        @*<input type="hidden" asp-for="SolicitanteId" id="SolicitanteOriginalId" />*@
+        <input type="hidden" asp-for="SolicitanteId" id="hCiudadanoSolicitanteBuscar" />
+        <input type="text" id="hBeneficiarioBuscar" name="hBeneficiarioBuscar" style="display:none" />
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_3v' width="10%">
+                    <label for="LegislaturaLabel">Legislatura</label>
+                </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
                     <label for="OrigenSolicitudLabel">Origen de Solicitud</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="20%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="10%">
                     <label for="FolioLabel">Folio</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="15%">
@@ -150,11 +52,14 @@
                 </td>
             </tr>
             <tr>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
+                    <select id="LegislaturaId" class="form-control" asp-items="ViewBag.LegislaturaId"></select>
+                </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
                     <select for="OrigenPeticion" onchange="optSelecEnOrigen();" id="OrigenPeticion" class="form-control" asp-items="ViewBag.OrigenPeticionId"></select>
                 </td>
 
-                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="20%">
+                <td style='text-align: center; background-color: white; color: black; padding: 1px;' width="10%">
                     <input asp-for="Folio" id="FolioPeticionEdicion" class="form-control" />
                 </td>
 
@@ -191,11 +96,18 @@
 
         <table class='table table-bordered' style='width:100%;' id="tablaCiudadano">
             <tr style="padding:2px;">
-                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_2' width="30%">
+                <td style='text-align: center; vertical-align: middle;' class='fondoAzul_p_LetraNegra_2' width="25%">
                     <label for="SolicitanteLabel" class="control-label">Solicitante</label>
                 </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
+                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="25%">
                     <input type='text' id='NombreCiudadanoSolicitante' style='width:100%; max-width:100%;' value="@ViewBag.NomSolicitante" />
+                </td>
+                <td style='text-align: center; vertical-align: middle; padding: 2px;' class='fondoAzul_p_LetraNegra_3' width="25%">
+                    <label for="ResponsableLabel" class="control-label">Responsable</label>
+                </td>
+                <td style='text-align: center;' width="25%">
+                    @*<input class="form-control" type='text' id='ResponsableSolicitante' style='width:100%; max-width:100%;' />*@
+                    <select asp-for="ResponsableID" class="form-control" asp-items="ViewBag.ResponsableAtenderId" id="responsableId"></select>
                 </td>
             </tr>
         </table>
@@ -204,23 +116,39 @@
             <strong>Debe seleccionar un Solicitante</strong>
         </div>
 
-        <table class='table table-bordered' style='width:100%; display:none;' id="tablaAsociacion">
-            <tr style="padding:2px;">
-                <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="30%">
-                    <label for="AsociacionLabel" class="control-label">Asociación</label>
-                </td>
-                <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
-                    <select for="Asociacion" id="AsociacionId" class="form-control" asp-items="ViewBag.Asociaciones"></select>
-                </td>
-            </tr>
-        </table>
+        @if (Model.OrigenPeticionId == 3)
+        {
+            <table class='table table-bordered' style='width:100%;' id="tablaAsociacion">
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="30%">
+                        <label for="AsociacionLabel" class="control-label">Asociación</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
+                        <select asp-for="AsociacionId" id="AsociacionId" class="form-control" asp-items="ViewBag.Asociaciones"></select>
+                    </td>
+                </tr>
+            </table>
+        }
+        else
+        {
+            <table class='table table-bordered' style='width:100%;display:none;' id="tablaAsociacion">
+                <tr style="padding:2px;">
+                    <td style='text-align: center; vertical-align: middle;' class='fondoGrisLetraNegra_2h' width="30%">
+                        <label for="AsociacionLabel" class="control-label">Asociación</label>
+                    </td>
+                    <td style='text-align: left; vertical-align: middle; background-color: white; color: black; padding: 1px; ' width="70%">
+                        <select asp-for="AsociacionId" id="AsociacionId" class="form-control" asp-items="ViewBag.Asociaciones"></select>
+                    </td>
+                </tr>
+            </table>
 
+        }
         <div class="alert alert-danger" id="msgAlerta_Asociacion" style="display: none;" align="center">
             <strong>Debe seleccionar una Asociación</strong>
         </div>
 
 
-        <input type="text" id="hBeneficiarioBuscar" name="hBeneficiarioBuscar" style="display:none" />
+
 
         @*Inicio Sección de Mensajes*@
 
@@ -234,22 +162,38 @@
 
         <table class='table table-bordered' style='width:100%;'>
             <tr>
-                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="90%">
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="70%">
                     <label for="ColoniaLabel" id="DescripcionLabel">Descripción</label>
+                </td>
+                <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="30%">
+                    <label for="ColoniaLabel" id="CostoLabel">Costo</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoAzul_p_LetraNegra_2' width="10%">
                     <label for="ColoniaLabel" id="HitoLabel">Hito</label>
                 </td>
             </tr>
             <tr>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="90%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="70%">
                     <textarea asp-for="Descripcion" id="DescripcionApoyo" name="DescripcionApoyo" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
                 </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="30%">
+                    <table width='100%' style=' border-color: #c1c4c9;'>
+                        <tr>
+                            <td width='20%' style='background-color: #c1c4c9; border-radius: 10px 0px 0px 10px; text-align:center;'>$</td>
+                            <td width='80%' style='text-align:left;'>
+                                <input asp-for="Costo" id="CostoApoyoEdit" class="form-control" onkeypress="return isNumber(event)" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
                 <td style='text-align: center; vertical-align: middle; background-color: white; color: black; padding: 2px;' width="10%">
-                    @if(Model.Hito==1){
-                    <input type='checkbox' id='cboxHito' checked />
-                    }else{
-                    <input type='checkbox' id='cboxHito' />
+                    @if (Model.Hito == 1)
+                    {
+                        <input type='checkbox' id='cboxHito' checked />
+                    }
+                    else
+                    {
+                        <input type='checkbox' id='cboxHito' />
                     }
                 </td>
             </tr>
@@ -333,53 +277,78 @@
     </div>
 </div>
 
+@*---------Modal Seleccionar y Subir Archivo Petición-Bitacora ---------*@
+<div class="modal" id="ModalSeleccionarArchivosPeticionesBitacora" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosPeticionesBitacora">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaArchBitacora" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosPeticionesBitacora" class="modal-title" style="padding-left:10px;"><srong>Documento Anexos de Actividad de Seguimiento de Apoyos</srong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFilePeticionBitacora" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenPeticionActId" type="hidden" name="HiddenPeticionActId" value="">
+                <input id="HiddenPeticionBitacoraId" type="hidden" name="HiddenPeticionBitacoraId" value="">
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosPeticionBitacoraButton('FileUploadFormFilePeticionBitacora')" class="btn btn-dark">Anexar Archivo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
-
-
-
-
-<div class="col-md-12 col-sm-12" id="app">
-    @*<p class="alert alert-primary">Use mousewheel to scroll the tabs while preventing vertical page scroll</p>*@
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-pills flex-nowrap" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">CLASIFICACIÓN</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ARCHIVOS ANEXOS</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">BENEFICIARIOS</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">BITÁCORA</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content col-md-12 col-sm-12">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(20, 85, 236, 0.76); color: white; border-radius: 10px 10px 10px 10px; padding: 2px; '>CLASIFICACIÓN</h4>
-            <div id="divCatSubCatNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(20, 85, 236, 0.76); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
-            <div id="divArchivosAnexosNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(20, 85, 236, 0.76); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BENEFICIARIOS</h4>
-            <div id="divBeneficiariosNPeticion"></div>
-        </div>
-        <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-            <h4 class="card-header" style='text-align: center; background-color: rgba(20, 85, 236, 0.76); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BITÁCORA</h4>
-            <div id="divBitacoraNPeticion"></div>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <ul id="tabsJustified" class="nav nav-pills flex-column" style="background-color: rgba(220,223,226,.8);">
+                    <li class="nav-item"><a id="opc_1" href="" data-target="#home1" data-toggle="tab" class="nav-link small text-uppercase active" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">CATEGORÍA</a></li>
+                    <li class="nav-item"><a id="opc_2" href="" data-target="#profile1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">ARCHIVOS</a></li>
+                    <li class="nav-item"><a id="opc_3" href="" data-target="#messages1" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">BENEFICIARIOS</a></li>
+                    <li class="nav-item"><a id="opc_4" href="" data-target="#messages2" data-toggle="tab" class="nav-link small text-uppercase" style="border: solid 1px #D0D6DE; border-left-color: dimgrey; border-left-width: 3px; ">SEGUIMIENTO</a></li>
+                </ul>
+                <div class="tab-content border rounded p-3 w-100" style="background-color: rgba(181, 185, 195, 0.3); ">
+                    <div id="home1" class="tab-pane fade active show">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>CATEGORÍA Y SUBCATEGORÍA</h4>
+                        <div id="divCatSubCatNPeticion"></div>
+                    </div>
+                    <div id="profile1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>ARCHIVOS ANEXOS</h4>
+                        <div id="divArchivosAnexosNPeticion"></div>
+                    </div>
+                    <div id="messages1" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>BENEFICIARIOS</h4>
+                        <div id="divBeneficiariosNPeticion"></div>
+                    </div>
+                    <div id="messages2" class="tab-pane fade">
+                        <h4 class="card-header" style='text-align: center; background-color: rgba(19, 104, 173, 0.82); color: white; border-radius: 10px 10px 10px 10px; padding: 2px;'>SEGUIMIENTO</h4>
+                        <div id="divBitacoraNPeticion"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">REGRESAR</a>

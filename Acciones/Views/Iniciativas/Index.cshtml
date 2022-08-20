@@ -1,0 +1,595 @@
+﻿
+@model IEnumerable<Acciones.Models.Iniciativas>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    });
+</script>
+
+<style>
+    .circulo {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid #c6d9ec;
+        padding: 10px;
+    }
+
+        .circulo:hover {
+            /*text-decoration: none;*/
+            background-color: white;
+        }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        /*        width: 50px;
+    */
+    }
+
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+
+
+@{
+    List<SelectListItem> opcionesOrigenIni = new List<SelectListItem>();
+    opcionesOrigenIni.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
+    opcionesOrigenIni.Add(new SelectListItem() { Text = "Interno", Value = "Interno" });
+    opcionesOrigenIni.Add(new SelectListItem() { Text = "Externo", Value = "Externo" });
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <table width="100%" style="border:none;">
+            <tr>
+                <td width="20%" align="left" style="padding-left:20px;">
+                    <img src="~/Images/documentos.jpg" height='80' style='border:0px; border-radius:0px; padding:0px;' />
+                </td>
+                <td width="70%" align="center">
+                    <h1 class="letraAzulEncabezado">INICIATIVAS</h1>
+                </td>
+                <td width="10%">
+                    <div class="row">
+                        @*<a data-toggle='collapse' href='#collapseDatosIniciativas' role='button' aria-expanded='true' aria-controls='collapseDatosIniciativas'>
+                                <i class="circulo fas fa-plus-circle" data-toggle='tooltip' data-placement='top' data-html='true' title="Nuevo Registro"></i>
+                            </a>*@
+
+                        <span class='circulo fas fa-plus-circle' style='cursor:pointer; color:mediumblue;' title='Nuevo Registro de Iniciativa' onclick='MostrarModalNvaIniciativa();'></span>
+
+                        <a data-toggle='collapse' href='#collapseFiltroIniciativa' role='button' aria-expanded='false' aria-controls='collapseFiltroIniciativa'>
+                            <i class="circulo fas fa-filter" data-toggle='tooltip' data-placement='top' data-html='true' title="Aplicar Filtro"></i>
+                        </a>
+                        <a asp-action="IniciativasToExcel" asp-controller="Iniciativas">
+                            <i class="circulo fas fa-file-excel" data-toggle='tooltip' data-placement='top' data-html='true' title="Exportar a Excel"></i>
+                        </a>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+    @*---------Modal Lateral Derecho para Nuevo Registro de INICIATIVA ---------*@
+    <div class="modal modal_outer right_modal fade" id="nuevoRegistroIniciativa_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabelIniciativa">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h2 class="modal-title">Nuevo Registro de Iniciativa</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body get_quote_view_modal_body">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Registro de Iniciativa</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label" for="inputTipo">Legislatura</label>
+                                    <select class="form-control" asp-items="ViewBag.LegIniciativa" id="LegislaturaId"></select>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label" for="inputTipo">Folio</label>
+                                    <input type="text" class="form-control" id="inputFolioIniciativa">
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label" for="inputTipo" style="color:orange;">Tipo Iniciativa</label>
+                                    <select class="form-control" asp-items="ViewBag.TipoIniciativa" id="TipoIniciativaId"></select>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label" for="inputOrigen">Origen</label>
+                                    <select id="opcionOrigenIniId" class="form-control" asp-items="opcionesOrigenIni"></select>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label class="form-label" for="inputTamaño" style="color:orange;">Estatus Iniciativa</label>
+                                    <select class="form-control" asp-items="ViewBag.EstatusIniciativa" id="EstatusIniciativaId"></select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="inputTipo" style="color:orange;">Iniciativa</label>
+                                    <textarea id="TituloIni" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="inputTipo">Descripción</label>
+                                    <textarea id="DescripcionIni" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Presidente</label>
+                                    <select class="form-control" asp-items="ViewBag.Presidente" id="PresidenteId"></select>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Promotor</label>
+                                    <select class="form-control" asp-items="ViewBag.Promotor" id="PromotorId"></select>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Número en Página</label>
+                                    <input type="text" class="form-control" id="NumSecuencial">
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Link Pagina</label>
+                                    <input type="text" class="form-control" id="LinkPagina">
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Fecha de Ingreso</label>
+                                    <div class='input-group date' id='datepickerIniFRecibido'>
+                                        <input type="date" id="FechaRecibidoIni" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Fecha Turno a Comisión</label>
+                                    <div class='input-group date' id='datepickerIniFComision'>
+                                        <input type="date" id="FechaComisionIni" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Fecha Aprobación Pleno</label>
+                                    <div class='input-group date' id='datepickerIniFPleno'>
+                                        <input type="date" id="FechaPlenoIni" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="inputTamaño">Fecha Publicación Sombra de Arteaga</label>
+                                    <div class='input-group date' id='datepickerIniFBaja'>
+                                        <input type="date" id="FechaPublicaIni" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="alert alert-danger" id="msgAlerta_DatosIncompletos" style="display: none;" align="center">
+                                    <strong> Debe registrar por lo menos la Iniciativa, Tipo Iniciativa y Estatus Iniciativa</strong>
+                                </div>
+                            </div>
+
+                            <div align="right">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">CANCELAR</button>
+                                @*<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseDatosIniciativas">CANCELAR</button>*@
+                                <button type='button' onclick='GuardarNuevaIniciativa();' class='btn btn-primary'>GUARDAR</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div><!-- modal -->
+</div>
+
+
+@*---------Collapse FILTRA Registros de Iniciativa ---------*@
+
+<div class="collapse" id="collapseFiltroIniciativa">
+
+    <div class="card">
+        <div class="card-header" style="background-color: #e6f2ff;">
+            <h5 class="card-title mb-0">Filtra Registros de Iniciativas</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="mb-3 col-md-2">
+                    <label class="form-label" for="inputTipo">Legislatura</label>
+                    <select class="form-control" asp-items="ViewBag.LegIniciativa" id="LegislaturaId_B"></select>
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label class="form-label" for="inputTipo">Folio</label>
+                    <input type="text" class="form-control" id="inputFolioIniciativa_B">
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label class="form-label" for="inputTipo">Tipo Iniciativa</label>
+                    <select class="form-control" asp-items="ViewBag.TipoIniciativa" id="TipoIniciativaId_B"></select>
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label class="form-label" for="inputOrigen">Origen</label>
+                    <select id="opcionOrigenIniId_B" class="form-control" asp-items="opcionesOrigenIni"></select>
+                </div>
+                <div class="mb-3 col-md-2">
+                    <label class="form-label" for="inputTamaño">Estatus Iniciativa</label>
+                    <select class="form-control" asp-items="ViewBag.EstatusIniciativa" id="EstatusIniciativaId_B"></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="inputTipo">Iniciativa</label>
+                    <textarea id="TituloIni_B" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="inputTipo">Resumen</label>
+                    <textarea id="DescripcionIni_B" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Presidente</label>
+                    <select class="form-control" asp-items="ViewBag.Presidente" id="PresidenteId_B"></select>
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Promotor</label>
+                    <select class="form-control" asp-items="ViewBag.Promotor" id="PromotorId_B"></select>
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Número en Página</label>
+                    <input type="text" class="form-control" id="NumSecuencial_B">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Fecha de Ingreso</label>
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoRecibido' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoRecibido" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Fecha Turno a Comisión</label>
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoComision' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoComision" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Fecha Aprobación Pleno</label>
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoPleno' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoPleno" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label" for="inputTamaño">Fecha Baja</label>
+                    <div class='Column centrarVH' id='datetimepicker_FiltroRangoBaja' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
+                        <input class="centrarVH" type="text" id="filtro_rangoBaja" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
+                    </div>
+                </div>
+            </div>
+
+            <div align="right">
+                <a asp-action="Index"><button class="btn btn-primary">CANCELAR</button> </a>
+                <button type='button' onclick='FiltraIniciativa();' class='btn btn-primary'>BUSCAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input id="hideFechaInicioRecibido" type="hidden" value="">
+<input id="hideFechaFinRecibido" type="hidden" value="">
+
+<input id="hideFechaInicioComision" type="hidden" value="">
+<input id="hideFechaFinComision" type="hidden" value="">
+
+<input id="hideFechaInicioPleno" type="hidden" value="">
+<input id="hideFechaFinPleno" type="hidden" value="">
+
+<input id="hideFechaInicioBaja" type="hidden" value="">
+<input id="hideFechaFinBaja" type="hidden" value="">
+
+@*Búsqueda Rápida*@
+<table width="100%" style="border:none;">
+    <tr>
+        <td width="70%" align="center" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Iniciativa"
+                       aria-label="Search" aria-describedby="basic-addon2" id="BRiniciativa">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick='BusRapIniciativa();' id="BotonIniciativaBR">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td width="30%" align="right" style="padding-left:8px; vertical-align:middle;">
+            <label id="labelNumeroRegistros">&nbsp;</label>
+        </td>
+    </tr>
+</table>
+
+<div id="divListaIniciativas"></div>
+
+@*Opciones de Paginación*@
+<div style="display: inline-block; text-align: right; width: 100%">
+    <ul id="pagina-solicitudes" class="pagination-sm justify-content-end"></ul>
+</div>
+
+<div align="right">
+    <label id="labelNumeroRegistros_footer"></label>
+    &nbsp;
+    <label>Por Página</label>
+    <SELECT id="selNumeroRegistrosXpagina" NAME="selNumeroRegistrosXpagina" SIZE=1 onChange="javascript:FiltraIniciativa();">
+        <OPTION VALUE="5">5</OPTION>
+        <OPTION VALUE="10" selected="selected">10</OPTION>
+        <OPTION VALUE="20">20</OPTION>
+        <OPTION VALUE="100">100</OPTION>
+        <OPTION VALUE="200000">Todos</OPTION>
+    </SELECT>
+</div>
+
+
+<input id="hideNumPaginas" type="hidden" value="">
+<input id="hideNumRegistros" type="hidden" value="">
+
+<script>
+    var input = document.getElementById("BRiniciativa");
+    document.getElementById("BRiniciativa").focus();
+
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            console.log("ENTER");
+            event.preventDefault();
+            document.getElementById("BotonIniciativaBR").click();
+        }
+    });
+</script>
+
+
+
+
+
+<input type="text" id="hCiudadanoSolicitanteBuscar" name="hCiudadanoSolicitanteBuscar" style="display:none" />
+<input type="text" id="hCiudadanoPublicidadBuscar" name="hCiudadanoSolicitanteBuscar" style="display:none" />
+<input type="text" id="hColoniaBuscar" name="hColoniaBuscar" style="display:none" />
+<input type="text" id="hCalleBuscar" name="hCalleBuscar" style="display:none" />
+<input type="text" id="hCiudadanoId" name="hCiudadanoId" style="display:none" />
+
+<input type="text" id="hColoniaBuscarEdit" style="display:none" />
+<input type="text" id="hCalleBuscarEdit" style="display:none" />
+<input type="text" id="hCiudadanoIdEdit" style="display:none" />
+
+<input type="text" id="hCiudadanoPublicidadBuscar" style="display:none" />
+
+<input type="text" id="hIniciativaId" style="display:none" />
+<input type="text" id="hEditaIniciativaid" style="display:none" />
+
+
+@*---------Modal Seleccionar y Subir Archivos de Iniciativas ---------*@
+<div class="modal" id="ModalSeleccionarArchivoIniciativa" tabindex="-2" role="dialog" aria-labelledby="ModalSeleccionarArchivosIniciativa">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="centrarVH">
+                    <span style='font-size:25px; cursor:pointer' id="referenciaArchBitacora" class="badge"></span>
+                </p>
+                <p>
+                    <h4 id="idTituloSubirArchivosIniciativa" class="modal-title" style="padding-left:10px;"><strong>Documento Anexos de Iniciativa</strong></h4>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <br />
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="FileUploadFormFileIniciativa" lang="es" placeholder="">
+                    <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+
+                <input id="HiddenIniciativaId" type="hidden" name="HiddenIniciativaId" value="">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="subirArchivosIniciativaButton('FileUploadFormFileIniciativa')" class="btn btn-dark">Anexar Archivo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*---------Modal Lateral Derecho para Editar datos de Iniciativa ---------*@
+<div class="modal modal_outer right_modal fade" id="modalDerechoEditaIniciativa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h2 class="modal-title">Edición de Registro de Iniciativa</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body get_quote_view_modal_body">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Registro de Iniciativa</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="mb-3 col-md-2">
+                                <label class="form-label" for="inputTipo">Legislatura</label>
+                                <select class="form-control" asp-items="ViewBag.LegIniciativa" id="LegislaturaId_Edit"></select>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label class="form-label" for="inputTipo">Folio</label>
+                                <input type="text" class="form-control" id="inputFolioIniciativa_Edit">
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label class="form-label" for="inputTipo">Tipo Iniciativa</label>
+                                <select class="form-control" asp-items="ViewBag.TipoIniciativa" id="TipoIniciativaId_Edit"></select>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label class="form-label" for="inputOrigen">Origen</label>
+                                <select id="opcionOrigenIniId_Edit" class="form-control" asp-items="opcionesOrigenIni"></select>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label class="form-label" for="inputTamaño">Estatus Iniciativa</label>
+                                <select class="form-control" asp-items="ViewBag.EstatusIniciativa" id="EstatusIniciativaId_Edit"></select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="inputTipo">Iniciativa</label>
+                                <textarea id="TituloIni_Edit" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="inputTipo">Descripción</label>
+                                <textarea id="DescripcionIni_Edit" rows="3" style="width:100%; max-width:100%;" oninput=onInputDescripcion(event)></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Presidente</label>
+                                <select class="form-control" asp-items="ViewBag.Presidente" id="PresidenteId_Edit"></select>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Promotor</label>
+                                <select class="form-control" asp-items="ViewBag.Promotor" id="PromotorId_Edit"></select>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Número en Página</label>
+                                <input type="text" class="form-control" id="NumSecuencial_Edit">
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Link Pagina</label>
+                                <input type="text" class="form-control" id="LinkPagina_Edit">
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Fecha de Ingreso</label>
+                                <div class='input-group date' id='datepickerIniFRecibido_Edit'>
+                                    <input type="date" id="FechaRecibidoIni_Edit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Fecha Turno a Comisión</label>
+                                <div class='input-group date' id='datepickerIniFComision_Edit'>
+                                    <input type="date" id="FechaComisionIni_Edit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Fecha Aprobación Pleno</label>
+                                <div class='input-group date' id='datepickerIniFPleno_Edit'>
+                                    <input type="date" id="FechaPlenoIni_Edit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label class="form-label" for="inputTamaño">Fecha Publicación SA</label>
+                                <div class='input-group date' id='datepickerIniFBaja_Edit'>
+                                    <input type="date" id="FechaPublicaIni_Edit" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div align="right">
+                            <button type='button' onclick='CerrarModalEditarIniciativa();' class='btn btn-primary'>CANCELAR</button>
+                            <button type='button' onclick='GuardarActualizacionIniciativa();' class='btn btn-primary'>GUARDAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <table style='width:100%;'>
+                    <tr style="padding: 1px; vertical-align: top;">
+                        <td width="49%" style="padding: 1px; vertical-align: top;">
+                            <div class="card">
+                                <h5 class="card-header" style='text-align: center; background-color: #23649e; color: white; border-radius: 10px 10px 10px 10px; padding: 1px; cursor: pointer'>ARCHIVOS ANEXOS</h5>
+                                <div id="divArchivosAnexosIniciativa"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table style='width:100%;'>
+                    <tr style="padding: 1px; vertical-align: top;">
+                        <td width="49%" style="padding: 1px; vertical-align: top;">
+                            <div class="card">
+                                <h5 class="card-header" style='text-align: center; background-color: #23649e; color: white; border-radius: 10px 10px 10px 10px; padding: 1px; cursor: pointer' onclick="GeneraTablaDeComisiones();">COMISIÓN</h5>
+                                <div id="divComisionesDisponibles"></div>
+                            </div>
+                        </td>
+                        <td width="1%"></td>
+                        <td width="50%" style="padding:1px;">
+                            <div class="card">
+                                <h5 class="card-header" style='text-align: center; background-color: #23649e; color: white; border-radius: 10px 10px 10px 10px; padding: 1px; cursor: pointer' onclick="GeneraTablaDeDiputados();">AUTOR INTERNO</h5>
+                                <div id="divDiputadosDisponibles"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div align="right">
+                    <button type='button' onclick='cierraModalDerechoIniciativas();' class='btn btn-primary'>CERRAR</button>
+                </div>
+            </div>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
+
+
+
+
+@*---------Modal Muestra Detalle de una INICIATIVA ---------*@
+
+<div class="modal fade bd-example-modal-xl" id="modalMuestraDatosIniciativa" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <table width=100% style="border:none;">
+                    <tr width="100%;">
+                        <td align="center">
+                            <h4 class="fondoMenu" id="ModalLabelConsultaIniciativa">INICIATIVA</h4>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class='far fa-times-circle fa-lg' title='Cerrar'></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='divDatosIniciativa'></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn BotonNaranjaClaro" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <a href="~/Level_10.pdf"><strong>Level 10</strong></a>
+</div>

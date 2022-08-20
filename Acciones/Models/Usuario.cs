@@ -10,6 +10,7 @@ namespace Acciones.Models
         public Usuario()
         {
             Bitacoras = new HashSet<Bitacora>();
+            BitacorasGestion = new HashSet<BitacoraGestion>();
         }
 
         public int UsuarioId { get; set; }
@@ -31,5 +32,6 @@ namespace Acciones.Models
         public virtual Diputado Diputado { get; set; }
         public virtual Role Rol { get; set; }
         public virtual ICollection<Bitacora> Bitacoras { get; set; }
+        public virtual ICollection<BitacoraGestion> BitacorasGestion { get; set; }
     }
 }

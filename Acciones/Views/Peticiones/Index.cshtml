@@ -11,6 +11,32 @@
     });
 </script>
 
+<style>
+    .circulo {
+        background-color: white;
+        border-radius: 50%;
+        border: 1px solid #c6d9ec;
+        padding: 10px;
+    }
+
+        .circulo:hover {
+            /*text-decoration: none;*/
+            background-color: white;
+        }
+
+    img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        /*        width: 50px;
+    */
+    }
+
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+
 @{
     List<SelectListItem> opcionesHito = new List<SelectListItem>();
     opcionesHito.Add(new SelectListItem() { Text = "TODO", Value = "-1" });
@@ -18,54 +44,119 @@
     opcionesHito.Add(new SelectListItem() { Text = "NO", Value = "0" });
 }
 
-<div class="row">
-    <table width="100%" style="border:none;">
-        <tr>
-            <td align="left">
-                <img src="~/Images/apoyos_2.png" height='60' />
-            </td>
-            <td align="center">
-                <h1 class="letraAzulEncabezado">APOYOS SOLICITADOS</h1>
-            </td>
-            <td align="right">
-                <a asp-action="Create"><button class="btn BotonNaranjaClaro redondeada">NUEVO REGISTRO</button> </a>
-                <button class="btn BotonNaranjaClaro" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    <i class="fas fa-filter" title="Aplicar Filtro"></i>
-                </button>
-            </td>
-        </tr>
-    </table>
-</div>
+@*<div class="row">
+        <table width="95%" style="border:none;">
+            <tr>
+                <td align="left">
+                    <img src="~/Images/apoyos_2.png" height='60' />
+                </td>
+                <td align="center">
+                    <h1 class="letraAzulEncabezado">APOYOS</h1>
+                </td>
+                <td align="right">
+                    <a asp-action="Create"><button class="btn btn-dark redondeada">NUEVO REGISTRO</button> </a>
+                    <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="filtro_P">
+                        <i class="fas fa-filter" title="Aplicar Filtro"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>*@
 
-<p align="right">
-    <label id="labelNumeroRegistros">&nbsp;</label>
-</p>
+<table width="100%" style="border:none;">
+    <tr>
+        <td width="20%" align="left" style="padding-left:20px;">
+            <img src="~/Images/apoyos_2.png" height='60' style='border: none; border-radius: 0px; padding: 0px;' />
+        </td>
+        <td width="70%" align="center">
+            <h1 class="letraAzulEncabezado">APOYOS</h1>
+        </td>
+        <td width="10%" align="right">
+            <div class="row">
+                <a asp-action="Create" role='button'>
+                    <i class="circulo fas fa-plus-circle" data-toggle='tooltip' data-placement='top' data-html='true' title="Nuevo Registro de Apoyo"></i>
+                </a>
+                <a data-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample' id="filtro_P">
+                    <i class="circulo fas fa-filter" data-toggle='tooltip' data-placement='top' data-html='true' title="Aplicar Filtro"></i>
+                </a>
+                <a asp-action="WriteDataToExcel" asp-controller="Peticiones">
+                    <i class="circulo fas fa-file-excel" data-toggle='tooltip' data-placement='top' data-html='true' title="Exportar Apoyos a Excel"></i>
+                </a>
+                <a asp-action="Beneficiarios" asp-controller="Peticiones" asp-route-LegislaturaID="0" asp-route-anioSel="0" asp-route-mesSel="0">
+                    <i class="circulo fas fa-users" data-toggle='tooltip' data-placement='top' data-html='true' title="Beneficiarios"></i>
+                </a>
+                <a asp-action="BeneficiariosApoyoToExcel" asp-controller="Peticiones">
+                    <i class="circulo fas fa-file-excel" data-toggle='tooltip' data-placement='top' data-html='true' title="Exportar Beneficiarios a Excel" style="color:darkblue;"></i>
+                </a>
+
+            </div>
+
+
+        </td>
+    </tr>
+</table>
+
+@*<p align="right">
+        <label id="labelNumeroRegistros">&nbsp;</label>
+    </p>*@
+
+
+<table width="100%" style="border:none;">
+    <tr>
+        <td width="20%" align="left" style="padding-left:8px; vertical-align:middle;">
+            <div class="input-group">
+                <label>Legislatura&nbsp;</label>
+                <select id="LegPeticionReferencia" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
+            </div>
+        </td>
+        <td width="50%" align="left">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Búsqueda por Descripción ..."
+                       aria-label="Search" aria-describedby="basic-addon2" id="BRPeticionId">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick='BusqudaRapPeticiones();' id="BotonApoyoBR">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </td>
+        <td width="30%" align="right">
+            <label id="labelNumeroRegistros">&nbsp;</label>
+        </td>
+    </tr>
+</table>
 
 <div class="collapse" id="collapseExample">
     <div class="card card-body">
+
+
         <table class='table responsive-table table-bordered' style='width: 100%; border-color:white;'>
             <tr>
                 <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
                     <label for="LegBusqLabel">Legislatura</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="10%">
                     <label for="NumFolioBusqLabel">Folio</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
-                    <label for="ClasificacionBusqLabel">Clasificación</label>
+                    <label for="ClasificacionBusqLabel">Categoría</label>
                 </td>
                 <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
-                    <label for="SubcalsificacionBusqLabel" id="SubcalsificacionBusqLabel">Subclasificacion</label>
+                    <label for="SubcalsificacionBusqLabel" id="SubcalsificacionBusqLabel">Subcategoría</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="25%" colspan="2">
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
                     <label for="FechaRegistroBusqLabel">Fecha Registro</label>
                 </td>
+                <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="15%">
+                    <label for="ResponsableBusqLabel" id="ResponsableBusqLabel">Responsable</label>
+                </td>
+
             </tr>
             <tr>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
                     <select id="LegBusqueda" class="form-control" asp-items="ViewBag.LegBusqueda"></select>
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="10%">
                     <input type="text" class="form-control" name="NumFolioBusqueda" id="NumFolioBusqueda" />
                 </td>
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
@@ -74,12 +165,24 @@
                 <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="20%">
                     <select id="SubclasificacionBusqueda" class="form-control" asp-items="ViewBag.SubclasificacionBusqueda" disabled></select>
                 </td>
-                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="25%" colspan="2">
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
                     <div class='Column centrarVH' id='datetimepicker_FiltroRangoRegistro' data-toggle='tooltip' data-placement='top' data-html='true' title='<b>De clic para seleccionar rango de fecha</b>'>
                         <input class="centrarVH" type="text" id="filtro_rangoRegistro" style='cursor: pointer; width:100%; padding-left:0px; padding-right:0px; text-align:center; outline:none;' value="" />
                     </div>
                 </td>
+                <td style='text-align: center; background-color: white; color: black; padding: 2px;' width="15%">
+                    <select id="ResponsableBusqueda" class="form-control" asp-items="ViewBag.ResponsableBusqueda"></select>
+                </td>
+
             </tr>
+        </table>
+
+
+
+
+
+
+        <table class='table responsive-table table-bordered' style='width: 100%; border-color:white;'>
             <tr>
                 <td style='text-align: center; padding: 5px;' class='fondoMenuFactor' width="20%">
                     <label for="SolicitanteBusqLabel">Solicitante</label>
@@ -126,18 +229,18 @@
                 <td style='text-align: center; padding: 5px;' class='fondoMenuFactorH' width="20%">
                     <label for="TituloBusqLabel">Descripción</label>
                 </td>
-                <td style='text-align: center; padding: 5px;' width="20%">
+                <td style='text-align: center; padding: 5px;' width="60%" colspan="3">
                     <input type="text" class="form-control" name="descripcionFiltro" id="descripcionFiltro" />
                 </td>
-                <td style='text-align: center; padding: 5px;' class='fondoMenuFactorH' width="20%">
-                    <label for="TituloBusqLabel">Dependencia</label>
-                </td>
-                <td style='text-align: center; padding: 5px;' width="20%">
-                    <select id="DependenciaBusqueda" class="form-control" asp-items="ViewBag.DependenciaBusqueda"></select>
-                </td>
-                <td style='text-align: center; padding: 5px;' width="20%">
-                    <button type='button' onclick='FiltraPeticiones();' class='btn BotonNaranjaClaro redondeada'>FILTRAR</button>&nbsp;
-                    <a asp-action="Index"><button class="btn BotonNaranjaClaro redondeada">CANCELAR</button> </a>
+                @*<td style='text-align: center; padding: 5px;' class='fondoMenuFactorH' width="20%">
+                        <label for="TituloBusqLabel">Dependencia</label>
+                    </td>
+                    <td style='text-align: center; padding: 5px;' width="20%">
+                        <select id="DependenciaBusqueda" class="form-control" asp-items="ViewBag.DependenciaBusqueda"></select>
+                    </td>*@
+                <td style='text-align: center; padding: 5px;' width="20%" colspan="2">
+                    <button type='button' onclick='FiltraPeticiones();' class='btn btn-secondary'>FILTRAR</button>&nbsp;
+                    <a asp-action="Index"><button class="btn btn-secondary">CANCELAR</button> </a>
                 </td>
             </tr>
 
@@ -173,6 +276,20 @@
 <input id="hideNumPaginas" type="hidden" value="">
 <input id="hideNumRegistros" type="hidden" value="">
 
+
+<script>
+    var input = document.getElementById("BRPeticionId");
+    document.getElementById("BRPeticionId").focus();
+
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            console.log("ENTER");
+            event.preventDefault();
+            document.getElementById("BotonApoyoBR").click();
+        }
+    });
+</script>
+
 @*---------Modal Muestra Detalle de una Solicitud de Apoyo ---------*@
 
 <div class="modal fade bd-example-modal-xl" id="modalMuestraDatosSolicitud" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -206,7 +323,7 @@
                 </div>
                 <div id="divBeneficiariosNPeticion"></div>
                 <div class="text-center">
-                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">BITÁCORA DE ACTIVIDADES</h4>
+                    <h4 style="background-color: rgba(38, 112, 233, 1); color: white;">SEGUIMIENTO</h4>
                 </div>
                 <div id="divBitacoraNPeticion"></div>
             </div>

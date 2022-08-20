@@ -4,49 +4,59 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+@{
+    List<SelectListItem> estatusCat = new List<SelectListItem>();
+    estatusCat.Add(new SelectListItem() { Text = "Habilitado", Value = "1" });
+    estatusCat.Add(new SelectListItem() { Text = "Deshabilitado", Value = "0" });
+}
 
-<h4>Categoria</h4>
+<h1>Edita Categoría</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CategoriaId" />
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td bgcolor="#E8EEEF" width="25%">Nombre Categoría</td>
+                        <td width="75%" colspan="2"><input asp-for="Descripcion" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#E8EEEF" width="25%">Estatus</td>
+                        <td width="75%" colspan="2"><select id="habilitaCategoria" class="form-control" asp-for="Estatus" asp-items="estatusCat"></select></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            @*<div class="form-group">
+            <label asp-for="FechaRegistro" class="control-label"></label>
+            <input asp-for="FechaRegistro" class="form-control" />
+            <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FechaUltimoCambio" class="control-label"></label>
+            <input asp-for="FechaUltimoCambio" class="form-control" />
+            <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UsuarioRegistroId" class="control-label"></label>
+            <input asp-for="UsuarioRegistroId" class="form-control" />
+            <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estatus" class="control-label"></label>
-                <input asp-for="Estatus" class="form-control" />
-                <span asp-validation-for="Estatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaUltimoCambio" class="control-label"></label>
-                <input asp-for="FechaUltimoCambio" class="form-control" />
-                <span asp-validation-for="FechaUltimoCambio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioRegistroId" class="control-label"></label>
-                <input asp-for="UsuarioRegistroId" class="form-control" />
-                <span asp-validation-for="UsuarioRegistroId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="ACTUALIZAR" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar</a>
 </div>
 
 @section Scripts {
